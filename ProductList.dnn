@@ -1,0 +1,54 @@
+﻿<dotnetnuke version="3.0" type="Module">
+  <folders>
+    <folder>
+      <name>ProductList</name>
+      <friendlyname>ProductList</friendlyname>
+      <foldername>ProductList</foldername>
+      <modulename>ProductList</modulename>
+      <description>A ProductList module</description>
+      <version>01.00.00</version>
+      <businesscontrollerclass></businesscontrollerclass>
+      <modules>
+        <module>
+          <friendlyname>ProductList</friendlyname>
+          <cachetime>0</cachetime>
+          <controls>
+            <control>
+              <src>DesktopModules/ProductList/ProductList.ascx</src>
+              <type>View</type>
+              <helpurl></helpurl>
+            </control>
+            <control>
+              <key>ImportProducts</key>
+              <src>DesktopModules/ProductList/ImportProducts.ascx</src>
+              <type>View</type>
+              <helpurl></helpurl>
+            </control>
+            <control>
+              <key>ProductDetails</key>
+              <title>Product Details</title>
+              <src>DesktopModules/ProductList/ProductDetails.ascx</src>
+              <type>View</type>
+              <helpurl></helpurl>
+              <supportspartialrendering>true</supportspartialrendering>
+            </control>
+          </controls>
+        </module>
+      </modules>
+      <files>
+        <file>
+          <name>ProductDetails.ascx</name>
+        </file>
+        <file>
+          <name>ImportProducts.ascx</name>
+        </file>
+        <file>
+          <name>ProductList.dll</name>
+        </file>
+        <file>
+          <name>ProductList.ascx</name>
+        </file>
+      </files>
+    </folder>
+  </folders>
+</dotnetnuke>
