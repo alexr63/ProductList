@@ -50,16 +50,24 @@
       <HintPath>..\..\bin\DotNetNuke.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="EntityFramework, Version=4.4.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>packages\EntityFramework.5.0.0\lib\net40\EntityFramework.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.ApplicationBlocks.Data, Version=2.0.0.0, Culture=neutral">
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data.Entity" />
     <Reference Include="System.Data.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.Web.DynamicData" />
@@ -74,12 +82,25 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Categorie.cs">
+      <DependentUpon>SelectedHotels.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ProductDetails.ascx.cs">
+      <DependentUpon>ProductDetails.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ProductDetails.ascx.designer.cs">
+      <DependentUpon>ProductDetails.ascx</DependentUpon>
+    </Compile>
     <Compile Include="ImportProducts.ascx.cs">
       <DependentUpon>ImportProducts.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="ImportProducts.ascx.designer.cs">
       <DependentUpon>ImportProducts.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Product.cs">
+      <DependentUpon>SelectedHotels.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ProductList.ascx.cs">
@@ -89,10 +110,51 @@
     <Compile Include="ProductList.ascx.designer.cs">
       <DependentUpon>ProductList.ascx</DependentUpon>
     </Compile>
+    <Compile Include="SelectedHotels.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SelectedHotels.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SelectedHotels.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SelectedHotels.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SelectedHotels.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SelectedHotels.edmx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Build\build.bat" />
+    <Content Include="ProductDetails.ascx" />
+    <Content Include="packages.config" />
     <None Include="ProductList.dnn" />
+    <EntityDeploy Include="SelectedHotels.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>SelectedHotels.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="SelectedHotels.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>SelectedHotels.edmx</DependentUpon>
+      <LastGenOutput>SelectedHotels.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="SelectedHotels.edmx.diagram">
+      <DependentUpon>SelectedHotels.edmx</DependentUpon>
+    </Content>
+    <Content Include="SelectedHotels.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>SelectedHotels.edmx</DependentUpon>
+      <LastGenOutput>SelectedHotels.cs</LastGenOutput>
+    </Content>
+    <Content Include="Web.Config" />
+    <None Include="Web.Debug.Config">
+      <DependentUpon>Web.Config</DependentUpon>
+    </None>
+    <None Include="Web.Release.Config">
+      <DependentUpon>Web.Config</DependentUpon>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_LocalResources\ProductList.ascx.resx">
@@ -102,6 +164,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="ImportProducts.ascx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -7,6 +7,7 @@ using DotNetNuke.Entities.Modules;
 using DotNetNuke.Entities.Modules.Actions;
 using DotNetNuke.Security;
 using DotNetNuke.Services.Exceptions;
+using ProductList;
 
 namespace Cowrie.Modules.ProductList
 {
@@ -18,6 +19,11 @@ namespace Cowrie.Modules.ProductList
             {
                 if (!IsPostBack)
                 {
+                    using (SelectedHotelsEntities db = new SelectedHotelsEntities())
+                    {
+                        DataListContent.DataSource = db.Products.Local;
+                        DataListContent.DataBind();
+                    }
                 }
             }
             catch (Exception ex)

@@ -26,8 +26,9 @@ namespace Cowrie.Modules.ProductList
             }
         }
 
-        protected void cmdImport_Click(object sender, EventArgs e)
+        protected void ImageButtonImport_Click(object sender, EventArgs e)
         {
+#if NONAME
             EventLogController eventLogController = new EventLogController();
 
             try
@@ -120,6 +121,7 @@ namespace Cowrie.Modules.ProductList
 
                 Exceptions.ProcessModuleLoadException(this, ex);
             }
+#endif
         }
     }
 }

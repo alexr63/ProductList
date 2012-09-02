@@ -19,5 +19,5 @@
     </table>
 </asp:Panel>
 <p>
-    <mgc:ImageButton ID="cmdImport" runat="server" OnClick="cmdImport_Click" Text="Import" />
+    <asp:ImageButton ID="ImageButtonImport" runat="server" OnClick="ImageButtonImport_Click" Text="Import" />
 </p>
