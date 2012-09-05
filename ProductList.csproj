@@ -82,7 +82,10 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Categorie.cs">
+    <Compile Include="Cowrie_Categories.cs">
+      <DependentUpon>SelectedHotels.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Cowrie_Products.cs">
       <DependentUpon>SelectedHotels.tt</DependentUpon>
     </Compile>
     <Compile Include="ProductDetails.ascx.cs">
@@ -98,9 +101,6 @@
     </Compile>
     <Compile Include="ImportProducts.ascx.designer.cs">
       <DependentUpon>ImportProducts.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="Product.cs">
-      <DependentUpon>SelectedHotels.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ProductList.ascx.cs">
@@ -148,13 +148,6 @@
       <DependentUpon>SelectedHotels.edmx</DependentUpon>
       <LastGenOutput>SelectedHotels.cs</LastGenOutput>
     </Content>
-    <Content Include="Web.Config" />
-    <None Include="Web.Debug.Config">
-      <DependentUpon>Web.Config</DependentUpon>
-    </None>
-    <None Include="Web.Release.Config">
-      <DependentUpon>Web.Config</DependentUpon>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_LocalResources\ProductList.ascx.resx">

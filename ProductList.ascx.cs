@@ -1,6 +1,7 @@
 ﻿// Copyright (c) 2012 Cowrie
 
 using System;
+using System.Linq;
 using System.Web.UI.WebControls;
 using DotNetNuke.Common;
 using DotNetNuke.Entities.Modules;
@@ -21,7 +22,10 @@ namespace Cowrie.Modules.ProductList
                 {
                     using (SelectedHotelsEntities db = new SelectedHotelsEntities())
                     {
-                        DataListContent.DataSource = db.Products.Local;
+                        var query = from p in db.Cowrie_Products
+                                    where p.Cowrie_Categories.Any(c => c.PortalId == PortalId)
+                                    select p;
+                        DataListContent.DataSource = query.ToList();
                         DataListContent.DataBind();
                     }
                 }

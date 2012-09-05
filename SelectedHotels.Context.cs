@@ -25,7 +25,7 @@ namespace ProductList
             throw new UnintentionalCodeFirstException();
         }
     
-        public DbSet<Categorie> Categories { get; set; }
-        public DbSet<Product> Products { get; set; }
+        public DbSet<Cowrie_Categories> Cowrie_Categories { get; set; }
+        public DbSet<Cowrie_Products> Cowrie_Products { get; set; }
     }
 }

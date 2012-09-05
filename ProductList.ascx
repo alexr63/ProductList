@@ -7,7 +7,7 @@
                 <asp:Label ID="LabelName" runat="server" Text='<%# Eval("Name") %>' />
             </td>
             <td>
-                <asp:Label ID="LabelPrice" runat="server" Text='<%# Eval("Price", "{0:c}") %>' />
+                <asp:Label ID="LabelPrice" runat="server" Text='<%# Eval("UnitCost", "{0:c}") %>' />
             </td>
             <td rowspan="3">
                 <asp:Image ID="Image1" runat="server" />

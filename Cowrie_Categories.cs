@@ -12,11 +12,11 @@ namespace ProductList
     using System;
     using System.Collections.Generic;
     
-    public partial class Categorie
+    public partial class Cowrie_Categories
     {
-        public Categorie()
+        public Cowrie_Categories()
         {
-            this.Products = new HashSet<Product>();
+            this.Cowrie_Products = new HashSet<Cowrie_Products>();
         }
     
         public int Id { get; set; }
@@ -25,6 +25,6 @@ namespace ProductList
         public Nullable<int> ParentId { get; set; }
         public bool IsDeleted { get; set; }
     
-        public virtual ICollection<Product> Products { get; set; }
+        public virtual ICollection<Cowrie_Products> Cowrie_Products { get; set; }
     }
 }

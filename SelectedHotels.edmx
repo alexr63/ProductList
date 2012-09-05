@@ -83,14 +83,14 @@
     <edmx:ConceptualModels>
       <Schema Namespace="SelectedHotelsModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
         <EntityContainer Name="SelectedHotelsEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Categories" EntityType="SelectedHotelsModel.Categorie" />
-          <EntitySet Name="Products" EntityType="SelectedHotelsModel.Product" />
+          <EntitySet Name="Cowrie_Categories" EntityType="SelectedHotelsModel.Cowrie_Categories" />
+          <EntitySet Name="Cowrie_Products" EntityType="SelectedHotelsModel.Cowrie_Products" />
           <AssociationSet Name="Cowrie_CategoryProducts" Association="SelectedHotelsModel.Cowrie_CategoryProducts">
-            <End Role="Cowrie_Categories" EntitySet="Categories" />
-            <End Role="Cowrie_Products" EntitySet="Products" />
+            <End Role="Cowrie_Categories" EntitySet="Cowrie_Categories" />
+            <End Role="Cowrie_Products" EntitySet="Cowrie_Products" />
           </AssociationSet>
         </EntityContainer>
-        <EntityType Name="Categorie">
+        <EntityType Name="Cowrie_Categories">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
@@ -99,9 +99,9 @@
           <Property Name="Name" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
           <Property Name="ParentId" Type="Int32" />
           <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="Products" Relationship="SelectedHotelsModel.Cowrie_CategoryProducts" FromRole="Cowrie_Categories" ToRole="Cowrie_Products" />
+          <NavigationProperty Name="Cowrie_Products" Relationship="SelectedHotelsModel.Cowrie_CategoryProducts" FromRole="Cowrie_Categories" ToRole="Cowrie_Products" />
         </EntityType>
-        <EntityType Name="Product">
+        <EntityType Name="Cowrie_Products">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
@@ -113,11 +113,11 @@
           <Property Name="URL" Type="String" MaxLength="250" Unicode="true" FixedLength="false" />
           <Property Name="CreatedByUser" Type="Int32" Nullable="false" />
           <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="Categories" Relationship="SelectedHotelsModel.Cowrie_CategoryProducts" FromRole="Cowrie_Products" ToRole="Cowrie_Categories" />
+          <NavigationProperty Name="Cowrie_Categories" Relationship="SelectedHotelsModel.Cowrie_CategoryProducts" FromRole="Cowrie_Products" ToRole="Cowrie_Categories" />
         </EntityType>
         <Association Name="Cowrie_CategoryProducts">
-          <End Role="Cowrie_Categories" Type="SelectedHotelsModel.Categorie" Multiplicity="*" />
-          <End Role="Cowrie_Products" Type="SelectedHotelsModel.Product" Multiplicity="*" />
+          <End Role="Cowrie_Categories" Type="SelectedHotelsModel.Cowrie_Categories" Multiplicity="*" />
+          <End Role="Cowrie_Products" Type="SelectedHotelsModel.Cowrie_Products" Multiplicity="*" />
         </Association>
       </Schema>
     </edmx:ConceptualModels>
@@ -125,8 +125,8 @@
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="SelectedHotelsModelStoreContainer" CdmEntityContainer="SelectedHotelsEntities">
-          <EntitySetMapping Name="Categories">
-            <EntityTypeMapping TypeName="SelectedHotelsModel.Categorie">
+          <EntitySetMapping Name="Cowrie_Categories">
+            <EntityTypeMapping TypeName="SelectedHotelsModel.Cowrie_Categories">
               <MappingFragment StoreEntitySet="Cowrie_Categories">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="PortalId" ColumnName="PortalId" />
@@ -136,8 +136,8 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Products">
-            <EntityTypeMapping TypeName="SelectedHotelsModel.Product">
+          <EntitySetMapping Name="Cowrie_Products">
+            <EntityTypeMapping TypeName="SelectedHotelsModel.Cowrie_Products">
               <MappingFragment StoreEntitySet="Cowrie_Products">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
