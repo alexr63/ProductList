@@ -22,8 +22,8 @@ namespace Cowrie.Modules.ProductList
                 {
                     using (SelectedHotelsEntities db = new SelectedHotelsEntities())
                     {
-                        var query = from p in db.Cowrie_Products
-                                    where p.Cowrie_Categories.Any(c => c.PortalId == PortalId)
+                        var query = from p in db.Products
+                                    where p.Categories.Any(c => c.PortalId == PortalId)
                                     select p;
                         DataListContent.DataSource = query.ToList();
                         DataListContent.DataBind();

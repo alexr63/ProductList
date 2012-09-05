@@ -22,22 +22,22 @@ namespace Cowrie.Modules.ProductList {
         protected global::System.Web.UI.WebControls.Panel pnlImport;
         
         /// <summary>
-        /// plReferralsFile control.
+        /// plProductsFile control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DotNetNuke.UI.UserControls.LabelControl plReferralsFile;
+        protected global::DotNetNuke.UI.UserControls.LabelControl plProductsFile;
         
         /// <summary>
-        /// ctlReferralsFile control.
+        /// ctlProductsFile control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DotNetNuke.UI.UserControls.UrlControl ctlReferralsFile;
+        protected global::DotNetNuke.UI.UserControls.UrlControl ctlProductsFile;
         
         /// <summary>
         /// ImageButtonImport control.

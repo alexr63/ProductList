@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="SelectedHotelsModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+    <Schema Namespace="SelectedHotelsModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityContainer Name="SelectedHotelsModelStoreContainer">
           <EntitySet Name="Cowrie_Categories" EntityType="SelectedHotelsModel.Store.Cowrie_Categories" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Cowrie_CategoryProducts" EntityType="SelectedHotelsModel.Store.Cowrie_CategoryProducts" store:Type="Tables" Schema="dbo" />
@@ -48,6 +48,7 @@
           <Property Name="URL" Type="nvarchar" MaxLength="250" />
           <Property Name="CreatedByUser" Type="int" Nullable="false" />
           <Property Name="IsDeleted" Type="bit" Nullable="false" />
+          <Property Name="Image" Type="nvarchar" MaxLength="250" />
         </EntityType>
         <Association Name="FK_Cowrie_CategoryProducts_Cowrie_Categories">
           <End Role="Cowrie_Categories" Type="SelectedHotelsModel.Store.Cowrie_Categories" Multiplicity="1">
@@ -77,20 +78,19 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="SelectedHotelsModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
         <EntityContainer Name="SelectedHotelsEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Cowrie_Categories" EntityType="SelectedHotelsModel.Cowrie_Categories" />
-          <EntitySet Name="Cowrie_Products" EntityType="SelectedHotelsModel.Cowrie_Products" />
+          <EntitySet Name="Categories" EntityType="SelectedHotelsModel.Category" />
+          <EntitySet Name="Products" EntityType="SelectedHotelsModel.Product" />
           <AssociationSet Name="Cowrie_CategoryProducts" Association="SelectedHotelsModel.Cowrie_CategoryProducts">
-            <End Role="Cowrie_Categories" EntitySet="Cowrie_Categories" />
-            <End Role="Cowrie_Products" EntitySet="Cowrie_Products" />
+            <End Role="Cowrie_Categories" EntitySet="Categories" />
+            <End Role="Cowrie_Products" EntitySet="Products" />
           </AssociationSet>
         </EntityContainer>
-        <EntityType Name="Cowrie_Categories">
+        <EntityType Name="Category">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
@@ -99,9 +99,9 @@
           <Property Name="Name" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
           <Property Name="ParentId" Type="Int32" />
           <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="Cowrie_Products" Relationship="SelectedHotelsModel.Cowrie_CategoryProducts" FromRole="Cowrie_Categories" ToRole="Cowrie_Products" />
+          <NavigationProperty Name="Products" Relationship="SelectedHotelsModel.Cowrie_CategoryProducts" FromRole="Cowrie_Categories" ToRole="Cowrie_Products" />
         </EntityType>
-        <EntityType Name="Cowrie_Products">
+        <EntityType Name="Product">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
@@ -113,11 +113,12 @@
           <Property Name="URL" Type="String" MaxLength="250" Unicode="true" FixedLength="false" />
           <Property Name="CreatedByUser" Type="Int32" Nullable="false" />
           <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="Cowrie_Categories" Relationship="SelectedHotelsModel.Cowrie_CategoryProducts" FromRole="Cowrie_Products" ToRole="Cowrie_Categories" />
+          <NavigationProperty Name="Categories" Relationship="SelectedHotelsModel.Cowrie_CategoryProducts" FromRole="Cowrie_Products" ToRole="Cowrie_Categories" />
+          <Property Type="String" Name="Image" MaxLength="250" FixedLength="false" Unicode="true" />
         </EntityType>
         <Association Name="Cowrie_CategoryProducts">
-          <End Role="Cowrie_Categories" Type="SelectedHotelsModel.Cowrie_Categories" Multiplicity="*" />
-          <End Role="Cowrie_Products" Type="SelectedHotelsModel.Cowrie_Products" Multiplicity="*" />
+          <End Role="Cowrie_Categories" Type="SelectedHotelsModel.Category" Multiplicity="*" />
+          <End Role="Cowrie_Products" Type="SelectedHotelsModel.Product" Multiplicity="*" />
         </Association>
       </Schema>
     </edmx:ConceptualModels>
@@ -125,8 +126,8 @@
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="SelectedHotelsModelStoreContainer" CdmEntityContainer="SelectedHotelsEntities">
-          <EntitySetMapping Name="Cowrie_Categories">
-            <EntityTypeMapping TypeName="SelectedHotelsModel.Cowrie_Categories">
+          <EntitySetMapping Name="Categories">
+            <EntityTypeMapping TypeName="SelectedHotelsModel.Category">
               <MappingFragment StoreEntitySet="Cowrie_Categories">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="PortalId" ColumnName="PortalId" />
@@ -136,9 +137,10 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Cowrie_Products">
-            <EntityTypeMapping TypeName="SelectedHotelsModel.Cowrie_Products">
+          <EntitySetMapping Name="Products">
+            <EntityTypeMapping TypeName="SelectedHotelsModel.Product">
               <MappingFragment StoreEntitySet="Cowrie_Products">
+                <ScalarProperty Name="Image" ColumnName="Image" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Number" ColumnName="Number" />

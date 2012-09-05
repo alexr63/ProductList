@@ -82,10 +82,15 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Cowrie_Categories.cs">
+    <Compile Include="Category.cs">
       <DependentUpon>SelectedHotels.tt</DependentUpon>
     </Compile>
-    <Compile Include="Cowrie_Products.cs">
+    <Compile Include="Hotels_Standard.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Hotels_Standard.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Product.cs">
       <DependentUpon>SelectedHotels.tt</DependentUpon>
     </Compile>
     <Compile Include="ProductDetails.ascx.cs">
@@ -130,6 +135,17 @@
     <None Include="Build\build.bat" />
     <Content Include="ProductDetails.ascx" />
     <Content Include="packages.config" />
+    <Content Include="Hotels_Standard.xsc">
+      <DependentUpon>Hotels_Standard.xsd</DependentUpon>
+    </Content>
+    <None Include="Hotels_Standard.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>Hotels_Standard.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="Hotels_Standard.xss">
+      <DependentUpon>Hotels_Standard.xsd</DependentUpon>
+    </Content>
     <None Include="ProductList.dnn" />
     <EntityDeploy Include="SelectedHotels.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
@@ -148,6 +164,13 @@
       <DependentUpon>SelectedHotels.edmx</DependentUpon>
       <LastGenOutput>SelectedHotels.cs</LastGenOutput>
     </Content>
+    <Content Include="Web.Config" />
+    <None Include="Web.Debug.Config">
+      <DependentUpon>Web.Config</DependentUpon>
+    </None>
+    <None Include="Web.Release.Config">
+      <DependentUpon>Web.Config</DependentUpon>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_LocalResources\ProductList.ascx.resx">

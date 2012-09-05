@@ -1,12 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Xml;
 using System.Xml.Linq;
 using DotNetNuke.Entities.Modules;
 using DotNetNuke.Entities.Portals;
 using DotNetNuke.Services.Exceptions;
 using DotNetNuke.Services.FileSystem;
 using DotNetNuke.Services.Log.EventLog;
+using ProductList;
 
 namespace Cowrie.Modules.ProductList
 {
@@ -26,23 +29,48 @@ namespace Cowrie.Modules.ProductList
             }
         }
 
+        static IEnumerable<XElement> StreamRootChildDoc(string uri)
+        {
+            using (XmlReader reader = XmlReader.Create(uri))
+            {
+                reader.MoveToContent();
+                // Parse the file and display each of the nodes.
+                while (reader.Read())
+                {
+                    switch (reader.NodeType)
+                    {
+                        case XmlNodeType.Element:
+                            if (reader.Name == "hotel")
+                            {
+                                XElement el = XElement.ReadFrom(reader) as XElement;
+                                if (el != null)
+                                    yield return el;
+                            }
+                            break;
+                    }
+                }
+            }
+        }
+
         protected void ImageButtonImport_Click(object sender, EventArgs e)
         {
-#if NONAME
             EventLogController eventLogController = new EventLogController();
+
+            string categoryRootName = "Hotels";
+            string countryFilter = "Bangladesh";
 
             try
             {
-                if (ctlReferralsFile.Url.StartsWith("FileID="))
+                if (ctlProductsFile.Url.StartsWith("FileID="))
                 {
-                    int fileId = int.Parse(ctlReferralsFile.Url.Substring(7));
+                    int fileId = int.Parse(ctlProductsFile.Url.Substring(7));
                     FileController fileController = new FileController();
                     FileInfo fileInfo = fileController.GetFileById(fileId, PortalId);
                     if (fileInfo.FileName != String.Empty)
                     {
                         string xmlFilename = PortalSettings.HomeDirectoryMapPath + fileInfo.Folder + fileInfo.FileName;
 
-                        string schemaFilename = Server.MapPath("~/DesktopModules/ProductList/Components/referrals.xsd");
+                        string schemaFilename = Server.MapPath("~/DesktopModules/ProductList/Hotels_Standard.xsd");
                         PortalTemplateValidator xval = new PortalTemplateValidator();
                         if (!xval.Validate(xmlFilename, schemaFilename))
                         {
@@ -56,58 +84,145 @@ namespace Cowrie.Modules.ProductList
                                 logInfo.AddProperty("XMLError", error.ToString());
                                 eventLogController.AddLog(logInfo);
                             }
-                            DotNetNuke.UI.Skins.Skin.AddModuleMessage(this, "There are errors in XML file", DotNetNuke.UI.Skins.Controls.ModuleMessage.ModuleMessageType.RedError);
+                            DotNetNuke.UI.Skins.Skin.AddModuleMessage(this, "There are errors in XML file",
+                                                                      DotNetNuke.UI.Skins.Controls.ModuleMessage.
+                                                                          ModuleMessageType.RedError);
                             return;
                         }
 
-                        XDocument referralsXML = XDocument.Load(xmlFilename);
-                        var _referrals = from r in referralsXML.Descendants("referral")
-                                        select new
-                                        {
-                                            Name = r.Element("name").Value,
-                                            WebSite = r.Element("website") == null ? String.Empty : r.Element("website").Value,
-                                            Address = r.Element("address") == null ? String.Empty : r.Element("address").Value,
-                                            City = r.Element("city") == null ? String.Empty : r.Element("city").Value,
-                                            State = r.Element("state") == null ? String.Empty : r.Element("state").Value,
-                                            Zip = r.Element("zip") == null ? String.Empty : r.Element("zip").Value,
-                                            Priority = r.Element("priority") == null ? 0 : Convert.ToInt32(r.Element("priority").Value)
-                                        };
-                        using (MegottaDataContext db = new MegottaDataContext(ConfigurationManager.ConnectionStrings["SiteSqlServer"].ConnectionString))
-                        {
-                            foreach (var _referral in _referrals)
-                            {
-                                Referral referral = db.FindReferral(ModuleId, _referral.Name);
-                                if (referral == null)
+                        // read hotels from XML
+                        // use XmlReader to avoid huge file size dependence
+                        var xmlProducts =
+                            from el in StreamRootChildDoc(xmlFilename)
+                            select new
                                 {
-                                    referral = new Referral
-                                                       {
-                                                           ModuleID = ModuleId,
-                                                           Name = _referral.Name,
-                                                           WebSite = _referral.WebSite,
-                                                           Address = _referral.Address,
-                                                           City = _referral.City,
-                                                           State = _referral.State,
-                                                           Zip = _referral.Zip,
-                                                           Priority = _referral.Priority
-                                                       };
-                                    db.Referrals.InsertOnSubmit(referral);
+                                    Country = (string) el.Element("hotel_country"),
+                                    County = (string) el.Element("hotel_county"),
+                                    City = (string) el.Element("hotel_city"),
+                                    Number = (string) el.Element("hotel_ref"),
+                                    Name = (string) el.Element("hotel_name"),
+                                    Images = el.Element("images"),
+                                    UnitCost = (decimal) el.Element("PricesFrom"),
+                                    Description = (string) el.Element("hotel_description"),
+                                    DescriptionHTML = (string) el.Element("alternate_description"),
+                                    URL = (string) el.Element("hotel_link")
+                                };
+
+                        if (!String.IsNullOrEmpty(countryFilter))
+                        {
+                            xmlProducts = xmlProducts.Where(p => p.Country == countryFilter);
+                        }
+
+                        using (SelectedHotelsEntities db = new SelectedHotelsEntities())
+                        {
+                            foreach (var xmlProduct in xmlProducts)
+                            {
+                                var xmlProduct1 = xmlProduct;
+                                Product product =
+                                    db.Products.SingleOrDefault(
+                                        p => p.Number == xmlProduct1.Number && p.CreatedByUser == UserId);
+                                if (product == null)
+                                {
+                                    product = new Product
+                                        {
+                                            Name = xmlProduct1.Name,
+                                            Number = xmlProduct1.Number,
+                                            UnitCost = xmlProduct1.UnitCost,
+                                            Description = xmlProduct1.Description,
+                                            URL = xmlProduct.URL.Replace("[[PARTNERID]]", "2248").Trim(' '),
+                                            Image = (string) xmlProduct1.Images.Element("url"),
+                                            CreatedByUser = UserId,
+                                            IsDeleted = false
+                                        };
+                                    db.Products.Add(product);
+                                    db.SaveChanges();
                                 }
                                 else
                                 {
-                                    referral.ModuleID = ModuleId;
-                                    referral.WebSite = _referral.WebSite;
-                                    referral.Address = _referral.Address;
-                                    referral.City = _referral.City;
-                                    referral.State = _referral.State;
-                                    referral.Zip = _referral.Zip;
-                                    referral.Priority = _referral.Priority;
+                                    bool isChanged = false;
+                                    if (product.Name != xmlProduct1.Name)
+                                    {
+                                        product.Name = xmlProduct1.Name;
+                                        isChanged = true;
+                                    }
+                                    if (product.Number != xmlProduct1.Number)
+                                    {
+                                        product.Number = xmlProduct1.Number;
+                                        isChanged = true;
+                                    }
+                                    if (product.UnitCost != xmlProduct1.UnitCost)
+                                    {
+                                        product.UnitCost = xmlProduct1.UnitCost;
+                                        isChanged = true;
+                                    }
+                                    if (product.Description != xmlProduct1.Description)
+                                    {
+                                        product.Description = xmlProduct1.Description;
+                                        isChanged = true;
+                                    }
+                                    if (product.URL != xmlProduct1.URL.Replace("[[PARTNERID]]", "2248").Trim(' '))
+                                    {
+                                        product.URL = xmlProduct1.URL.Replace("[[PARTNERID]]", "2248").Trim(' ');
+                                        isChanged = true;
+                                    }
+                                    if (product.Image != (string) xmlProduct1.Images.Element("url"))
+                                    {
+                                        product.Image = (string) xmlProduct1.Images.Element("url");
+                                        isChanged = true;
+                                    }
+                                    if (isChanged)
+                                    {
+                                        db.SaveChanges();
+                                    }
                                 }
-                                db.SubmitChanges();
+
+                                var catergoryRoot = db.Categories.SingleOrDefault(
+                                    c =>
+                                    c.PortalId == PortalId && c.Name == categoryRootName);
+                                if (catergoryRoot == null)
+                                {
+                                    catergoryRoot = new Category
+                                        {PortalId = PortalId, Name = categoryRootName, IsDeleted = false};
+                                    db.Categories.Add(catergoryRoot);
+                                    db.SaveChanges();
+                                }
+                                if (product.Categories.SingleOrDefault(c => c.Id == catergoryRoot.Id) == null)
+                                {
+                                    product.Categories.Add(catergoryRoot);
+                                    db.SaveChanges();
+                                }
+
+                                int parentId = catergoryRoot.Id;
+                                if (!String.IsNullOrEmpty(xmlProduct1.Country))
+                                {
+                                    Category categoryCountry =
+                                        db.Categories.SingleOrDefault(
+                                            c =>
+                                            c.PortalId == PortalId && c.Name == xmlProduct1.Country &&
+                                            c.ParentId == parentId);
+                                    if (categoryCountry == null)
+                                    {
+                                        categoryCountry = new Category
+                                            {
+                                                PortalId = PortalId,
+                                                Name = xmlProduct1.Country,
+                                                ParentId = parentId,
+                                                IsDeleted = false
+                                            };
+                                        db.Categories.Add(categoryCountry);
+                                        db.SaveChanges();
+                                    }
+                                    if (product.Categories.SingleOrDefault(c => c.Id == categoryCountry.Id) == null)
+                                    {
+                                        product.Categories.Add(categoryCountry);
+                                        db.SaveChanges();
+                                    }
+                                }
                             }
                         }
                     }
-                    DotNetNuke.UI.Skins.Skin.AddModuleMessage(this, "Referrals were imported successfully.", DotNetNuke.UI.Skins.Controls.ModuleMessage.ModuleMessageType.GreenSuccess);
                 }
+                DotNetNuke.UI.Skins.Skin.AddModuleMessage(this, "Products were imported successfully.", DotNetNuke.UI.Skins.Controls.ModuleMessage.ModuleMessageType.GreenSuccess);
             }
             catch (Exception ex)
             {
@@ -121,7 +236,6 @@ namespace Cowrie.Modules.ProductList
 
                 Exceptions.ProcessModuleLoadException(this, ex);
             }
-#endif
         }
     }
 }

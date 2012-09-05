@@ -16,7 +16,7 @@ namespace ProductList
     {
         public Product()
         {
-            this.Categories = new HashSet<Categorie>();
+            this.Categories = new HashSet<Category>();
         }
     
         public int Id { get; set; }
@@ -27,7 +27,8 @@ namespace ProductList
         public string URL { get; set; }
         public int CreatedByUser { get; set; }
         public bool IsDeleted { get; set; }
+        public string Image { get; set; }
     
-        public virtual ICollection<Categorie> Categories { get; set; }
+        public virtual ICollection<Category> Categories { get; set; }
     }
 }

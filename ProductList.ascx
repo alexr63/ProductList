@@ -10,7 +10,7 @@
                 <asp:Label ID="LabelPrice" runat="server" Text='<%# Eval("UnitCost", "{0:c}") %>' />
             </td>
             <td rowspan="3">
-                <asp:Image ID="Image1" runat="server" />
+                <asp:Image ID="Image1" runat="server" ImageUrl='<%# Eval("Image") %>' Width="100" />
             </td>
             <td colspan="3">
                 <asp:Literal ID="LiteralDescription" runat="server" Text='<%# Eval("Description") != null ? Server.HtmlDecode(Eval("Description").ToString()) : String.Empty %>'></asp:Literal>
