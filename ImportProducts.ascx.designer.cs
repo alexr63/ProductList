@@ -22,15 +22,6 @@ namespace Cowrie.Modules.ProductList {
         protected global::System.Web.UI.WebControls.Panel pnlImport;
         
         /// <summary>
-        /// plProductsFile control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DotNetNuke.UI.UserControls.LabelControl plProductsFile;
-        
-        /// <summary>
         /// ctlProductsFile control.
         /// </summary>
         /// <remarks>
@@ -40,12 +31,30 @@ namespace Cowrie.Modules.ProductList {
         protected global::DotNetNuke.UI.UserControls.UrlControl ctlProductsFile;
         
         /// <summary>
-        /// ImageButtonImport control.
+        /// cboCountry control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ImageButton ImageButtonImport;
+        protected global::DotNetNuke.UI.WebControls.CountryListBox cboCountry;
+        
+        /// <summary>
+        /// valCountry control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator valCountry;
+        
+        /// <summary>
+        /// ButtonImport control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button ButtonImport;
     }
 }

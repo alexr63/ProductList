@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Web.UI.WebControls;
 using System.Xml;
 using System.Xml.Linq;
+using DotNetNuke.Common.Lists;
 using DotNetNuke.Entities.Modules;
 using DotNetNuke.Entities.Portals;
 using DotNetNuke.Services.Exceptions;
 using DotNetNuke.Services.FileSystem;
+using DotNetNuke.Services.Localization;
 using DotNetNuke.Services.Log.EventLog;
 using ProductList;
 
@@ -21,6 +24,11 @@ namespace Cowrie.Modules.ProductList
             {
                 if (!IsPostBack)
                 {
+                    var ctlEntry = new ListController();
+                    var entryCollection = ctlEntry.GetListEntryInfoItems("Country");
+                    cboCountry.DataSource = entryCollection;
+                    cboCountry.DataBind();
+                    cboCountry.Items.Insert(0, new ListItem("Please Select"));
                 }
             }
             catch (Exception ex)
@@ -52,12 +60,12 @@ namespace Cowrie.Modules.ProductList
             }
         }
 
-        protected void ImageButtonImport_Click(object sender, EventArgs e)
+        protected void ButtonImport_Click(object sender, EventArgs e)
         {
             EventLogController eventLogController = new EventLogController();
 
             string categoryRootName = "Hotels";
-            string countryFilter = "Bangladesh";
+            string countryFilter = cboCountry.SelectedItem.Text;
 
             try
             {
