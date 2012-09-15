@@ -8,6 +8,7 @@
         <EntityContainer Name="SelectedHotelsModelStoreContainer">
           <EntitySet Name="Cowrie_Categories" EntityType="SelectedHotelsModel.Store.Cowrie_Categories" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Cowrie_CategoryProducts" EntityType="SelectedHotelsModel.Store.Cowrie_CategoryProducts" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Cowrie_ProductImages" EntityType="SelectedHotelsModel.Store.Cowrie_ProductImages" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Cowrie_Products" EntityType="SelectedHotelsModel.Store.Cowrie_Products" store:Type="Tables" Schema="dbo" />
           <AssociationSet Name="FK_Cowrie_CategoryProducts_Cowrie_Categories" Association="SelectedHotelsModel.Store.FK_Cowrie_CategoryProducts_Cowrie_Categories">
             <End Role="Cowrie_Categories" EntitySet="Cowrie_Categories" />
@@ -16,6 +17,10 @@
           <AssociationSet Name="FK_Cowrie_CategoryProducts_Cowrie_Products" Association="SelectedHotelsModel.Store.FK_Cowrie_CategoryProducts_Cowrie_Products">
             <End Role="Cowrie_Products" EntitySet="Cowrie_Products" />
             <End Role="Cowrie_CategoryProducts" EntitySet="Cowrie_CategoryProducts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Cowrie_ProductImages_Cowrie_Products" Association="SelectedHotelsModel.Store.FK_Cowrie_ProductImages_Cowrie_Products">
+            <End Role="Cowrie_Products" EntitySet="Cowrie_Products" />
+            <End Role="Cowrie_ProductImages" EntitySet="Cowrie_ProductImages" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="Cowrie_Categories">
@@ -35,6 +40,14 @@
           </Key>
           <Property Name="CategoryId" Type="int" Nullable="false" />
           <Property Name="ProductId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Cowrie_ProductImages">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="ProductId" Type="int" Nullable="false" />
+          <Property Name="URL" Type="nvarchar" Nullable="false" MaxLength="250" />
         </EntityType>
         <EntityType Name="Cowrie_Products">
           <Key>
@@ -78,6 +91,20 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Cowrie_ProductImages_Cowrie_Products">
+          <End Role="Cowrie_Products" Type="SelectedHotelsModel.Store.Cowrie_Products" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Cowrie_ProductImages" Type="SelectedHotelsModel.Store.Cowrie_ProductImages" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cowrie_Products">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Cowrie_ProductImages">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
@@ -88,6 +115,11 @@
           <AssociationSet Name="Cowrie_CategoryProducts" Association="SelectedHotelsModel.Cowrie_CategoryProducts">
             <End Role="Cowrie_Categories" EntitySet="Categories" />
             <End Role="Cowrie_Products" EntitySet="Products" />
+          </AssociationSet>
+          <EntitySet Name="ProductImages" EntityType="SelectedHotelsModel.ProductImage" />
+          <AssociationSet Name="FK_Cowrie_ProductImages_Cowrie_Products" Association="SelectedHotelsModel.FK_Cowrie_ProductImages_Cowrie_Products">
+            <End Role="Product" EntitySet="Products" />
+            <End Role="Cowrie_ProductImages" EntitySet="ProductImages" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="Category">
@@ -115,10 +147,34 @@
           <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Categories" Relationship="SelectedHotelsModel.Cowrie_CategoryProducts" FromRole="Cowrie_Products" ToRole="Cowrie_Categories" />
           <Property Type="String" Name="Image" MaxLength="250" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="ProductImages" Relationship="SelectedHotelsModel.FK_Cowrie_ProductImages_Cowrie_Products" FromRole="Product" ToRole="Cowrie_ProductImages" />
         </EntityType>
         <Association Name="Cowrie_CategoryProducts">
           <End Role="Cowrie_Categories" Type="SelectedHotelsModel.Category" Multiplicity="*" />
           <End Role="Cowrie_Products" Type="SelectedHotelsModel.Product" Multiplicity="*" />
+        </Association>
+        <EntityType Name="ProductImage">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="ProductId" Nullable="false" />
+          <Property Type="String" Name="URL" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Product" Relationship="SelectedHotelsModel.FK_Cowrie_ProductImages_Cowrie_Products" FromRole="Cowrie_ProductImages" ToRole="Product" />
+        </EntityType>
+        <Association Name="FK_Cowrie_ProductImages_Cowrie_Products">
+          <End Type="SelectedHotelsModel.Product" Role="Product" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="SelectedHotelsModel.ProductImage" Role="Cowrie_ProductImages" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Cowrie_ProductImages">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
         </Association>
       </Schema>
     </edmx:ConceptualModels>
@@ -160,6 +216,15 @@
               <ScalarProperty Name="Id" ColumnName="ProductId" />
             </EndProperty>
           </AssociationSetMapping>
+          <EntitySetMapping Name="ProductImages">
+            <EntityTypeMapping TypeName="SelectedHotelsModel.ProductImage">
+              <MappingFragment StoreEntitySet="Cowrie_ProductImages">
+                <ScalarProperty Name="URL" ColumnName="URL" />
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -174,7 +239,7 @@
     <Options>
       <DesignerInfoPropertySet>
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
-        <DesignerProperty Name="EnablePluralization" Value="False" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
       </DesignerInfoPropertySet>

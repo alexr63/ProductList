@@ -226,6 +226,20 @@ namespace Cowrie.Modules.ProductList
                                         db.SaveChanges();
                                     }
                                 }
+
+                                product.ProductImages.Clear();
+                                db.SaveChanges();
+
+                                foreach (var image in xmlProduct1.Images.Elements("url"))
+                                {
+                                    if (!image.Value.Contains("/thumbnail/") && !image.Value.Contains("/detail/"))
+                                    {
+                                        ProductImage productImage = new ProductImage();
+                                        productImage.URL = image.Value;
+                                        product.ProductImages.Add(productImage);
+                                    }
+                                }
+                                db.SaveChanges();
                             }
                         }
                     }

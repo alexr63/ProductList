@@ -17,6 +17,7 @@ namespace ProductList
         public Product()
         {
             this.Categories = new HashSet<Category>();
+            this.ProductImages = new HashSet<ProductImage>();
         }
     
         public int Id { get; set; }
@@ -30,5 +31,6 @@ namespace ProductList
         public string Image { get; set; }
     
         public virtual ICollection<Category> Categories { get; set; }
+        public virtual ICollection<ProductImage> ProductImages { get; set; }
     }
 }

@@ -111,6 +111,9 @@
     <Compile Include="ImportProducts.ascx.designer.cs">
       <DependentUpon>ImportProducts.ascx</DependentUpon>
     </Compile>
+    <Compile Include="ProductImage.cs">
+      <DependentUpon>SelectedHotels.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ProductList.ascx.cs">
       <DependentUpon>ProductList.ascx</DependentUpon>

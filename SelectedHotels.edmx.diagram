@@ -8,6 +8,8 @@
         <EntityTypeShape EntityType="SelectedHotelsModel.Category" Width="1.5" PointX="0.75" PointY="1.25" IsExpanded="true" />
         <EntityTypeShape EntityType="SelectedHotelsModel.Product" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
         <AssociationConnector Association="SelectedHotelsModel.Cowrie_CategoryProducts" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="SelectedHotelsModel.ProductImage" Width="1.5" PointX="1.04220078375293" PointY="1.0893640821284447" />
+        <AssociationConnector Association="SelectedHotelsModel.FK_Cowrie_ProductImages_Cowrie_Products" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
