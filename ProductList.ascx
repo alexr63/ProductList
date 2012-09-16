@@ -1,18 +1,18 @@
 ﻿<%@ control language="C#" autoeventwireup="true" codebehind="ProductList.ascx.cs"
     inherits=" Cowrie.Modules.ProductList.ProductList" %>
-<asp:DataList ID="DataListContent" runat="server" Width="100%" RepeatLayout="Table" OnItemDataBound="DataListContent_DataBound">
+<asp:DataList ID="DataListContent" runat="server" Width="100%" RepeatLayout="Table" OnItemDataBound="DataListContent_DataBound" CellPadding="5">
     <ItemTemplate>
         <tr>
-            <td>
-                <asp:Label ID="LabelName" runat="server" Text='<%# Eval("Name") %>' />
+            <td style="vertical-align: middle">
+                <asp:HyperLink ID="HyperLinkName" runat="server" Text='<%# Eval("Name") %>' NavigateUrl='<%# DotNetNuke.Common.Globals.NavigateURL(TabId, "ProductDetails", "mid=" + ModuleId, "Id=" + Eval("Id")) %>' />
             </td>
-            <td>
+            <td style="vertical-align: middle">
                 <asp:Label ID="LabelPrice" runat="server" Text='<%# Eval("UnitCost", "{0:c}") %>' />
             </td>
-            <td rowspan="3">
-                <asp:Image ID="Image1" runat="server" ImageUrl='<%# Eval("Image") %>' Width="100" />
+            <td>
+                <asp:HyperLink ID="HyperLinkImage" runat="server" ImageUrl='<%# Eval("Image") %>' NavigateUrl='<%# DotNetNuke.Common.Globals.NavigateURL(TabId, "ProductDetails", "mid=" + ModuleId, "Id=" + Eval("Id")) %>' ImageWidth="100" />
             </td>
-            <td colspan="3">
+            <td>
                 <asp:Literal ID="LiteralDescription" runat="server" Text='<%# Eval("Description") != null ? Server.HtmlDecode(Eval("Description").ToString()) : String.Empty %>'></asp:Literal>
             </td>
         </tr>
