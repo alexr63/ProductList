@@ -24,10 +24,8 @@ namespace Cowrie.Modules.ProductList
                         product = db.Products.Find(id);
                         if (product != null)
                         {
-                            singleItemLink.ImageUrl = product.URL;
-
-                            ImageList.DataSource = product.ProductImages;
-                            ImageList.DataBind();
+                            Repeater1.DataSource = product.ProductImages;
+                            Repeater1.DataBind();
                         }
                         DataBind();
                     }
