@@ -10,6 +10,10 @@
           <EntitySet Name="Cowrie_CategoryProducts" EntityType="SelectedHotelsModel.Store.Cowrie_CategoryProducts" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Cowrie_ProductImages" EntityType="SelectedHotelsModel.Store.Cowrie_ProductImages" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Cowrie_Products" EntityType="SelectedHotelsModel.Store.Cowrie_Products" store:Type="Tables" Schema="dbo" />
+          <AssociationSet Name="FK_Cowrie_Categories_Cowrie_Categories" Association="SelectedHotelsModel.Store.FK_Cowrie_Categories_Cowrie_Categories">
+            <End Role="Cowrie_Categories" EntitySet="Cowrie_Categories" />
+            <End Role="Cowrie_Categories1" EntitySet="Cowrie_Categories" />
+          </AssociationSet>
           <AssociationSet Name="FK_Cowrie_CategoryProducts_Cowrie_Categories" Association="SelectedHotelsModel.Store.FK_Cowrie_CategoryProducts_Cowrie_Categories">
             <End Role="Cowrie_Categories" EntitySet="Cowrie_Categories" />
             <End Role="Cowrie_CategoryProducts" EntitySet="Cowrie_CategoryProducts" />
@@ -63,6 +67,18 @@
           <Property Name="IsDeleted" Type="bit" Nullable="false" />
           <Property Name="Image" Type="nvarchar" MaxLength="250" />
         </EntityType>
+        <Association Name="FK_Cowrie_Categories_Cowrie_Categories">
+          <End Role="Cowrie_Categories" Type="SelectedHotelsModel.Store.Cowrie_Categories" Multiplicity="0..1" />
+          <End Role="Cowrie_Categories1" Type="SelectedHotelsModel.Store.Cowrie_Categories" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cowrie_Categories">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Cowrie_Categories1">
+              <PropertyRef Name="ParentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Cowrie_CategoryProducts_Cowrie_Categories">
           <End Role="Cowrie_Categories" Type="SelectedHotelsModel.Store.Cowrie_Categories" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -121,6 +137,10 @@
             <End Role="Product" EntitySet="Products" />
             <End Role="Cowrie_ProductImages" EntitySet="ProductImages" />
           </AssociationSet>
+          <AssociationSet Name="FK_Cowrie_Categories_Cowrie_Categories" Association="SelectedHotelsModel.FK_Cowrie_Categories_Cowrie_Categories">
+            <End Role="Category" EntitySet="Categories" />
+            <End Role="ParentCategory" EntitySet="Categories" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="Category">
           <Key>
@@ -132,6 +152,8 @@
           <Property Name="ParentId" Type="Int32" />
           <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Products" Relationship="SelectedHotelsModel.Cowrie_CategoryProducts" FromRole="Cowrie_Categories" ToRole="Cowrie_Products" />
+          <NavigationProperty Name="SubCategories" Relationship="SelectedHotelsModel.FK_Cowrie_Categories_Cowrie_Categories" FromRole="Category" ToRole="ParentCategory" />
+          <NavigationProperty Name="ParentCategory" Relationship="SelectedHotelsModel.FK_Cowrie_Categories_Cowrie_Categories" FromRole="ParentCategory" ToRole="Category" />
         </EntityType>
         <EntityType Name="Product">
           <Key>
@@ -173,6 +195,18 @@
             </Principal>
             <Dependent Role="Cowrie_ProductImages">
               <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Cowrie_Categories_Cowrie_Categories">
+          <End Type="SelectedHotelsModel.Category" Role="Category" Multiplicity="0..1" />
+          <End Type="SelectedHotelsModel.Category" Role="ParentCategory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ParentCategory">
+              <PropertyRef Name="ParentId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>

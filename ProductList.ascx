@@ -1,5 +1,7 @@
 ﻿<%@ control language="C#" autoeventwireup="true" codebehind="ProductList.ascx.cs"
     inherits=" Cowrie.Modules.ProductList.ProductList" %>
+<%@ Register assembly="DotNetNuke.WebControls" namespace="DotNetNuke.UI.WebControls" tagPrefix="dnn" %>
+<dnn:DnnTree runat="server" ID="DNNTreeCategories" CollapsedNodeImage="../../Images/Plus.gif" ExpandedNodeImage="../../Images/Minus.gif" OnNodeClick="DNNTreeCategories_NodeClick"></dnn:DnnTree>
 <asp:DataList ID="DataListContent" runat="server" Width="100%" RepeatLayout="Table" OnItemDataBound="DataListContent_DataBound" CellPadding="5">
     <ItemTemplate>
         <tr>
