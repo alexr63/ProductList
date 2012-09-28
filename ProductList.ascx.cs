@@ -79,12 +79,6 @@ namespace Cowrie.Modules.ProductList
                     using (SelectedHotelsEntities db = new SelectedHotelsEntities())
                     {
                         PopulateTree(db);
-
-                        var query = from p in db.Products
-                                    where !p.IsDeleted && p.Categories.Any(c => c.PortalId == PortalId)
-                                    select p;
-                        DataListContent.DataSource = query.ToList();
-                        DataListContent.DataBind();
                     }
                 }
             }
@@ -92,6 +86,15 @@ namespace Cowrie.Modules.ProductList
             {
                 Exceptions.ProcessModuleLoadException(this, ex);
             }
+        }
+
+        private void BindData(SelectedHotelsEntities db, int categoryId)
+        {
+            var query = from p in db.Products
+                        where !p.IsDeleted && p.Categories.Any(c => c.Id == categoryId)
+                        select p;
+            DataListContent.DataSource = query.ToList();
+            DataListContent.DataBind();
         }
 
         #region IActionable Members
@@ -130,6 +133,10 @@ namespace Cowrie.Modules.ProductList
         protected void DNNTreeCategories_NodeClick(object source, DNNTreeNodeClickEventArgs e)
         {
             int categoryId = int.Parse(e.Node.Key);
+            using (SelectedHotelsEntities db = new SelectedHotelsEntities())
+            {
+                BindData(db, categoryId);
+            }
         }
     }
 }

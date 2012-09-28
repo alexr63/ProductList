@@ -153,6 +153,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Build\build.bat" />
+    <Content Include="module.css" />
     <Content Include="ProductDetails.ascx" />
     <Content Include="packages.config" />
     <Content Include="Hotels_Standard.xsc">
@@ -239,6 +240,6 @@
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>
-    <PostBuildEvent>$(ProjectDir)\build\build.bat $(ConfigurationName)</PostBuildEvent>
+    <PostBuildEvent>$(ProjectDir)build\build.bat $(ConfigurationName)</PostBuildEvent>
   </PropertyGroup>
 </Project>
