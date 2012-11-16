@@ -15,7 +15,7 @@ namespace Cowrie.Modules.ProductList
 {
     public partial class ProductList : PortalModuleBase, IActionable
     {
-        private void PopulateTree(SelectedHotelsEntities db)
+        private int? PopulateTree(SelectedHotelsEntities db)
         {
             DNNTreeCategories.TreeNodes.Clear();
             var topCategories = from c in db.Categories
@@ -45,6 +45,11 @@ namespace Cowrie.Modules.ProductList
                     }
                 }
             }
+            if (topCategories.Count() > 0)
+            {
+                return topCategories.First().Id;
+            }
+            return null;
         }
 
         private void PopulateChildrenTreeNodes(DotNetNuke.UI.WebControls.TreeNode objParent)
@@ -78,7 +83,11 @@ namespace Cowrie.Modules.ProductList
                 {
                     using (SelectedHotelsEntities db = new SelectedHotelsEntities())
                     {
-                        PopulateTree(db);
+                        int? firstCategoryId = PopulateTree(db);
+                        if (firstCategoryId.HasValue)
+                        {
+                            BindData(db, firstCategoryId.Value);
+                        }
                     }
                 }
             }
