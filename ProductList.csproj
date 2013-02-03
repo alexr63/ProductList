@@ -185,13 +185,6 @@
       <DependentUpon>SelectedHotels.edmx</DependentUpon>
       <LastGenOutput>SelectedHotels.cs</LastGenOutput>
     </Content>
-    <Content Include="Web.Config" />
-    <None Include="Web.Debug.Config">
-      <DependentUpon>Web.Config</DependentUpon>
-    </None>
-    <None Include="Web.Release.Config">
-      <DependentUpon>Web.Config</DependentUpon>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_LocalResources\ProductList.ascx.resx">
