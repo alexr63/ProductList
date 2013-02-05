@@ -38,6 +38,9 @@ XCOPY %project%\*.css %package%
 REM Copy JS
 XCOPY %project%\*.js %package%
 
+REM Copy fancybox
+XCOPY %project%\Scripts\fancybox\*.* %package%
+
 REM Copy SqlDataProvider files
 XCOPY %project%\*.SqlDataProvider %package%
 
