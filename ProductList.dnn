@@ -19,12 +19,6 @@
               <helpurl></helpurl>
             </control>
             <control>
-              <key>ImportProducts</key>
-              <src>DesktopModules/ProductList/ImportProducts.ascx</src>
-              <type>View</type>
-              <helpurl></helpurl>
-            </control>
-            <control>
               <key>ProductDetails</key>
               <title>Product Details</title>
               <src>DesktopModules/ProductList/ProductDetails.ascx</src>
@@ -38,9 +32,6 @@
       <files>
         <file>
           <name>ProductDetails.ascx</name>
-        </file>
-        <file>
-          <name>ImportProducts.ascx</name>
         </file>
         <file>
           <name>ProductList.dll</name>

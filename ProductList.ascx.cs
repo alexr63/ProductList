@@ -1,6 +1,7 @@
 ﻿// Copyright (c) 2012 Cowrie
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.UI.WebControls;
 using DotNetNuke.Common;
@@ -13,66 +14,43 @@ using ProductList;
 
 namespace Cowrie.Modules.ProductList
 {
-    public partial class ProductList : PortalModuleBase, IActionable
+    public partial class ProductList : PortalModuleBase
     {
         private int? PopulateTree(SelectedHotelsEntities db)
         {
-            DNNTreeCategories.TreeNodes.Clear();
-            var topCategories = from c in db.Categories
-                                where !c.IsDeleted && c.PortalId == PortalId && c.ParentId == null
-                                select c;
-            foreach (Category category in topCategories)
+            DNNTreeLocations.TreeNodes.Clear();
+            var topLocations = from l in db.Locations
+                                where !l.IsDeleted && l.ParentId == null
+                                select l;
+            foreach (Location location in topLocations)
             {
-                DotNetNuke.UI.WebControls.TreeNode objNode = new DotNetNuke.UI.WebControls.TreeNode(category.Name);
-                objNode.ToolTip = category.Name;
+                DotNetNuke.UI.WebControls.TreeNode objNode = new DotNetNuke.UI.WebControls.TreeNode(location.Name);
+                objNode.ToolTip = location.Name;
                 objNode.ClickAction = eClickAction.PostBack;
-                objNode.Key = category.Id.ToString();
-                DNNTreeCategories.TreeNodes.Add(objNode);
-                if (category.SubCategories.Any(c => !c.IsDeleted))
+                objNode.Key = location.Id.ToString();
+                DNNTreeLocations.TreeNodes.Add(objNode);
+                if (location.SubLocations.Any(l => !l.IsDeleted))
                 {
                     objNode.HasNodes = true;
-                    var subCategories = from c in category.SubCategories
-                                        where !c.IsDeleted
-                                        select c;
-                    foreach (Category subCategory in subCategories)
+                    var subLocations = from l in location.SubLocations
+                                        where !l.IsDeleted
+                                        select l;
+                    foreach (Location subLocation in subLocations)
                     {
                         int index = objNode.TreeNodes.Add();
                         objNode = objNode.TreeNodes[index];
-                        objNode.Text = subCategory.Name;
-                        objNode.ToolTip = subCategory.Name;
+                        objNode.Text = subLocation.Name;
+                        objNode.ToolTip = subLocation.Name;
                         objNode.ClickAction = eClickAction.PostBack;
-                        objNode.Key = subCategory.Id.ToString();
+                        objNode.Key = subLocation.Id.ToString();
                     }
                 }
             }
-            if (topCategories.Count() > 0)
+            if (topLocations.Count() > 0)
             {
-                return topCategories.First().Id;
+                return topLocations.First().Id;
             }
             return null;
-        }
-
-        private void PopulateChildrenTreeNodes(DotNetNuke.UI.WebControls.TreeNode objParent)
-        {
-            int index = 0;
-            DotNetNuke.UI.WebControls.TreeNode objTreeNode = new DotNetNuke.UI.WebControls.TreeNode();
-            index = objParent.TreeNodes.Add();
-            objTreeNode = objParent.TreeNodes[index];
-            objTreeNode.Text = "Super-Simple Module (DAL+)";
-            objTreeNode.NavigateUrl = "http://www.adefwebserver.com/DotNetNukeHELP/DNN_ShowMeThePages/";
-            objTreeNode.ClickAction = eClickAction.Navigate;
-            index = objParent.TreeNodes.Add();
-            objTreeNode = objParent.TreeNodes[index];
-            index += 1;
-            objTreeNode.Text = "Super-Fast Super-Easy Module (DAL+)";
-            objTreeNode.NavigateUrl = "http://www.adefwebserver.com/DotNetNukeHELP/DNN_Things4Sale/";
-            objTreeNode.ClickAction = eClickAction.Navigate;
-            index = objParent.TreeNodes.Add();
-            objTreeNode = objParent.TreeNodes[index];
-            index += 1;
-            objTreeNode.Text = "Create a full complete Module";
-            objTreeNode.NavigateUrl = "http://www.adefwebserver.com/DotNetNukeHELP/DNN_Module4/";
-            objTreeNode.ClickAction = eClickAction.Navigate;
         }
 
         protected void Page_Load(object sender, EventArgs e)
@@ -83,10 +61,10 @@ namespace Cowrie.Modules.ProductList
                 {
                     using (SelectedHotelsEntities db = new SelectedHotelsEntities())
                     {
-                        int? firstCategoryId = PopulateTree(db);
-                        if (firstCategoryId.HasValue)
+                        int? firstLocationId = PopulateTree(db);
+                        if (firstLocationId.HasValue)
                         {
-                            BindData(db, firstCategoryId.Value);
+                            BindData(db, firstLocationId.Value);
                         }
                     }
                 }
@@ -97,37 +75,17 @@ namespace Cowrie.Modules.ProductList
             }
         }
 
-        private void BindData(SelectedHotelsEntities db, int categoryId)
+        private void BindData(SelectedHotelsEntities db, int locationId)
         {
-            var query = from p in db.Products
-                        where !p.IsDeleted && p.Categories.Any(c => c.Id == categoryId)
-                        select p;
-            DataListContent.DataSource = query.ToList();
+            IList<Product> products = (from p in db.Products
+                        where !p.IsDeleted && p.ProductTypeId == 1
+                        select p).ToList();
+            IList<Hotel> hotels = products.Cast<Hotel>().ToList();
+            DataListContent.DataSource = hotels.Where(h =>  h.LocationId == locationId).ToList();
             DataListContent.DataBind();
         }
 
         #region IActionable Members
-
-        public DotNetNuke.Entities.Modules.Actions.ModuleActionCollection ModuleActions
-        {
-            get
-            {
-                //create a new action to add an item, this will be added to the controls
-                //dropdown menu
-                ModuleActionCollection actions = new ModuleActionCollection
-                                                     {
-                                                         {
-                                                             GetNextActionID(), "Import Products", "Import.Products",
-                                                             String.Empty, String.Empty,
-                                                             Globals.NavigateURL(TabId, "ImportProducts", "mid=" + ModuleId,
-                                                                                 "pid=" + PortalId),
-                                                             false, SecurityAccessLevel.Admin, true, false
-                                                             }
-                                                     };
-
-                return actions;
-            }
-        }
 
         #endregion
 
@@ -139,12 +97,12 @@ namespace Cowrie.Modules.ProductList
             }
         }
 
-        protected void DNNTreeCategories_NodeClick(object source, DNNTreeNodeClickEventArgs e)
+        protected void DNNTreeLocations_NodeClick(object source, DNNTreeNodeClickEventArgs e)
         {
-            int categoryId = int.Parse(e.Node.Key);
+            int locationId = int.Parse(e.Node.Key);
             using (SelectedHotelsEntities db = new SelectedHotelsEntities())
             {
-                BindData(db, categoryId);
+                BindData(db, locationId);
             }
         }
     }

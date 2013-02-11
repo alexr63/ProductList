@@ -99,13 +99,25 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Book.cs">
+      <DependentUpon>SelectedHotels.tt</DependentUpon>
+    </Compile>
     <Compile Include="Category.cs">
+      <DependentUpon>SelectedHotels.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Clothe.cs">
+      <DependentUpon>SelectedHotels.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Hotel.cs">
       <DependentUpon>SelectedHotels.tt</DependentUpon>
     </Compile>
     <Compile Include="Hotels_Standard.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Hotels_Standard.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Location.cs">
+      <DependentUpon>SelectedHotels.tt</DependentUpon>
     </Compile>
     <Compile Include="Product.cs">
       <DependentUpon>SelectedHotels.tt</DependentUpon>
@@ -117,14 +129,10 @@
     <Compile Include="ProductDetails.ascx.designer.cs">
       <DependentUpon>ProductDetails.ascx</DependentUpon>
     </Compile>
-    <Compile Include="ImportProducts.ascx.cs">
-      <DependentUpon>ImportProducts.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="ImportProducts.ascx.designer.cs">
-      <DependentUpon>ImportProducts.ascx</DependentUpon>
-    </Compile>
     <Compile Include="ProductImage.cs">
+      <DependentUpon>SelectedHotels.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ProductType.cs">
       <DependentUpon>SelectedHotels.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -210,15 +218,21 @@
       <DependentUpon>SelectedHotels.edmx</DependentUpon>
       <LastGenOutput>SelectedHotels.cs</LastGenOutput>
     </Content>
+    <Content Include="Web.Config">
+      <SubType>Designer</SubType>
+    </Content>
+    <None Include="Web.Debug.Config">
+      <DependentUpon>Web.Config</DependentUpon>
+    </None>
+    <None Include="Web.Release.Config">
+      <DependentUpon>Web.Config</DependentUpon>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_LocalResources\ProductList.ascx.resx">
       <SubType>Designer</SubType>
     </Content>
     <Content Include="ProductList.ascx" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="ImportProducts.ascx" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

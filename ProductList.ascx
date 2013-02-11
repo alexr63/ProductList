@@ -2,7 +2,7 @@
     inherits=" Cowrie.Modules.ProductList.ProductList" %>
 <%@ Register assembly="DotNetNuke.WebControls" namespace="DotNetNuke.UI.WebControls" tagPrefix="dnn" %>
 <div id="categories">
-    <dnn:DnnTree runat="server" ID="DNNTreeCategories" CollapsedNodeImage="../../Images/Plus.gif" ExpandedNodeImage="../../Images/Minus.gif" OnNodeClick="DNNTreeCategories_NodeClick"></dnn:DnnTree>
+    <dnn:DnnTree runat="server" ID="DNNTreeLocations" CollapsedNodeImage="../../Images/Plus.gif" ExpandedNodeImage="../../Images/Minus.gif" OnNodeClick="DNNTreeLocations_NodeClick"></dnn:DnnTree>
 </div>
 <div id="products">
     <asp:DataList ID="DataListContent" runat="server" Width="100%" RepeatLayout="Table" OnItemDataBound="DataListContent_DataBound" CellPadding="5">
