@@ -119,6 +119,7 @@
     <Compile Include="Location.cs">
       <DependentUpon>SelectedHotels.tt</DependentUpon>
     </Compile>
+    <Compile Include="PageQuery.cs" />
     <Compile Include="Product.cs">
       <DependentUpon>SelectedHotels.tt</DependentUpon>
     </Compile>

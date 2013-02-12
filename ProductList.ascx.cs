@@ -23,6 +23,7 @@ namespace Cowrie.Modules.ProductList
             DNNTreeLocations.TreeNodes.Clear();
             var topLocations = from l in db.Locations
                                where !l.IsDeleted && l.ParentId == null && l.Id == locationId
+                               orderby l.Name
                                select l;
             foreach (Location location in topLocations)
             {
@@ -47,6 +48,7 @@ namespace Cowrie.Modules.ProductList
                 objNode.HasNodes = true;
                 var subLocations = from l in location.SubLocations
                                    where !l.IsDeleted
+                                   orderby l.Name
                                    select l;
                 foreach (Location subLocation in subLocations)
                 {
@@ -70,7 +72,7 @@ namespace Cowrie.Modules.ProductList
                     using (SelectedHotelsEntities db = new SelectedHotelsEntities())
                     {
                         int? locationId = null;
-                        if (Settings["location"] == null)
+                        if (Settings["location"] != null)
                         {
                             locationId = Convert.ToInt32(Settings["location"]);
                         }
@@ -97,14 +99,18 @@ namespace Cowrie.Modules.ProductList
                 LabelLocation.Text = location.Name;
             }
             IList<Product> products = (from p in db.Products
-                        where !p.IsDeleted && p.ProductTypeId == 1
-                        select p).ToList();
+                                       where !p.IsDeleted && p.ProductTypeId == 1
+                                       orderby p.Name
+                                       select p).ToList();
             IList<Hotel> hotels = products.Cast<Hotel>().ToList();
-            DataListContent.DataSource =
-                hotels.Where(
-                    h =>
-                    h.LocationId == locationId || h.Location.ParentId == locationId ||
-                    (h.Location.ParentLocation != null && h.Location.ParentLocation.ParentId == locationId)).ToList();
+            int pageSize = 10;
+            int page = 1;
+            int skip = Math.Max(pageSize * (page - 1), 0);
+            var query = (from h in hotels
+                        where h.LocationId == locationId || h.Location.ParentId == locationId ||
+                              (h.Location.ParentLocation != null && h.Location.ParentLocation.ParentId == locationId)
+                         select h).Skip(skip).Take(pageSize);
+            DataListContent.DataSource = query;
             DataListContent.DataBind();
         }
 
