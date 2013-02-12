@@ -6,7 +6,7 @@
       <foldername>ProductList</foldername>
       <modulename>ProductList</modulename>
       <description>A ProductList module</description>
-      <version>01.01.00</version>
+      <version>01.02.00</version>
       <businesscontrollerclass></businesscontrollerclass>
       <modules>
         <module>
@@ -26,10 +26,20 @@
               <helpurl></helpurl>
               <supportspartialrendering>true</supportspartialrendering>
             </control>
+            <control>
+              <key>Settings</key>
+              <title>LeadCapture Settings</title>
+              <src>DesktopModules/ProductList/Settings.ascx</src>
+              <type>Edit</type>
+              <helpurl></helpurl>
+            </control>
           </controls>
         </module>
       </modules>
       <files>
+        <file>
+          <name>Settings.ascx</name>
+        </file>
         <file>
           <name>ProductDetails.ascx</name>
         </file>

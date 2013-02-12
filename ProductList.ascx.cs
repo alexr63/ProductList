@@ -4,10 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.UI.WebControls;
-using DotNetNuke.Common;
 using DotNetNuke.Entities.Modules;
-using DotNetNuke.Entities.Modules.Actions;
-using DotNetNuke.Security;
 using DotNetNuke.Services.Exceptions;
 using DotNetNuke.UI.WebControls;
 using ProductList;
@@ -17,15 +14,19 @@ namespace Cowrie.Modules.ProductList
 {
     public partial class ProductList : PortalModuleBase
     {
-        private int? PopulateTree(SelectedHotelsEntities db)
+        private int? PopulateTree(SelectedHotelsEntities db, int? locationId)
         {
+            if (locationId == null)
+            {
+                locationId = 1;
+            }
             DNNTreeLocations.TreeNodes.Clear();
             var topLocations = from l in db.Locations
-                                where !l.IsDeleted && l.ParentId == null && l.Id == 1
-                                select l;
+                               where !l.IsDeleted && l.ParentId == null && l.Id == locationId
+                               select l;
             foreach (Location location in topLocations)
             {
-                DotNetNuke.UI.WebControls.TreeNode objNode = new DotNetNuke.UI.WebControls.TreeNode(location.Name);
+                TreeNode objNode = new TreeNode(location.Name);
                 objNode.ToolTip = location.Name;
                 objNode.ClickAction = eClickAction.PostBack;
                 objNode.Key = location.Id.ToString();
@@ -50,7 +51,7 @@ namespace Cowrie.Modules.ProductList
                 foreach (Location subLocation in subLocations)
                 {
                     int index = objNode.TreeNodes.Add();
-                    DotNetNuke.UI.WebControls.TreeNode objSubNode = objNode.TreeNodes[index];
+                    TreeNode objSubNode = objNode.TreeNodes[index];
                     objSubNode.Text = subLocation.Name;
                     objSubNode.ToolTip = subLocation.Name;
                     objSubNode.ClickAction = eClickAction.PostBack;
@@ -68,7 +69,13 @@ namespace Cowrie.Modules.ProductList
                 {
                     using (SelectedHotelsEntities db = new SelectedHotelsEntities())
                     {
-                        int? firstLocationId = PopulateTree(db);
+                        int? locationId = null;
+                        if (Settings["location"] == null)
+                        {
+                            locationId = Convert.ToInt32(Settings["location"]);
+                        }
+
+                        int? firstLocationId = PopulateTree(db, locationId);
                         if (firstLocationId.HasValue)
                         {
                             BindData(db, firstLocationId.Value);

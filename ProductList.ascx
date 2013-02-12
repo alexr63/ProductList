@@ -1,5 +1,5 @@
 ﻿<%@ control language="C#" autoeventwireup="true" codebehind="ProductList.ascx.cs"
-    inherits=" Cowrie.Modules.ProductList.ProductList" %>
+    inherits="Cowrie.Modules.ProductList.ProductList" %>
 <%@ Register assembly="DotNetNuke.WebControls" namespace="DotNetNuke.UI.WebControls" tagPrefix="dnn" %>
 <div id="categories">
     <dnn:DnnTree runat="server" ID="DNNTreeLocations" CollapsedNodeImage="../../Images/Plus.gif" ExpandedNodeImage="../../Images/Minus.gif" OnNodeClick="DNNTreeLocations_NodeClick"></dnn:DnnTree>
