@@ -5,6 +5,7 @@
     <dnn:DnnTree runat="server" ID="DNNTreeLocations" CollapsedNodeImage="../../Images/Plus.gif" ExpandedNodeImage="../../Images/Minus.gif" OnNodeClick="DNNTreeLocations_NodeClick"></dnn:DnnTree>
 </div>
 <div id="products">
+    <h1><asp:Label ID="LabelLocation" runat="server" /></h1>
     <asp:DataList ID="DataListContent" runat="server" Width="100%" RepeatLayout="Table" OnItemDataBound="DataListContent_DataBound" CellPadding="5">
         <ItemTemplate>
             <tr>

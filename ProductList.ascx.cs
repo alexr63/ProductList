@@ -11,6 +11,7 @@ using DotNetNuke.Security;
 using DotNetNuke.Services.Exceptions;
 using DotNetNuke.UI.WebControls;
 using ProductList;
+using TreeNode = DotNetNuke.UI.WebControls.TreeNode;
 
 namespace Cowrie.Modules.ProductList
 {
@@ -20,7 +21,7 @@ namespace Cowrie.Modules.ProductList
         {
             DNNTreeLocations.TreeNodes.Clear();
             var topLocations = from l in db.Locations
-                                where !l.IsDeleted && l.ParentId == null
+                                where !l.IsDeleted && l.ParentId == null && l.Id == 1
                                 select l;
             foreach (Location location in topLocations)
             {
@@ -29,28 +30,34 @@ namespace Cowrie.Modules.ProductList
                 objNode.ClickAction = eClickAction.PostBack;
                 objNode.Key = location.Id.ToString();
                 DNNTreeLocations.TreeNodes.Add(objNode);
-                if (location.SubLocations.Any(l => !l.IsDeleted))
-                {
-                    objNode.HasNodes = true;
-                    var subLocations = from l in location.SubLocations
-                                        where !l.IsDeleted
-                                        select l;
-                    foreach (Location subLocation in subLocations)
-                    {
-                        int index = objNode.TreeNodes.Add();
-                        objNode = objNode.TreeNodes[index];
-                        objNode.Text = subLocation.Name;
-                        objNode.ToolTip = subLocation.Name;
-                        objNode.ClickAction = eClickAction.PostBack;
-                        objNode.Key = subLocation.Id.ToString();
-                    }
-                }
+                CreateSubLocationNodes(location, objNode);
             }
-            if (topLocations.Count() > 0)
+            if (topLocations.Any())
             {
                 return topLocations.First().Id;
             }
             return null;
+        }
+
+        private static void CreateSubLocationNodes(Location location, TreeNode objNode)
+        {
+            if (location.SubLocations.Any(l => !l.IsDeleted))
+            {
+                objNode.HasNodes = true;
+                var subLocations = from l in location.SubLocations
+                                   where !l.IsDeleted
+                                   select l;
+                foreach (Location subLocation in subLocations)
+                {
+                    int index = objNode.TreeNodes.Add();
+                    DotNetNuke.UI.WebControls.TreeNode objSubNode = objNode.TreeNodes[index];
+                    objSubNode.Text = subLocation.Name;
+                    objSubNode.ToolTip = subLocation.Name;
+                    objSubNode.ClickAction = eClickAction.PostBack;
+                    objSubNode.Key = subLocation.Id.ToString();
+                    CreateSubLocationNodes(subLocation, objSubNode);
+                }
+            }
         }
 
         protected void Page_Load(object sender, EventArgs e)
@@ -77,11 +84,20 @@ namespace Cowrie.Modules.ProductList
 
         private void BindData(SelectedHotelsEntities db, int locationId)
         {
+            var location = db.Locations.SingleOrDefault(l => l.Id == locationId);
+            if (location != null)
+            {
+                LabelLocation.Text = location.Name;
+            }
             IList<Product> products = (from p in db.Products
                         where !p.IsDeleted && p.ProductTypeId == 1
                         select p).ToList();
             IList<Hotel> hotels = products.Cast<Hotel>().ToList();
-            DataListContent.DataSource = hotels.Where(h =>  h.LocationId == locationId).ToList();
+            DataListContent.DataSource =
+                hotels.Where(
+                    h =>
+                    h.LocationId == locationId || h.Location.ParentId == locationId ||
+                    (h.Location.ParentLocation != null && h.Location.ParentLocation.ParentId == locationId)).ToList();
             DataListContent.DataBind();
         }
 
