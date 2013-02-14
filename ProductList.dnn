@@ -35,6 +35,17 @@
             </control>
           </controls>
         </module>
+        <module>
+          <friendlyname>HomeAndGardens</friendlyname>
+          <cachetime>0</cachetime>
+          <controls>
+            <control>
+              <src>DesktopModules/ProductList/HomeAndGardens.ascx</src>
+              <type>View</type>
+              <helpurl></helpurl>
+            </control>
+          </controls>
+        </module>
       </modules>
       <files>
         <file>
@@ -48,6 +59,9 @@
         </file>
         <file>
           <name>ProductList.ascx</name>
+        </file>
+        <file>
+          <name>HomeAndGardens.ascx</name>
         </file>
         <file>
           <path>Scripts/fancybox</path>

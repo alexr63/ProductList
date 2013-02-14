@@ -108,6 +108,17 @@
     <Compile Include="Clothe.cs">
       <DependentUpon>SelectedHotels.tt</DependentUpon>
     </Compile>
+    <Compile Include="Enums.cs" />
+    <Compile Include="HomeAndGarden.cs">
+      <DependentUpon>SelectedHotels.tt</DependentUpon>
+    </Compile>
+    <Compile Include="HomeAndGardens.ascx.cs">
+      <DependentUpon>HomeAndGardens.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="HomeAndGardens.ascx.designer.cs">
+      <DependentUpon>HomeAndGardens.ascx</DependentUpon>
+    </Compile>
     <Compile Include="Hotel.cs">
       <DependentUpon>SelectedHotels.tt</DependentUpon>
     </Compile>
@@ -169,6 +180,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Build\build.bat" />
+    <Content Include="HomeAndGardens.ascx" />
     <Content Include="module.css" />
     <Content Include="ProductDetails.ascx" />
     <Content Include="packages.config" />

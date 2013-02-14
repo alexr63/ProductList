@@ -100,7 +100,7 @@ namespace Cowrie.Modules.ProductList
                 LabelLocation.Text = location.Name;
             }
             IList<Product> products = (from p in db.Products
-                                       where !p.IsDeleted && p.ProductTypeId == 1
+                                       where !p.IsDeleted && p.ProductTypeId == (int)Enums.ProductTypeEnum.Hotels
                                        select p).ToList();
             IList<Hotel> hotels = products.Cast<Hotel>().ToList();
             var query = from h in hotels
