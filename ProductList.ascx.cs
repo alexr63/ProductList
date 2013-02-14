@@ -80,6 +80,7 @@ namespace Cowrie.Modules.ProductList
                         int? firstLocationId = PopulateTree(db, locationId);
                         if (firstLocationId.HasValue)
                         {
+                            ViewState["locationId"] = firstLocationId;
                             BindData(db, firstLocationId.Value);
                         }
                     }
@@ -100,18 +101,23 @@ namespace Cowrie.Modules.ProductList
             }
             IList<Product> products = (from p in db.Products
                                        where !p.IsDeleted && p.ProductTypeId == 1
-                                       orderby p.Name
                                        select p).ToList();
             IList<Hotel> hotels = products.Cast<Hotel>().ToList();
-            int pageSize = 10;
-            int page = 1;
-            int skip = Math.Max(pageSize * (page - 1), 0);
-            var query = (from h in hotels
-                        where h.LocationId == locationId || h.Location.ParentId == locationId ||
-                              (h.Location.ParentLocation != null && h.Location.ParentLocation.ParentId == locationId)
-                         select h).Skip(skip).Take(pageSize);
-            DataListContent.DataSource = query;
-            DataListContent.DataBind();
+            var query = from h in hotels
+                         where h.LocationId == locationId || h.Location.ParentId == locationId ||
+                               (h.Location.ParentLocation != null && h.Location.ParentLocation.ParentId == locationId)
+                         select h;
+            if (DropDownListSortCriterias.SelectedValue == "Name")
+            {
+                ListViewContent.DataSource = query.OrderBy(h => h.Name).ToList();
+            }
+            else
+            {
+                ListViewContent.DataSource = query.OrderBy(h => h.UnitCost).ToList();
+            }
+            ListViewContent.DataBind();
+
+            LabelCount.Text = query.Count().ToString();
         }
 
         #region IActionable Members
@@ -129,9 +135,43 @@ namespace Cowrie.Modules.ProductList
         protected void DNNTreeLocations_NodeClick(object source, DNNTreeNodeClickEventArgs e)
         {
             int locationId = int.Parse(e.Node.Key);
+            ViewState["locationId"] = locationId;
             using (SelectedHotelsEntities db = new SelectedHotelsEntities())
             {
                 BindData(db, locationId);
+            }
+        }
+
+        protected void DropDownListSortCriterias_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (ViewState["locationId"] != null)
+            {
+                int locationId = Convert.ToInt32(ViewState["locationId"]);
+                using (SelectedHotelsEntities db = new SelectedHotelsEntities())
+                {
+                    BindData(db, locationId);
+                }
+            }
+        }
+
+        protected void DropDownListPageSizes_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            DataPagerContent.PageSize = Convert.ToInt32(DropDownListPageSizes.SelectedValue);
+        }
+
+        protected void ListViewContent_PagePropertiesChanging(object sender, PagePropertiesChangingEventArgs e)
+        {
+            //set current page startindex, max rows and rebind to false
+            DataPagerContent.SetPageProperties(e.StartRowIndex, e.MaximumRows, false);
+
+            //rebind List View
+            if (ViewState["locationId"] != null)
+            {
+                int locationId = Convert.ToInt32(ViewState["locationId"]);
+                using (SelectedHotelsEntities db = new SelectedHotelsEntities())
+                {
+                    BindData(db, locationId);
+                }
             }
         }
     }

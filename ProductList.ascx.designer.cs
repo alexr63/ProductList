@@ -31,12 +31,48 @@ namespace Cowrie.Modules.ProductList {
         protected global::System.Web.UI.WebControls.Label LabelLocation;
         
         /// <summary>
-        /// DataListContent control.
+        /// LabelCount control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DataList DataListContent;
+        protected global::System.Web.UI.WebControls.Label LabelCount;
+        
+        /// <summary>
+        /// DropDownListSortCriterias control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList DropDownListSortCriterias;
+        
+        /// <summary>
+        /// DropDownListPageSizes control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList DropDownListPageSizes;
+        
+        /// <summary>
+        /// DataPagerContent control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DataPager DataPagerContent;
+        
+        /// <summary>
+        /// ListViewContent control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ListView ListViewContent;
     }
 }

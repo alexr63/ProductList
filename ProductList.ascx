@@ -6,7 +6,51 @@
 </div>
 <div id="products">
     <h1><asp:Label ID="LabelLocation" runat="server" /></h1>
-    <asp:DataList ID="DataListContent" runat="server" Width="100%" RepeatLayout="Table" OnItemDataBound="DataListContent_DataBound" CellPadding="5">
+    <table style="width: 100%">
+        <tr>
+            <td>
+                <asp:Label ID="LabelCount" runat="server" /> hotels found
+            </td>
+            <td>
+                Sort by <asp:DropDownList ID="DropDownListSortCriterias" runat="server" AutoPostBack="True" OnSelectedIndexChanged="DropDownListSortCriterias_SelectedIndexChanged">
+                    <asp:ListItem Selected="True">Name</asp:ListItem>
+                    <asp:ListItem>Price</asp:ListItem>
+                </asp:DropDownList>
+            </td>
+            <td>
+                View <asp:DropDownList ID="DropDownListPageSizes" runat="server" AutoPostBack="True" OnSelectedIndexChanged="DropDownListPageSizes_SelectedIndexChanged">
+                    <asp:ListItem Selected="True">10</asp:ListItem>
+                    <asp:ListItem>20</asp:ListItem>
+                    <asp:ListItem>50</asp:ListItem>
+                </asp:DropDownList>
+            </td>
+            <td>
+                <asp:DataPager ID="DataPagerContent" runat="server" PagedControlID="ListViewContent">
+                    <Fields>
+                        <asp:NextPreviousPagerField ShowFirstPageButton="True" ShowNextPageButton="False" ShowPreviousPageButton="False" />
+                        <asp:NumericPagerField />
+                        <asp:NextPreviousPagerField ShowLastPageButton="True" ShowNextPageButton="False" ShowPreviousPageButton="False" />
+                    </Fields>
+                </asp:DataPager>
+            </td>
+        </tr>
+    </table>
+    <asp:ListView ID="ListViewContent" runat="server" OnPagePropertiesChanging="ListViewContent_PagePropertiesChanging">
+        <LayoutTemplate>
+            <h3>Product Listing</h3>
+            <table>
+                <asp:PlaceHolder runat="server" ID="itemPlaceholder"></asp:PlaceHolder>                        
+            </table>
+        </LayoutTemplate>
+        
+        <ItemSeparatorTemplate>
+            <tr>
+                <td colspan="4">
+                    <hr />
+                </td>
+            </tr>
+        </ItemSeparatorTemplate>
+
         <ItemTemplate>
             <tr>
                 <td style="vertical-align: middle">
@@ -23,12 +67,5 @@
                 </td>
             </tr>
         </ItemTemplate>
-        <SeparatorTemplate>
-            <tr>
-                <td colspan="4">
-                    <hr />
-                </td>
-            </tr>
-        </SeparatorTemplate>
-    </asp:DataList>
+    </asp:ListView>
 </div>
