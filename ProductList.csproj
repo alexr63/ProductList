@@ -70,6 +70,7 @@
     <Reference Include="Microsoft.ApplicationBlocks.Data, Version=2.0.0.0, Culture=neutral">
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
@@ -107,6 +108,13 @@
     </Compile>
     <Compile Include="Clothe.cs">
       <DependentUpon>SelectedHotels.tt</DependentUpon>
+    </Compile>
+    <Compile Include="HomeAndGardensDetails.ascx.cs">
+      <DependentUpon>HomeAndGardensDetails.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="HomeAndGardensDetails.ascx.designer.cs">
+      <DependentUpon>HomeAndGardensDetails.ascx</DependentUpon>
     </Compile>
     <Compile Include="Enums.cs" />
     <Compile Include="HomeAndGarden.cs">
@@ -177,9 +185,11 @@
     <Compile Include="Settings.ascx.designer.cs">
       <DependentUpon>Settings.ascx</DependentUpon>
     </Compile>
+    <Compile Include="Utils.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Build\build.bat" />
+    <Content Include="HomeAndGardensDetails.ascx" />
     <Content Include="HomeAndGardens.ascx" />
     <Content Include="module.css" />
     <Content Include="ProductDetails.ascx" />

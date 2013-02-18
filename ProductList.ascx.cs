@@ -8,61 +8,11 @@ using DotNetNuke.Entities.Modules;
 using DotNetNuke.Services.Exceptions;
 using DotNetNuke.UI.WebControls;
 using ProductList;
-using TreeNode = DotNetNuke.UI.WebControls.TreeNode;
 
 namespace Cowrie.Modules.ProductList
 {
     public partial class ProductList : PortalModuleBase
     {
-        private int? PopulateTree(SelectedHotelsEntities db, int? locationId)
-        {
-            if (locationId == null)
-            {
-                locationId = 1;
-            }
-            DNNTreeLocations.TreeNodes.Clear();
-            var topLocations = from l in db.Locations
-                               where !l.IsDeleted && l.ParentId == null && l.Id == locationId
-                               orderby l.Name
-                               select l;
-            foreach (Location location in topLocations)
-            {
-                TreeNode objNode = new TreeNode(location.Name);
-                objNode.ToolTip = location.Name;
-                objNode.ClickAction = eClickAction.PostBack;
-                objNode.Key = location.Id.ToString();
-                DNNTreeLocations.TreeNodes.Add(objNode);
-                CreateSubLocationNodes(location, objNode);
-            }
-            if (topLocations.Any())
-            {
-                return topLocations.First().Id;
-            }
-            return null;
-        }
-
-        private static void CreateSubLocationNodes(Location location, TreeNode objNode)
-        {
-            if (location.SubLocations.Any(l => !l.IsDeleted))
-            {
-                objNode.HasNodes = true;
-                var subLocations = from l in location.SubLocations
-                                   where !l.IsDeleted
-                                   orderby l.Name
-                                   select l;
-                foreach (Location subLocation in subLocations)
-                {
-                    int index = objNode.TreeNodes.Add();
-                    TreeNode objSubNode = objNode.TreeNodes[index];
-                    objSubNode.Text = subLocation.Name;
-                    objSubNode.ToolTip = subLocation.Name;
-                    objSubNode.ClickAction = eClickAction.PostBack;
-                    objSubNode.Key = subLocation.Id.ToString();
-                    CreateSubLocationNodes(subLocation, objSubNode);
-                }
-            }
-        }
-
         protected void Page_Load(object sender, EventArgs e)
         {
             try
@@ -76,8 +26,9 @@ namespace Cowrie.Modules.ProductList
                         {
                             locationId = Convert.ToInt32(Settings["location"]);
                         }
-
-                        int? firstLocationId = PopulateTree(db, locationId);
+                        var location = db.Locations.SingleOrDefault(l => l.Id == locationId);
+                        LabelLocation.Text = location.Name;
+                        int? firstLocationId = Utils.PopulateTree(DNNTreeLocations, db, locationId);
                         if (firstLocationId.HasValue)
                         {
                             ViewState["locationId"] = firstLocationId;
@@ -97,7 +48,7 @@ namespace Cowrie.Modules.ProductList
             var location = db.Locations.SingleOrDefault(l => l.Id == locationId);
             if (location != null)
             {
-                LabelLocation.Text = location.Name;
+                LabelSelectedLocation.Text = location.Name;
             }
             IList<Product> products = (from p in db.Products
                                        where !p.IsDeleted && p.ProductTypeId == (int)Enums.ProductTypeEnum.Hotels
@@ -172,6 +123,16 @@ namespace Cowrie.Modules.ProductList
                 {
                     BindData(db, locationId);
                 }
+            }
+        }
+
+        protected void DNNTreeLocations_PopulateOnDemand(object source, DotNetNuke.UI.WebControls.DNNTreeEventArgs e)
+        {
+            using (SelectedHotelsEntities db = new SelectedHotelsEntities())
+            {
+                int? locationId = Convert.ToInt32(e.Node.Key);
+                var location = db.Locations.SingleOrDefault(l => l.Id == locationId);
+                Utils.CreateSubLocationNodes(location, e.Node, locationId);
             }
         }
     }

@@ -2,10 +2,11 @@
     inherits="Cowrie.Modules.ProductList.ProductList" %>
 <%@ Register assembly="DotNetNuke.WebControls" namespace="DotNetNuke.UI.WebControls" tagPrefix="dnn" %>
 <div id="categories">
-    <dnn:DnnTree runat="server" ID="DNNTreeLocations" CollapsedNodeImage="../../Images/Plus.gif" ExpandedNodeImage="../../Images/Minus.gif" OnNodeClick="DNNTreeLocations_NodeClick"></dnn:DnnTree>
+    <dnn:DnnTree runat="server" ID="DNNTreeLocations" CollapsedNodeImage="../../Images/Plus.gif" ExpandedNodeImage="../../Images/Minus.gif" OnNodeClick="DNNTreeLocations_NodeClick" PopulateOnDemand="DNNTreeLocations_PopulateOnDemand"></dnn:DnnTree>
 </div>
 <div id="products">
     <h1><asp:Label ID="LabelLocation" runat="server" /></h1>
+    <h2><asp:Label ID="LabelSelectedLocation" runat="server" /></h2>
     <table style="width: 100%">
         <tr>
             <td>

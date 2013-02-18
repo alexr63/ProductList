@@ -13,30 +13,39 @@ namespace Cowrie.Modules.ProductList {
     public partial class Settings {
         
         /// <summary>
-        /// lblLocation control.
+        /// DnnLabelCurrentLocation control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DotNetNuke.UI.UserControls.LabelControl lblLocation;
+        protected global::DotNetNuke.UI.UserControls.LabelControl DnnLabelCurrentLocation;
         
         /// <summary>
-        /// cbLocations control.
+        /// LabelCurrentLocation control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList cbLocations;
+        protected global::System.Web.UI.WebControls.Label LabelCurrentLocation;
         
         /// <summary>
-        /// valLocations control.
+        /// LabelLocation control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator valLocations;
+        protected global::DotNetNuke.UI.UserControls.LabelControl LabelLocation;
+        
+        /// <summary>
+        /// DNNTreeLocations control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DotNetNuke.UI.WebControls.DnnTree DNNTreeLocations;
     }
 }
