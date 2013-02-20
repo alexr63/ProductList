@@ -1,6 +1,7 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="Settings.ascx.cs" Inherits="Cowrie.Modules.ProductList.Settings" %>
 <%@ Register TagPrefix="dnn" TagName="Label" Src="~/controls/LabelControl.ascx" %>
 <%@ Register assembly="DotNetNuke.WebControls" namespace="DotNetNuke.UI.WebControls" tagPrefix="dnn" %>
+<%@ Register TagPrefix="telerik" Namespace="Telerik.Web.UI" Assembly="Telerik.Web.UI" %>
 <table cellspacing="0" cellpadding="2" border="0" summary="ModuleName1 Settings Design Table">
     <tr>
         <td class="SubHead" width="150" valign="top">
@@ -19,7 +20,9 @@
             </dnn:Label>
         </td>
         <td valign="bottom">
-            <dnn:DnnTree runat="server" ID="DNNTreeLocations" CollapsedNodeImage="../../Images/Plus.gif" ExpandedNodeImage="../../Images/Minus.gif" PopulateOnDemand="DNNTreeLocations_PopulateOnDemand"></dnn:DnnTree>
+            <telerik:RadTreeView ID="RadTreeViewLocations" runat="server" Height="300px" Width="100%"
+                OnNodeExpand="RadTreeViewLocations_NodeExpand">
+            </telerik:RadTreeView>
         </td>
     </tr>
 </table>

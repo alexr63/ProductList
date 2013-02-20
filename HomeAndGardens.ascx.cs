@@ -35,12 +35,9 @@ namespace Cowrie.Modules.ProductList
 
         private void BindSizes(SelectedHotelsEntities db)
         {
-            IList<Product> products = (from p in db.Products
-                                       where
-                                           !p.IsDeleted &&
-                                           p.ProductTypeId == (int) Enums.ProductTypeEnum.HomeAndGardens
-                                       select p).ToList();
-            IList<HomeAndGarden> homeAndGardens = products.Cast<HomeAndGarden>().ToList();
+            IList<HomeAndGarden> homeAndGardens = (from p in db.Products
+                                                   where !p.IsDeleted
+                                                   select p).OfType<HomeAndGarden>().ToList();
             var query = (from h in homeAndGardens
                          where h.Size != String.Empty
                          orderby h.Size
@@ -51,10 +48,9 @@ namespace Cowrie.Modules.ProductList
 
         private void BindData(SelectedHotelsEntities db)
         {
-            IList<Product> products = (from p in db.Products
-                                       where !p.IsDeleted && p.ProductTypeId == (int)Enums.ProductTypeEnum.HomeAndGardens
-                                       select p).ToList();
-            IList<HomeAndGarden> homeAndGardens = products.Cast<HomeAndGarden>().ToList();
+            IList<HomeAndGarden> homeAndGardens = (from p in db.Products
+                                                   where !p.IsDeleted
+                                                   select p).OfType<HomeAndGarden>().ToList();
             List<string> selectedSizes = new List<string>();
             IEnumerable<HomeAndGarden> query;
             if (CheckBoxListSizes.Items[0].Selected)
