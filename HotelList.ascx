@@ -1,16 +1,16 @@
-﻿<%@ control language="C#" autoeventwireup="true" codebehind="ProductList.ascx.cs"
-    inherits="Cowrie.Modules.ProductList.ProductList" %>
+﻿<%@ control language="C#" autoeventwireup="true" codebehind="HotelList.ascx.cs"
+    inherits="Cowrie.Modules.ProductList.HotelList" %>
 <%@ Register assembly="DotNetNuke.WebControls" namespace="DotNetNuke.UI.WebControls" tagPrefix="dnn" %>
 <div id="categories">
-    <dnn:DnnTree runat="server" ID="DNNTreeCategories" CollapsedNodeImage="../../Images/Plus.gif" ExpandedNodeImage="../../Images/Minus.gif" OnNodeClick="DNNTreeCategories_NodeClick" PopulateOnDemand="DNNTreeCategories_PopulateOnDemand"></dnn:DnnTree>
+    <dnn:DnnTree runat="server" ID="DNNTreeLocations" CollapsedNodeImage="../../Images/Plus.gif" ExpandedNodeImage="../../Images/Minus.gif" OnNodeClick="DNNTreeLocations_NodeClick" PopulateOnDemand="DNNTreeLocations_PopulateOnDemand"></dnn:DnnTree>
 </div>
 <div id="products">
-    <h1><asp:Label ID="LabelCategory" runat="server" /></h1>
-    <h2><asp:Label ID="LabelSelectedCategory" runat="server" /></h2>
+    <h1><asp:Label ID="LabelLocation" runat="server" /></h1>
+    <h2><asp:Label ID="LabelSelectedLocation" runat="server" /></h2>
     <table style="width: 100%">
         <tr>
             <td>
-                <asp:Label ID="LabelCount" runat="server" /> products found
+                <asp:Label ID="LabelCount" runat="server" /> hotels found
             </td>
             <td>
                 Sort by <asp:DropDownList ID="DropDownListSortCriterias" runat="server" AutoPostBack="True" OnSelectedIndexChanged="DropDownListSortCriterias_SelectedIndexChanged">

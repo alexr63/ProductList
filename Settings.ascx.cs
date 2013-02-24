@@ -25,15 +25,15 @@ namespace Cowrie.Modules.ProductList
                 {
                     using (SelectedHotelsEntities db = new SelectedHotelsEntities())
                     {
-                        object setting = Settings["location"];
-                        int? locationId = null;
+                        object setting = Settings["category"];
+                        int? categoryId = null;
                         if (setting != null)
                         {
-                            locationId = Convert.ToInt32(setting);
-                            var location = db.Locations.SingleOrDefault(l => l.Id == locationId);
-                            LabelCurrentLocation.Text = location.Name;
+                            categoryId = Convert.ToInt32(setting);
+                            var category = db.Categories.SingleOrDefault(c => c.Id == categoryId);
+                            LabelCurrentCategory.Text = category.Name;
                         }
-                        PopulateTree(RadTreeViewLocations, db, null, locationId);
+                        PopulateTree(RadTreeViewCategories, db, null, categoryId);
                     }
                 }
             }
@@ -51,7 +51,7 @@ namespace Cowrie.Modules.ProductList
             try
             {
                 ModuleController controller = new ModuleController();
-                controller.UpdateModuleSetting(ModuleId, "location", RadTreeViewLocations.SelectedValue);
+                controller.UpdateModuleSetting(ModuleId, "category", RadTreeViewCategories.SelectedValue);
             }
             catch (Exception ex)
             {
@@ -63,73 +63,60 @@ namespace Cowrie.Modules.ProductList
         {
             using (SelectedHotelsEntities db = new SelectedHotelsEntities())
             {
-                int? locationId = Convert.ToInt32(e.Node.Value);
-                var location = db.Locations.SingleOrDefault(l => l.Id == locationId);
-                CreateSubLocationNodes(location, e.Node, locationId);
+                int? categoryId = Convert.ToInt32(e.Node.Value);
+                var category = db.Categories.SingleOrDefault(c => c.Id == categoryId);
+                CreateSubLocationNodes(category, e.Node, categoryId);
             }
             e.Node.Expanded = true;
         }
 
-        public static int? PopulateTree(RadTreeView RadTreeViewLocations, SelectedHotelsEntities db, int? locationId = null, int? selectedLocationId = null)
+        public static int? PopulateTree(RadTreeView radTreeView, SelectedHotelsEntities db, int? categoryId = null, int? selectedCategoryId = null)
         {
-            RadTreeViewLocations.Nodes.Clear();
-            IOrderedQueryable<Location> topLocations;
-            if (locationId == null)
-            {
-                topLocations = from l in db.Locations
-                               where !l.IsDeleted && l.ParentId == null
-                               orderby l.Name
-                               select l;
-            }
-            else
-            {
-                topLocations = from l in db.Locations
-                               where !l.IsDeleted && l.ParentId == locationId
-                               orderby l.Name
-                               select l;
-            }
-            foreach (Location location in topLocations)
+            radTreeView.Nodes.Clear();
+            IOrderedQueryable<Category> topCategories = from c in db.Categories
+                                                        where !c.IsDeleted && c.ParentId == categoryId
+                                                        orderby c.Name
+                                                        select c;
+            foreach (Category category in topCategories)
             {
                 RadTreeNode node = new RadTreeNode();
-                node.Text = location.Name;
-                node.ToolTip = location.Name;
+                node.Text = category.Name;
+                node.ToolTip = category.Name;
                 node.ExpandMode = TreeNodeExpandMode.ServerSideCallBack;
-                node.Value = location.Id.ToString();
-                if (selectedLocationId != null && location.Id == selectedLocationId)
+                node.Value = category.Id.ToString();
+                if (selectedCategoryId != null && category.Id == selectedCategoryId)
                 {
                     node.Selected = true;
                 }
-                RadTreeViewLocations.Nodes.Add(node);
-                //CreateSubLocationNodes(location, objNode, selectedLocationId);
+                radTreeView.Nodes.Add(node);
             }
-            if (topLocations.Any())
+            if (topCategories.Any())
             {
-                return topLocations.First().Id;
+                return topCategories.First().Id;
             }
             return null;
         }
 
-        public static void CreateSubLocationNodes(Location location, RadTreeNode objNode, int? selectedLocationId)
+        public static void CreateSubLocationNodes(Category category, RadTreeNode objNode, int? selectedCategoryId)
         {
-            if (location.SubLocations.Any(l => !l.IsDeleted))
+            if (category.SubCategories.Any(c => !c.IsDeleted))
             {
-                var subLocations = from l in location.SubLocations
-                                   where !l.IsDeleted
-                                   orderby l.Name
-                                   select l;
-                foreach (Location subLocation in subLocations)
+                var subCategories = from c in category.SubCategories
+                                   where !c.IsDeleted
+                                   orderby c.Name
+                                   select c;
+                foreach (Category subCategory in subCategories)
                 {
                     RadTreeNode node = new RadTreeNode();
-                    node.Text = subLocation.Name;
-                    node.ToolTip = subLocation.Name;
+                    node.Text = subCategory.Name;
+                    node.ToolTip = subCategory.Name;
                     node.ExpandMode = TreeNodeExpandMode.ServerSideCallBack;
-                    node.Value = subLocation.Id.ToString();
-                    if (selectedLocationId != null && location.Id == selectedLocationId)
+                    node.Value = subCategory.Id.ToString();
+                    if (selectedCategoryId != null && category.Id == selectedCategoryId)
                     {
                         node.Selected = true;
                     }
                     objNode.Nodes.Add(node);
-                    //CreateSubLocationNodes(subLocation, objSubNode, selectedLocationId);
                 }
             }
         }

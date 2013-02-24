@@ -82,5 +82,36 @@ namespace ProductList
                 }
             }
         }
+
+        public static void CreateSubCategoryNodes(Category category, TreeNode objNode, int? selectedCategoryId)
+        {
+            if (category.SubCategories.Any(l => !l.IsDeleted))
+            {
+                objNode.HasNodes = true;
+                var subCategories = from c in category.SubCategories
+                                   where !c.IsDeleted
+                                   orderby c.Name
+                                   select c;
+                foreach (Category subCategory in subCategories)
+                {
+                    int index = objNode.TreeNodes.Add();
+                    TreeNode objSubNode = objNode.TreeNodes[index];
+                    objSubNode.Text = subCategory.Name;
+                    objSubNode.ToolTip = subCategory.Name;
+                    objSubNode.ClickAction = eClickAction.PostBack;
+                    objSubNode.Key = subCategory.Id.ToString();
+                    if (selectedCategoryId != null && category.Id == selectedCategoryId)
+                    {
+                        objSubNode.Selected = true;
+                        objNode.Expand();
+                    }
+                    if (category.SubCategories.Any(c => !c.IsDeleted))
+                    {
+                        objNode.HasNodes = true;
+                    }
+                    //CreateSubCategoryNodes(subCategory, objSubNode, selectedCategoryId);
+                }
+            }
+        }
     }
 }

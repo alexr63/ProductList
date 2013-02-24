@@ -11,11 +11,11 @@ using ProductList;
 
 namespace Cowrie.Modules.ProductList
 {
-    public partial class ProductList : PortalModuleBase
+    public partial class HotelList : PortalModuleBase
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (Settings["category"] == null)
+            if (Settings["location"] == null)
             {
                 return;
             }
@@ -26,14 +26,14 @@ namespace Cowrie.Modules.ProductList
                 {
                     using (SelectedHotelsEntities db = new SelectedHotelsEntities())
                     {
-                        int categoryId = Convert.ToInt32(Settings["category"]);
-                        var category = db.Categories.SingleOrDefault(l => l.Id == categoryId);
-                        LabelCategory.Text = category.Name;
-                        int? firstCategoryId = Utils.PopulateTree(DNNTreeCategories, db, categoryId);
-                        if (firstCategoryId.HasValue)
+                        int locationId = Convert.ToInt32(Settings["location"]);
+                        var location = db.Locations.SingleOrDefault(l => l.Id == locationId);
+                        LabelLocation.Text = location.Name;
+                        int? firstLocationId = Utils.PopulateTree(DNNTreeLocations, db, locationId);
+                        if (firstLocationId.HasValue)
                         {
-                            ViewState["categoryId"] = firstCategoryId;
-                            BindData(db, firstCategoryId.Value);
+                            ViewState["locationId"] = firstLocationId;
+                            BindData(db, firstLocationId.Value);
                         }
                     }
                 }
@@ -44,26 +44,27 @@ namespace Cowrie.Modules.ProductList
             }
         }
 
-        private void BindData(SelectedHotelsEntities db, int categoryId)
+        private void BindData(SelectedHotelsEntities db, int locationId)
         {
-            var category = db.Categories.SingleOrDefault(l => l.Id == categoryId);
-            if (category != null)
+            var location = db.Locations.SingleOrDefault(l => l.Id == locationId);
+            if (location != null)
             {
-                LabelSelectedCategory.Text = category.Name;
+                LabelSelectedLocation.Text = location.Name;
             }
-            IList<Product> products = (from p in db.Products
+            IList<Hotel> hotels = (from p in db.Products
                                        where !p.IsDeleted
-                                       select p).OfType<Product>().ToList();
-            var query = from p in products
-                         where p.Categories.Any(c => c.Id == categoryId || (c.ParentCategory != null && c.ParentCategory.Id == categoryId))
-                         select p;
+                                       select p).OfType<Hotel>().ToList();
+            var query = from h in hotels
+                         where h.LocationId == locationId || h.Location.ParentId == locationId ||
+                               (h.Location.ParentLocation != null && h.Location.ParentLocation.ParentId == locationId)
+                         select h;
             if (DropDownListSortCriterias.SelectedValue == "Name")
             {
-                ListViewContent.DataSource = query.OrderBy(p => p.Name).ToList();
+                ListViewContent.DataSource = query.OrderBy(h => h.Name).ToList();
             }
             else
             {
-                ListViewContent.DataSource = query.OrderBy(p => p.UnitCost).ToList();
+                ListViewContent.DataSource = query.OrderBy(h => h.UnitCost).ToList();
             }
             ListViewContent.DataBind();
 
@@ -82,24 +83,24 @@ namespace Cowrie.Modules.ProductList
             }
         }
 
-        protected void DNNTreeCategories_NodeClick(object source, DNNTreeNodeClickEventArgs e)
+        protected void DNNTreeLocations_NodeClick(object source, DNNTreeNodeClickEventArgs e)
         {
-            int categoryId = int.Parse(e.Node.Key);
-            ViewState["categoryId"] = categoryId;
+            int locationId = int.Parse(e.Node.Key);
+            ViewState["locationId"] = locationId;
             using (SelectedHotelsEntities db = new SelectedHotelsEntities())
             {
-                BindData(db, categoryId);
+                BindData(db, locationId);
             }
         }
 
         protected void DropDownListSortCriterias_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (ViewState["categoryId"] != null)
+            if (ViewState["locationId"] != null)
             {
-                int categoryId = Convert.ToInt32(ViewState["categoryId"]);
+                int locationId = Convert.ToInt32(ViewState["locationId"]);
                 using (SelectedHotelsEntities db = new SelectedHotelsEntities())
                 {
-                    BindData(db, categoryId);
+                    BindData(db, locationId);
                 }
             }
         }
@@ -115,23 +116,23 @@ namespace Cowrie.Modules.ProductList
             DataPagerContent.SetPageProperties(e.StartRowIndex, e.MaximumRows, false);
 
             //rebind List View
-            if (ViewState["categoryId"] != null)
+            if (ViewState["locationId"] != null)
             {
-                int categoryId = Convert.ToInt32(ViewState["categoryId"]);
+                int locationId = Convert.ToInt32(ViewState["locationId"]);
                 using (SelectedHotelsEntities db = new SelectedHotelsEntities())
                 {
-                    BindData(db, categoryId);
+                    BindData(db, locationId);
                 }
             }
         }
 
-        protected void DNNTreeCategories_PopulateOnDemand(object source, DotNetNuke.UI.WebControls.DNNTreeEventArgs e)
+        protected void DNNTreeLocations_PopulateOnDemand(object source, DotNetNuke.UI.WebControls.DNNTreeEventArgs e)
         {
             using (SelectedHotelsEntities db = new SelectedHotelsEntities())
             {
-                int? categoryId = Convert.ToInt32(e.Node.Key);
-                var category = db.Categories.SingleOrDefault(l => l.Id == categoryId);
-                Utils.CreateSubCategoryNodes(category, e.Node, categoryId);
+                int? locationId = Convert.ToInt32(e.Node.Key);
+                var location = db.Locations.SingleOrDefault(l => l.Id == locationId);
+                Utils.CreateSubLocationNodes(location, e.Node, locationId);
             }
         }
     }

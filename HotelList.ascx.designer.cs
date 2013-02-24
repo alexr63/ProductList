@@ -10,34 +10,34 @@
 namespace Cowrie.Modules.ProductList {
     
     
-    public partial class ProductList {
+    public partial class HotelList {
         
         /// <summary>
-        /// DNNTreeCategories control.
+        /// DNNTreeLocations control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DotNetNuke.UI.WebControls.DnnTree DNNTreeCategories;
+        protected global::DotNetNuke.UI.WebControls.DnnTree DNNTreeLocations;
         
         /// <summary>
-        /// LabelCategory control.
+        /// LabelLocation control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label LabelCategory;
+        protected global::System.Web.UI.WebControls.Label LabelLocation;
         
         /// <summary>
-        /// LabelSelectedCategory control.
+        /// LabelSelectedLocation control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label LabelSelectedCategory;
+        protected global::System.Web.UI.WebControls.Label LabelSelectedLocation;
         
         /// <summary>
         /// LabelCount control.

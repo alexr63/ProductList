@@ -12,7 +12,7 @@ namespace ProductList
     using System;
     using System.Collections.Generic;
     
-    public abstract partial class Product
+    public partial class Product
     {
         public Product()
         {
