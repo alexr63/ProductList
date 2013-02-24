@@ -59,7 +59,7 @@ namespace Cowrie.Modules.ProductList
             }
         }
  
-        protected void RadTreeViewLocations_NodeExpand(object sender, RadTreeNodeEventArgs e)
+        protected void RadTreeViewCategories_NodeExpand(object sender, RadTreeNodeEventArgs e)
         {
             using (SelectedHotelsEntities db = new SelectedHotelsEntities())
             {
@@ -74,7 +74,10 @@ namespace Cowrie.Modules.ProductList
         {
             radTreeView.Nodes.Clear();
             IOrderedQueryable<Category> topCategories = from c in db.Categories
-                                                        where !c.IsDeleted && c.ParentId == categoryId
+                                                        where !c.IsDeleted &&
+                                                              (categoryId == null
+                                                                   ? c.ParentId == null
+                                                                   : c.ParentId == categoryId)
                                                         orderby c.Name
                                                         select c;
             foreach (Category category in topCategories)

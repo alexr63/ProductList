@@ -9,24 +9,17 @@ namespace ProductList
 {
     public static class Utils
     {
-        public static int? PopulateTree(DnnTree DNNTreeLocations, SelectedHotelsEntities db, int? locationId = null, int? selectedLocationId = null)
+        public static int? PopulateLocationTree(DnnTree DNNTreeLocations, SelectedHotelsEntities db, int? locationId = null, int? selectedLocationId = null)
         {
             DNNTreeLocations.TreeNodes.Clear();
-            IOrderedQueryable<Location> topLocations;
-            if (locationId == null)
-            {
-                topLocations = from l in db.Locations
-                               where !l.IsDeleted && l.ParentId == null
-                               orderby l.Name
-                               select l;
-            }
-            else
-            {
-                topLocations = from l in db.Locations
-                               where !l.IsDeleted && l.ParentId == locationId
-                               orderby l.Name
-                               select l;
-            }
+            IOrderedQueryable<Location> topLocations = from l in db.Locations
+                                                       where
+                                                           !l.IsDeleted &&
+                                                           (locationId == null
+                                                                ? l.ParentId == null
+                                                                : l.ParentId == locationId)
+                                                       orderby l.Name
+                                                       select l;
             foreach (Location location in topLocations)
             {
                 TreeNode objNode = new TreeNode(location.Name);
@@ -81,6 +74,42 @@ namespace ProductList
                     //CreateSubLocationNodes(subLocation, objSubNode, selectedLocationId);
                 }
             }
+        }
+
+        public static int? PopulateCategoryTree(DnnTree DNNTreeCategories, SelectedHotelsEntities db, int? categoryId = null, int? selectedCategoryId = null)
+        {
+            DNNTreeCategories.TreeNodes.Clear();
+            IOrderedQueryable<Category> topCategories = from c in db.Categories
+                                                       where
+                                                           !c.IsDeleted &&
+                                                           (categoryId == null
+                                                                ? c.ParentId == null
+                                                                : c.ParentId == categoryId)
+                                                       orderby c.Name
+                                                       select c;
+            foreach (Category category in topCategories)
+            {
+                TreeNode objNode = new TreeNode(category.Name);
+                objNode.ToolTip = category.Name;
+                objNode.ClickAction = eClickAction.PostBack;
+                objNode.Key = category.Id.ToString();
+                if (selectedCategoryId != null && category.Id == selectedCategoryId)
+                {
+                    objNode.Selected = true;
+                    objNode.Expand();
+                }
+                if (category.SubCategories.Any(l => !l.IsDeleted))
+                {
+                    objNode.HasNodes = true;
+                }
+                DNNTreeCategories.TreeNodes.Add(objNode);
+                //CreateSubLocationNodes(location, objNode, selectedLocationId);
+            }
+            if (topCategories.Any())
+            {
+                return topCategories.First().Id;
+            }
+            return null;
         }
 
         public static void CreateSubCategoryNodes(Category category, TreeNode objNode, int? selectedCategoryId)

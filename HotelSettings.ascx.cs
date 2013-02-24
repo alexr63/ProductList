@@ -74,7 +74,10 @@ namespace Cowrie.Modules.ProductList
         {
             radTreeView.Nodes.Clear();
             IOrderedQueryable<Location> topLocations = from l in db.Locations
-                                                       where !l.IsDeleted && l.ParentId == locationId
+                                                       where !l.IsDeleted &&
+                                                           (locationId == null
+                                                                ? l.ParentId == null
+                                                                : l.ParentId == locationId)
                                                        orderby l.Name
                                                        select l;
             foreach (Location location in topLocations)

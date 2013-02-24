@@ -29,7 +29,7 @@ namespace Cowrie.Modules.ProductList
                         int categoryId = Convert.ToInt32(Settings["category"]);
                         var category = db.Categories.SingleOrDefault(l => l.Id == categoryId);
                         LabelCategory.Text = category.Name;
-                        int? firstCategoryId = Utils.PopulateTree(DNNTreeCategories, db, categoryId);
+                        int? firstCategoryId = Utils.PopulateCategoryTree(DNNTreeCategories, db, categoryId);
                         if (firstCategoryId.HasValue)
                         {
                             ViewState["categoryId"] = firstCategoryId;

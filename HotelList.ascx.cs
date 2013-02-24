@@ -29,7 +29,7 @@ namespace Cowrie.Modules.ProductList
                         int locationId = Convert.ToInt32(Settings["location"]);
                         var location = db.Locations.SingleOrDefault(l => l.Id == locationId);
                         LabelLocation.Text = location.Name;
-                        int? firstLocationId = Utils.PopulateTree(DNNTreeLocations, db, locationId);
+                        int? firstLocationId = Utils.PopulateLocationTree(DNNTreeLocations, db, locationId);
                         if (firstLocationId.HasValue)
                         {
                             ViewState["locationId"] = firstLocationId;
