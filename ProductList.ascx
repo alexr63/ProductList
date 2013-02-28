@@ -2,6 +2,7 @@
     inherits="Cowrie.Modules.ProductList.ProductList" %>
 <%@ Register assembly="DotNetNuke.WebControls" namespace="DotNetNuke.UI.WebControls" tagPrefix="dnn" %>
 <div id="categories">
+    Search: <asp:TextBox ID="TextBoxSearch" runat="server"></asp:TextBox>&nbsp;<asp:Button ID="ButtonSubmit" runat="server" Text="Submit" OnClick="ButtonSubmit_Click" />
     <dnn:DnnTree runat="server" ID="DNNTreeCategories" CollapsedNodeImage="../../Images/Plus.gif" ExpandedNodeImage="../../Images/Minus.gif" OnNodeClick="DNNTreeCategories_NodeClick" PopulateOnDemand="DNNTreeCategories_PopulateOnDemand"></dnn:DnnTree>
 </div>
 <div id="products">

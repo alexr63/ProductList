@@ -57,6 +57,14 @@ namespace Cowrie.Modules.ProductList
             var query = from p in products
                          where p.Categories.Any(c => c.Id == categoryId || (c.ParentCategory != null && c.ParentCategory.Id == categoryId))
                          select p;
+            if (TextBoxSearch.Text != String.Empty)
+            {
+                query =
+                    query.Where(
+                        p =>
+                        p.Name.ToLower().Contains(TextBoxSearch.Text.ToLower()) ||
+                        p.Description.ToLower().Contains(TextBoxSearch.Text.ToLower()));
+            }
             if (DropDownListSortCriterias.SelectedValue == "Name")
             {
                 ListViewContent.DataSource = query.OrderBy(p => p.Name).ToList();
@@ -132,6 +140,18 @@ namespace Cowrie.Modules.ProductList
                 int? categoryId = Convert.ToInt32(e.Node.Key);
                 var category = db.Categories.SingleOrDefault(l => l.Id == categoryId);
                 Utils.CreateSubCategoryNodes(category, e.Node, categoryId);
+            }
+        }
+
+        protected void ButtonSubmit_Click(object sender, EventArgs e)
+        {
+            if (ViewState["categoryId"] != null)
+            {
+                int categoryId = Convert.ToInt32(ViewState["categoryId"]);
+                using (SelectedHotelsEntities db = new SelectedHotelsEntities())
+                {
+                    BindData(db, categoryId);
+                }
             }
         }
     }

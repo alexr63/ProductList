@@ -76,17 +76,15 @@ namespace ProductList
             }
         }
 
-        public static int? PopulateCategoryTree(DnnTree DNNTreeCategories, SelectedHotelsEntities db, int? categoryId = null, int? selectedCategoryId = null)
+        public static int? PopulateCategoryTree(DnnTree DNNTreeCategories, SelectedHotelsEntities db, int categoryId, int? selectedCategoryId = null)
         {
             DNNTreeCategories.TreeNodes.Clear();
             IOrderedQueryable<Category> topCategories = from c in db.Categories
-                                                       where
-                                                           !c.IsDeleted &&
-                                                           (categoryId == null
-                                                                ? c.ParentId == null
-                                                                : c.ParentId == categoryId)
-                                                       orderby c.Name
-                                                       select c;
+                                                        where
+                                                            !c.IsDeleted &&
+                                                            c.Id == categoryId
+                                                        orderby c.Name
+                                                        select c;
             foreach (Category category in topCategories)
             {
                 TreeNode objNode = new TreeNode(category.Name);

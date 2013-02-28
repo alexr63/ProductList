@@ -1,7 +1,11 @@
 ﻿<%@ control language="C#" autoeventwireup="true" codebehind="HotelList.ascx.cs"
     inherits="Cowrie.Modules.ProductList.HotelList" %>
 <%@ Register assembly="DotNetNuke.WebControls" namespace="DotNetNuke.UI.WebControls" tagPrefix="dnn" %>
+<%@ Register TagPrefix="telerik" Namespace="Telerik.Web.UI" Assembly="Telerik.Web.UI" %>
 <div id="categories">
+    <telerik:RadTreeView ID="RadTreeViewLocations" runat="server" Height="300px" Width="100%"
+        OnNodeExpand="RadTreeViewLocations_NodeExpand" OnNodeClick="RadTreeViewLocations_NodeClick">
+    </telerik:RadTreeView>
     <dnn:DnnTree runat="server" ID="DNNTreeLocations" CollapsedNodeImage="../../Images/Plus.gif" ExpandedNodeImage="../../Images/Minus.gif" OnNodeClick="DNNTreeLocations_NodeClick" PopulateOnDemand="DNNTreeLocations_PopulateOnDemand"></dnn:DnnTree>
 </div>
 <div id="products">
@@ -55,13 +59,13 @@
         <ItemTemplate>
             <tr>
                 <td style="vertical-align: middle">
-                    <asp:HyperLink ID="HyperLinkName" runat="server" Text='<%# Eval("Name") %>' NavigateUrl='<%# DotNetNuke.Common.Globals.NavigateURL(TabId, "ProductDetails", "mid=" + ModuleId, "Id=" + Eval("Id")) %>' />
+                    <asp:HyperLink ID="HyperLinkName" runat="server" Text='<%# Eval("Name") %>' NavigateUrl='<%# DotNetNuke.Common.Globals.NavigateURL(TabId, "HotelDetails", "mid=" + ModuleId, "Id=" + Eval("Id")) %>' />
                 </td>
                 <td style="vertical-align: middle">
                     <asp:Label ID="LabelPrice" runat="server" Text='<%# Eval("UnitCost", "{0:c}") %>' />
                 </td>
                 <td>
-                    <asp:HyperLink ID="HyperLinkImage" runat="server" ImageUrl='<%# Eval("Image") %>' NavigateUrl='<%# DotNetNuke.Common.Globals.NavigateURL(TabId, "ProductDetails", "mid=" + ModuleId, "Id=" + Eval("Id")) %>' ImageWidth="100" />
+                    <asp:HyperLink ID="HyperLinkImage" runat="server" ImageUrl='<%# Eval("Image") %>' NavigateUrl='<%# DotNetNuke.Common.Globals.NavigateURL(TabId, "HotelDetails", "mid=" + ModuleId, "Id=" + Eval("Id")) %>' ImageWidth="100" />
                 </td>
                 <td>
                     <asp:Literal ID="LiteralDescription" runat="server" Text='<%# Eval("Description") != null ? Server.HtmlDecode(Eval("Description").ToString()) : String.Empty %>'></asp:Literal>
