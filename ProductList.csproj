@@ -329,6 +329,6 @@
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>
-    <PostBuildEvent>rem $(ProjectDir)build\build.bat $(ConfigurationName)</PostBuildEvent>
+    <PostBuildEvent>$(ProjectDir)build\build.bat $(ConfigurationName)</PostBuildEvent>
   </PropertyGroup>
 </Project>
