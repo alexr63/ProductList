@@ -83,6 +83,9 @@
       </modules>
       <files>
         <file>
+          <name>module.css</name>
+        </file>
+        <file>
           <name>ProductList.dll</name>
         </file>
         <file>
