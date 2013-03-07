@@ -1,5 +1,6 @@
 ﻿<%@ control language="C#" autoeventwireup="true" codebehind="HomeAndGardens.ascx.cs"
     inherits="Cowrie.Modules.ProductList.HomeAndGardens" %>
+<%@ Import Namespace="ProductList" %>
 <%@ Register assembly="DotNetNuke.WebControls" namespace="DotNetNuke.UI.WebControls" tagPrefix="dnn" %>
 <div id="categories">
     <h3>Sizes</h3>
@@ -43,34 +44,36 @@
     <asp:ListView ID="ListViewContent" runat="server" OnPagePropertiesChanging="ListViewContent_PagePropertiesChanging">
         <LayoutTemplate>
             <h3>Product Listing</h3>
-            <table>
+            <div style="width: 100%">
                 <asp:PlaceHolder runat="server" ID="itemPlaceholder"></asp:PlaceHolder>                        
-            </table>
+            </div>
         </LayoutTemplate>
         
-        <ItemSeparatorTemplate>
-            <tr>
-                <td colspan="4">
-                    <hr />
-                </td>
-            </tr>
-        </ItemSeparatorTemplate>
-
         <ItemTemplate>
-            <tr>
-                <td style="vertical-align: middle">
-                    <asp:HyperLink ID="HyperLinkName" runat="server" Text='<%# Eval("Name") %>' NavigateUrl='<%# DotNetNuke.Common.Globals.NavigateURL(TabId, "HomeAndGardensDetails", "mid=" + ModuleId, "Id=" + Eval("Id")) %>' />
-                </td>
-                <td style="vertical-align: middle">
-                    <asp:Label ID="LabelPrice" runat="server" Text='<%# Eval("UnitCost", "{0:c}") %>' />
-                </td>
-                <td>
-                    <asp:HyperLink ID="HyperLinkImage" runat="server" ImageUrl='<%# Eval("Image") %>' NavigateUrl='<%# DotNetNuke.Common.Globals.NavigateURL(TabId, "HomeAndGardensDetails", "mid=" + ModuleId, "Id=" + Eval("Id")) %>' ImageWidth="100" />
-                </td>
-                <td>
-                    <asp:Literal ID="LiteralDescription" runat="server" Text='<%# Eval("Description") != null ? Server.HtmlDecode(Eval("Description").ToString()) : String.Empty %>'></asp:Literal>
-                </td>
-            </tr>
+            <div style="margin: 5px; float: left; width: 210px; border-top-style: dotted; border-top-width: 1px; border-top-color: #C0C0C0; min-height: 280px">
+                <table>
+                    <tr>
+                        <td style="vertical-align: middle">
+                            <asp:HyperLink ID="HyperLinkName" runat="server" Text='<%# Eval("Name") %>' NavigateUrl='<%# DotNetNuke.Common.Globals.NavigateURL(TabId, "HomeAndGardensDetails", "mid=" + ModuleId, "Id=" + Eval("Id")) %>' />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="vertical-align: middle">
+                            <asp:Label ID="LabelPrice" runat="server" Text='<%# Eval("UnitCost", "{0:c}") %>' />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <asp:HyperLink ID="HyperLinkImage" runat="server" ImageUrl='<%# Eval("Image") %>' NavigateUrl='<%# DotNetNuke.Common.Globals.NavigateURL(TabId, "HomeAndGardensDetails", "mid=" + ModuleId, "Id=" + Eval("Id")) %>' ImageWidth="100" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <asp:Literal ID="LiteralDescription" runat="server" Text='<%# Eval("Description") != null ? Server.HtmlDecode(Eval("Description").ToString().TruncateAtWord(120)) : String.Empty %>'></asp:Literal>
+                        </td>
+                    </tr>
+                </table>
+            </div>
         </ItemTemplate>
     </asp:ListView>
 </div>
