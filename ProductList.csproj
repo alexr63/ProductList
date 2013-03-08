@@ -109,6 +109,27 @@
     <Compile Include="Clothe.cs">
       <DependentUpon>SelectedHotels.tt</DependentUpon>
     </Compile>
+    <Compile Include="Clothes.ascx.cs">
+      <DependentUpon>Clothes.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Clothes.ascx.designer.cs">
+      <DependentUpon>Clothes.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="ClothesDetails.ascx.cs">
+      <DependentUpon>ClothesDetails.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ClothesDetails.ascx.designer.cs">
+      <DependentUpon>ClothesDetails.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="ClothesSettings.ascx.cs">
+      <DependentUpon>ClothesSettings.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ClothesSettings.ascx.designer.cs">
+      <DependentUpon>ClothesSettings.ascx</DependentUpon>
+    </Compile>
     <Compile Include="HotelSettings.ascx.cs">
       <DependentUpon>HotelSettings.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -210,6 +231,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Build\build.bat" />
+    <Content Include="Clothes.ascx" />
+    <Content Include="ClothesDetails.ascx" />
+    <Content Include="ClothesSettings.ascx" />
     <Content Include="HotelSettings.ascx" />
     <Content Include="HotelDetails.ascx" />
     <Content Include="HotelList.ascx" />

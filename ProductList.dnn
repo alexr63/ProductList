@@ -6,7 +6,7 @@
       <foldername>ProductList</foldername>
       <modulename>ProductList</modulename>
       <description>A ProductList module</description>
-      <version>01.04.03</version>
+      <version>01.04.04</version>
       <businesscontrollerclass></businesscontrollerclass>
       <modules>
         <module>
@@ -62,6 +62,32 @@
           </controls>
         </module>
         <module>
+          <friendlyname>Clothes</friendlyname>
+          <cachetime>0</cachetime>
+          <controls>
+            <control>
+              <src>DesktopModules/ProductList/Clothes.ascx</src>
+              <type>View</type>
+              <helpurl></helpurl>
+            </control>
+            <control>
+              <key>ClothesDetails</key>
+              <title>Clothes Details</title>
+              <src>DesktopModules/ProductList/ClothesDetails.ascx</src>
+              <type>View</type>
+              <helpurl></helpurl>
+              <supportspartialrendering>true</supportspartialrendering>
+            </control>
+            <control>
+              <key>Settings</key>
+              <title>Clothes Settings</title>
+              <src>DesktopModules/ProductList/ClothesSettings.ascx</src>
+              <type>Edit</type>
+              <helpurl></helpurl>
+            </control>
+          </controls>
+        </module>
+        <module>
           <friendlyname>HomeAndGardens</friendlyname>
           <cachetime>0</cachetime>
           <controls>
@@ -105,6 +131,15 @@
         </file>
         <file>
           <name>HotelSettings.ascx</name>
+        </file>
+        <file>
+          <name>Clothes.ascx</name>
+        </file>
+        <file>
+          <name>ClothesDetails.ascx</name>
+        </file>
+        <file>
+          <name>ClothesSettings.ascx</name>
         </file>
         <file>
           <name>HomeAndGardens.ascx</name>
