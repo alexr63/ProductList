@@ -26,14 +26,22 @@ namespace Cowrie.Modules.ProductList
                 {
                     using (SelectedHotelsEntities db = new SelectedHotelsEntities())
                     {
-                        int categoryId = Convert.ToInt32(Settings["category"]);
-                        var category = db.Categories.SingleOrDefault(l => l.Id == categoryId);
-                        LabelCategory.Text = category.Name;
-                        int? firstCategoryId = Utils.PopulateCategoryTree(DNNTreeCategories, db, categoryId);
-                        if (firstCategoryId.HasValue)
+                        int mode = Convert.ToInt32(Settings["mode"]);
+                        if (mode == (int)Enums.DisplayModeEnum.Hotels)
                         {
-                            ViewState["categoryId"] = firstCategoryId;
-                            BindData(db, firstCategoryId.Value);
+                            int categoryId = Convert.ToInt32(Settings["category"]);
+                            var category = db.Categories.SingleOrDefault(l => l.Id == categoryId);
+                            LabelCategory.Text = category.Name;
+                            BindDataByCategory(db, categoryId);
+                        }
+                        else
+                        {
+                            int locationId = Convert.ToInt32(Settings["location"]);
+                            var location = db.Locations.SingleOrDefault(l => l.Id == locationId);
+                            LabelLocation.Text = location.Name;
+                            Utils.PopulateLocationTree(RadTreeViewLocations, db, locationId, locationId);
+                            ViewState["locationId"] = locationId;
+                            BindDataByLocation(db, locationId);
                         }
                     }
                 }
@@ -44,7 +52,7 @@ namespace Cowrie.Modules.ProductList
             }
         }
 
-        private void BindData(SelectedHotelsEntities db, int categoryId)
+        private void BindDataByCategory(SelectedHotelsEntities db, int categoryId)
         {
             var category = db.Categories.SingleOrDefault(l => l.Id == categoryId);
             if (category != null)
@@ -78,6 +86,42 @@ namespace Cowrie.Modules.ProductList
             LabelCount.Text = query.Count().ToString();
         }
 
+        private void BindDataByLocation(SelectedHotelsEntities db, int locationId)
+        {
+            var location = db.Locations.SingleOrDefault(l => l.Id == locationId);
+            if (location != null)
+            {
+                LabelSelectedLocation.Text = location.Name;
+            }
+            IList<Hotel> hotels = (from p in db.Products
+                                   where !p.IsDeleted
+                                   select p).OfType<Hotel>().ToList();
+            var query = from h in hotels
+                        where h.LocationId == locationId || h.Location.ParentId == locationId ||
+                              (h.Location.ParentLocation != null && h.Location.ParentLocation.ParentId == locationId)
+                        select h;
+            if (TextBoxSearch.Text != String.Empty)
+            {
+                query =
+                    query.Where(
+                        p =>
+                        p.Name.ToLower().Contains(TextBoxSearch.Text.ToLower()) ||
+                        p.Description.ToLower().Contains(TextBoxSearch.Text.ToLower()));
+            }
+            if (DropDownListSortCriterias.SelectedValue == "Name")
+            {
+                ListViewContent.DataSource = query.OrderBy(h => h.Name).ToList();
+            }
+            else
+            {
+                ListViewContent.DataSource = query.OrderBy(h => h.UnitCost).ToList();
+            }
+            ListViewContent.DataBind();
+
+            LabelCount.Text = query.Count().ToString();
+        }
+
+
         #region IActionable Members
 
         #endregion
@@ -96,7 +140,7 @@ namespace Cowrie.Modules.ProductList
             ViewState["categoryId"] = categoryId;
             using (SelectedHotelsEntities db = new SelectedHotelsEntities())
             {
-                BindData(db, categoryId);
+                BindDataByCategory(db, categoryId);
             }
         }
 
@@ -107,7 +151,7 @@ namespace Cowrie.Modules.ProductList
                 int categoryId = Convert.ToInt32(ViewState["categoryId"]);
                 using (SelectedHotelsEntities db = new SelectedHotelsEntities())
                 {
-                    BindData(db, categoryId);
+                    BindDataByCategory(db, categoryId);
                 }
             }
         }
@@ -128,7 +172,7 @@ namespace Cowrie.Modules.ProductList
                 int categoryId = Convert.ToInt32(ViewState["categoryId"]);
                 using (SelectedHotelsEntities db = new SelectedHotelsEntities())
                 {
-                    BindData(db, categoryId);
+                    BindDataByCategory(db, categoryId);
                 }
             }
         }
@@ -150,7 +194,7 @@ namespace Cowrie.Modules.ProductList
                 int categoryId = Convert.ToInt32(ViewState["categoryId"]);
                 using (SelectedHotelsEntities db = new SelectedHotelsEntities())
                 {
-                    BindData(db, categoryId);
+                    BindDataByCategory(db, categoryId);
                 }
             }
         }

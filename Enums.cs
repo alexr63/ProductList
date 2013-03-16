@@ -14,5 +14,11 @@ namespace ProductList
             Books,
             HomeAndGardens
         }
+
+        public enum DisplayModeEnum 
+        {
+            Hotels = 1,
+            Products
+        }
     }
 }

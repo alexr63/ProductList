@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using DotNetNuke.UI.WebControls;
+using Telerik.Web.UI;
 using TreeNode = DotNetNuke.UI.WebControls.TreeNode;
 
 namespace ProductList
@@ -148,5 +149,115 @@ namespace ProductList
                 }
             }
         }
+
+        public static int? PopulateCategoryTree(RadTreeView radTreeView, SelectedHotelsEntities db, int? categoryId = null, int? selectedCategoryId = null)
+        {
+            radTreeView.Nodes.Clear();
+            IOrderedQueryable<Category> topCategories = from c in db.Categories
+                                                        where !c.IsDeleted &&
+                                                              (categoryId == null
+                                                                   ? c.ParentId == null
+                                                                   : c.ParentId == categoryId)
+                                                        orderby c.Name
+                                                        select c;
+            foreach (Category category in topCategories)
+            {
+                RadTreeNode node = new RadTreeNode();
+                node.Text = category.Name;
+                node.ToolTip = category.Name;
+                node.ExpandMode = TreeNodeExpandMode.ServerSideCallBack;
+                node.Value = category.Id.ToString();
+                if (selectedCategoryId != null && category.Id == selectedCategoryId)
+                {
+                    node.Selected = true;
+                }
+                radTreeView.Nodes.Add(node);
+            }
+            if (topCategories.Any())
+            {
+                return topCategories.First().Id;
+            }
+            return null;
+        }
+
+        public static int? PopulateLocationTree(RadTreeView radTreeView, SelectedHotelsEntities db, int? locationId = null, int? selectedLocationId = null)
+        {
+            radTreeView.Nodes.Clear();
+            IOrderedQueryable<Location> topLocations = from l in db.Locations
+                                                       where !l.IsDeleted &&
+                                                           (locationId == null
+                                                                ? l.ParentId == null
+                                                                : l.ParentId == locationId)
+                                                       orderby l.Name
+                                                       select l;
+            foreach (Location location in topLocations)
+            {
+                RadTreeNode node = new RadTreeNode();
+                node.Text = location.Name;
+                node.ToolTip = location.Name;
+                node.ExpandMode = TreeNodeExpandMode.ServerSideCallBack;
+                node.Value = location.Id.ToString();
+                if (selectedLocationId != null && location.Id == selectedLocationId)
+                {
+                    node.Selected = true;
+                }
+                radTreeView.Nodes.Add(node);
+                //CreateSubLocationNodes(location, objNode, selectedLocationId);
+            }
+            if (topLocations.Any())
+            {
+                return topLocations.First().Id;
+            }
+            return null;
+        }
+
+        public static void CreateSubLocationNodes(Location location, RadTreeNode objNode, int? selectedLocationId)
+        {
+            if (location.SubLocations.Any(c => !c.IsDeleted))
+            {
+                var subLocations = from l in location.SubLocations
+                                   where !l.IsDeleted
+                                   orderby l.Name
+                                   select l;
+                foreach (Location subLocation in subLocations)
+                {
+                    RadTreeNode node = new RadTreeNode();
+                    node.Text = subLocation.Name;
+                    node.ToolTip = subLocation.Name;
+                    node.ExpandMode = TreeNodeExpandMode.ServerSideCallBack;
+                    node.Value = subLocation.Id.ToString();
+                    if (selectedLocationId != null && location.Id == selectedLocationId)
+                    {
+                        node.Selected = true;
+                    }
+                    objNode.Nodes.Add(node);
+                }
+            }
+        }
+
+        public static void CreateSubCategoryNodes(Category category, RadTreeNode objNode, int? selectedCategoryId)
+        {
+            if (category.SubCategories.Any(c => !c.IsDeleted))
+            {
+                var subCategories = from c in category.SubCategories
+                                    where !c.IsDeleted
+                                    orderby c.Name
+                                    select c;
+                foreach (Category subCategory in subCategories)
+                {
+                    RadTreeNode node = new RadTreeNode();
+                    node.Text = subCategory.Name;
+                    node.ToolTip = subCategory.Name;
+                    node.ExpandMode = TreeNodeExpandMode.ServerSideCallBack;
+                    node.Value = subCategory.Id.ToString();
+                    if (selectedCategoryId != null && category.Id == selectedCategoryId)
+                    {
+                        node.Selected = true;
+                    }
+                    objNode.Nodes.Add(node);
+                }
+            }
+        }
+
     }
 }

@@ -25,7 +25,15 @@ namespace Cowrie.Modules.ProductList
                 {
                     using (SelectedHotelsEntities db = new SelectedHotelsEntities())
                     {
-                        object setting = Settings["category"];
+                        object setting = Settings["mode"];
+                        int mode = (int)Enums.DisplayModeEnum.Hotels;
+                        if (setting != null)
+                        {
+                            mode = Convert.ToInt32(setting);
+                        }
+                        RadioButtonListMode.SelectedValue = mode.ToString();
+
+                        setting = Settings["category"];
                         int? categoryId = null;
                         if (setting != null)
                         {
@@ -33,7 +41,17 @@ namespace Cowrie.Modules.ProductList
                             var category = db.Categories.SingleOrDefault(c => c.Id == categoryId);
                             LabelCurrentCategory.Text = category.Name;
                         }
-                        PopulateTree(RadTreeViewCategories, db, null, categoryId);
+                        Utils.PopulateCategoryTree(RadTreeViewCategories, db, null, categoryId);
+
+                        setting = Settings["location"];
+                        int? locationId = null;
+                        if (setting != null)
+                        {
+                            locationId = Convert.ToInt32(setting);
+                            var location = db.Locations.SingleOrDefault(l => l.Id == locationId);
+                            LabelCurrentLocation.Text = location.Name;
+                        }
+                        Utils.PopulateLocationTree(RadTreeViewLocations, db, null, locationId);
                     }
                 }
             }
@@ -51,7 +69,9 @@ namespace Cowrie.Modules.ProductList
             try
             {
                 ModuleController controller = new ModuleController();
+                controller.UpdateModuleSetting(ModuleId, "mode", RadioButtonListMode.SelectedValue);
                 controller.UpdateModuleSetting(ModuleId, "category", RadTreeViewCategories.SelectedValue);
+                controller.UpdateModuleSetting(ModuleId, "location", RadTreeViewLocations.SelectedValue);
             }
             catch (Exception ex)
             {
@@ -65,63 +85,21 @@ namespace Cowrie.Modules.ProductList
             {
                 int? categoryId = Convert.ToInt32(e.Node.Value);
                 var category = db.Categories.SingleOrDefault(c => c.Id == categoryId);
-                CreateSubLocationNodes(category, e.Node, categoryId);
+                Utils.CreateSubCategoryNodes(category, e.Node, categoryId);
             }
             e.Node.Expanded = true;
         }
 
-        public static int? PopulateTree(RadTreeView radTreeView, SelectedHotelsEntities db, int? categoryId = null, int? selectedCategoryId = null)
+        protected void RadTreeViewLocations_NodeExpand(object sender, RadTreeNodeEventArgs e)
         {
-            radTreeView.Nodes.Clear();
-            IOrderedQueryable<Category> topCategories = from c in db.Categories
-                                                        where !c.IsDeleted &&
-                                                              (categoryId == null
-                                                                   ? c.ParentId == null
-                                                                   : c.ParentId == categoryId)
-                                                        orderby c.Name
-                                                        select c;
-            foreach (Category category in topCategories)
+            using (SelectedHotelsEntities db = new SelectedHotelsEntities())
             {
-                RadTreeNode node = new RadTreeNode();
-                node.Text = category.Name;
-                node.ToolTip = category.Name;
-                node.ExpandMode = TreeNodeExpandMode.ServerSideCallBack;
-                node.Value = category.Id.ToString();
-                if (selectedCategoryId != null && category.Id == selectedCategoryId)
-                {
-                    node.Selected = true;
-                }
-                radTreeView.Nodes.Add(node);
+                int? locationId = Convert.ToInt32(e.Node.Value);
+                var location = db.Locations.SingleOrDefault(l => l.Id == locationId);
+                Utils.CreateSubLocationNodes(location, e.Node, locationId);
             }
-            if (topCategories.Any())
-            {
-                return topCategories.First().Id;
-            }
-            return null;
+            e.Node.Expanded = true;
         }
 
-        public static void CreateSubLocationNodes(Category category, RadTreeNode objNode, int? selectedCategoryId)
-        {
-            if (category.SubCategories.Any(c => !c.IsDeleted))
-            {
-                var subCategories = from c in category.SubCategories
-                                   where !c.IsDeleted
-                                   orderby c.Name
-                                   select c;
-                foreach (Category subCategory in subCategories)
-                {
-                    RadTreeNode node = new RadTreeNode();
-                    node.Text = subCategory.Name;
-                    node.ToolTip = subCategory.Name;
-                    node.ExpandMode = TreeNodeExpandMode.ServerSideCallBack;
-                    node.Value = subCategory.Id.ToString();
-                    if (selectedCategoryId != null && category.Id == selectedCategoryId)
-                    {
-                        node.Selected = true;
-                    }
-                    objNode.Nodes.Add(node);
-                }
-            }
-        }
     }
 }
