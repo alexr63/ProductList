@@ -300,6 +300,9 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="Cowrie_GetHotelsInLocation" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="LocationId" Type="int" Mode="In" />
+        </Function>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
@@ -334,6 +337,9 @@
             <End Role="Category" EntitySet="Categories" />
             <End Role="Category1" EntitySet="Categories" />
           </AssociationSet>
+          <FunctionImport Name="Cowrie_GetHotelsInLocation" ReturnType="Collection(SelectedHotelsModel.Cowrie_GetHotelsInLocation_Result)">
+            <Parameter Name="LocationId" Mode="In" Type="Int32" />
+          </FunctionImport>
         </EntityContainer>
         <EntityType Name="Category">
           <Key>
@@ -482,6 +488,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <ComplexType Name="Cowrie_GetHotelsInLocation_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="250" />
+          <Property Type="String" Name="Number" Nullable="true" MaxLength="50" />
+          <Property Type="Decimal" Name="UnitCost" Nullable="true" Precision="19" />
+          <Property Type="String" Name="Description" Nullable="true" />
+          <Property Type="String" Name="URL" Nullable="true" MaxLength="250" />
+          <Property Type="Int32" Name="CreatedByUser" Nullable="false" />
+          <Property Type="Boolean" Name="IsDeleted" Nullable="false" />
+          <Property Type="String" Name="Image" Nullable="true" MaxLength="250" />
+          <Property Type="Int32" Name="ProductTypeId" Nullable="true" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -582,6 +600,22 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="Cowrie_GetHotelsInLocation" FunctionName="SelectedHotelsModel.Store.Cowrie_GetHotelsInLocation">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SelectedHotelsModel.Cowrie_GetHotelsInLocation_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Number" ColumnName="Number" />
+                <ScalarProperty Name="UnitCost" ColumnName="UnitCost" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="URL" ColumnName="URL" />
+                <ScalarProperty Name="CreatedByUser" ColumnName="CreatedByUser" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
+                <ScalarProperty Name="ProductTypeId" ColumnName="ProductTypeId" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

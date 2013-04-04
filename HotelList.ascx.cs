@@ -81,16 +81,6 @@ namespace Cowrie.Modules.ProductList
             }
         }
 
-        protected void DNNTreeLocations_NodeClick(object source, DNNTreeNodeClickEventArgs e)
-        {
-            int locationId = int.Parse(e.Node.Key);
-            ViewState["locationId"] = locationId;
-            using (SelectedHotelsEntities db = new SelectedHotelsEntities())
-            {
-                BindData(db, locationId);
-            }
-        }
-
         protected void RadTreeViewLocations_NodeClick(object sender, RadTreeNodeEventArgs e)
         {
             int locationId = int.Parse(e.Node.Value);
@@ -134,23 +124,13 @@ namespace Cowrie.Modules.ProductList
             }
         }
 
-        protected void DNNTreeLocations_PopulateOnDemand(object source, DotNetNuke.UI.WebControls.DNNTreeEventArgs e)
-        {
-            using (SelectedHotelsEntities db = new SelectedHotelsEntities())
-            {
-                int? locationId = Convert.ToInt32(e.Node.Key);
-                var location = db.Locations.SingleOrDefault(l => l.Id == locationId);
-                Utils.CreateSubLocationNodes(location, e.Node, locationId);
-            }
-        }
-
         protected void RadTreeViewLocations_NodeExpand(object sender, RadTreeNodeEventArgs e)
         {
             using (SelectedHotelsEntities db = new SelectedHotelsEntities())
             {
                 int? locationId = Convert.ToInt32(e.Node.Value);
                 var location = db.Locations.SingleOrDefault(l => l.Id == locationId);
-                CreateSubLocationNodes(location, e.Node, locationId);
+                CreateSubLocationNodes(location, e.Node);
             }
             e.Node.Expanded = true;
         }
@@ -184,7 +164,7 @@ namespace Cowrie.Modules.ProductList
             return null;
         }
 
-        public static void CreateSubLocationNodes(Location location, RadTreeNode objNode, int? selectedLocationId)
+        public static void CreateSubLocationNodes(Location location, RadTreeNode objNode, int? selectedLocationId = null)
         {
             if (location.SubLocations.Any(l => !l.IsDeleted))
             {
@@ -199,9 +179,13 @@ namespace Cowrie.Modules.ProductList
                     node.ToolTip = subLocation.Name;
                     node.ExpandMode = TreeNodeExpandMode.ServerSideCallBack;
                     node.Value = subLocation.Id.ToString();
-                    if (selectedLocationId != null && location.Id == selectedLocationId)
+                    if (selectedLocationId != null && subLocation.Id == selectedLocationId)
                     {
                         node.Selected = true;
+                    }
+                    if (subLocation.SubLocations.Any())
+                    {
+                                            node.ExpandMode = TreeNodeExpandMode.ServerSideCallBack;
                     }
                     objNode.Nodes.Add(node);
                     //CreateSubLocationNodes(subLocation, objSubNode, selectedLocationId);

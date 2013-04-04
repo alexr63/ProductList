@@ -130,6 +130,9 @@
     <Compile Include="ClothesSettings.ascx.designer.cs">
       <DependentUpon>ClothesSettings.ascx</DependentUpon>
     </Compile>
+    <Compile Include="Cowrie_GetHotelsInLocation_Result.cs">
+      <DependentUpon>SelectedHotels.tt</DependentUpon>
+    </Compile>
     <Compile Include="HotelSettings.ascx.cs">
       <DependentUpon>HotelSettings.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

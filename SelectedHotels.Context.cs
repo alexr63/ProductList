@@ -12,6 +12,9 @@ namespace ProductList
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
+    using System.Data.Objects;
+    using System.Data.Objects.DataClasses;
+    using System.Linq;
     
     public partial class SelectedHotelsEntities : DbContext
     {
@@ -30,5 +33,14 @@ namespace ProductList
         public DbSet<ProductImage> ProductImages { get; set; }
         public DbSet<ProductType> ProductTypes { get; set; }
         public DbSet<Location> Locations { get; set; }
+    
+        public virtual ObjectResult<Cowrie_GetHotelsInLocation_Result> Cowrie_GetHotelsInLocation(Nullable<int> locationId)
+        {
+            var locationIdParameter = locationId.HasValue ?
+                new ObjectParameter("LocationId", locationId) :
+                new ObjectParameter("LocationId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Cowrie_GetHotelsInLocation_Result>("Cowrie_GetHotelsInLocation", locationIdParameter);
+        }
     }
 }

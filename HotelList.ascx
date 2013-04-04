@@ -6,7 +6,6 @@
     <telerik:RadTreeView ID="RadTreeViewLocations" runat="server" Height="300px" Width="100%"
         OnNodeExpand="RadTreeViewLocations_NodeExpand" OnNodeClick="RadTreeViewLocations_NodeClick">
     </telerik:RadTreeView>
-    <dnn:DnnTree runat="server" ID="DNNTreeLocations" CollapsedNodeImage="../../Images/Plus.gif" ExpandedNodeImage="../../Images/Minus.gif" OnNodeClick="DNNTreeLocations_NodeClick" PopulateOnDemand="DNNTreeLocations_PopulateOnDemand"></dnn:DnnTree>
 </div>
 <div id="products">
     <h1><asp:Label ID="LabelLocation" runat="server" /></h1>
