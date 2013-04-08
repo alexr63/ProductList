@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Data.Objects;
 using System.Linq;
 using System.Web.UI.WebControls;
 using DotNetNuke.Entities.Modules;
@@ -49,24 +50,19 @@ namespace Cowrie.Modules.ProductList
             {
                 LabelSelectedLocation.Text = location.Name;
             }
-            IList<Hotel> hotels = (from p in db.Products
-                                       where !p.IsDeleted
-                                       select p).OfType<Hotel>().ToList();
-            var query = from h in hotels
-                         where h.LocationId == locationId || h.Location.ParentId == locationId ||
-                               (h.Location.ParentLocation != null && h.Location.ParentLocation.ParentId == locationId)
-                         select h;
+            ObjectResult<Cowrie_GetHotelsInLocation_Result> hotels2 = db.Cowrie_GetHotelsInLocation(locationId);
             if (DropDownListSortCriterias.SelectedValue == "Name")
             {
-                ListViewContent.DataSource = query.OrderBy(h => h.Name).ToList();
+                ListViewContent.DataSource = hotels2.OrderBy(h => h.Name).ToList();
             }
             else
             {
-                ListViewContent.DataSource = query.OrderBy(h => h.UnitCost).ToList();
+                ListViewContent.DataSource = hotels2.OrderBy(h => h.UnitCost).ToList();
             }
             ListViewContent.DataBind();
 
-            LabelCount.Text = query.Count().ToString();
+            hotels2 = db.Cowrie_GetHotelsInLocation(locationId);
+            LabelCount.Text = hotels2.Count().ToString();
         }
 
         #region IActionable Members
