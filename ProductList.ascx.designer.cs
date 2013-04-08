@@ -166,48 +166,48 @@ namespace Cowrie.Modules.ProductList {
         protected global::System.Web.UI.WebControls.Label LabelSelectedLocation;
         
         /// <summary>
-        /// Label1 control.
+        /// LabelCount2 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label Label1;
+        protected global::System.Web.UI.WebControls.Label LabelCount2;
         
         /// <summary>
-        /// DropDownList1 control.
+        /// DropDownListSortCriterias2 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList DropDownList1;
+        protected global::System.Web.UI.WebControls.DropDownList DropDownListSortCriterias2;
         
         /// <summary>
-        /// DropDownList2 control.
+        /// DropDownListPageSizes2 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList DropDownList2;
+        protected global::System.Web.UI.WebControls.DropDownList DropDownListPageSizes2;
         
         /// <summary>
-        /// DataPager1 control.
+        /// DataPagerContent2 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DataPager DataPager1;
+        protected global::System.Web.UI.WebControls.DataPager DataPagerContent2;
         
         /// <summary>
-        /// ListView1 control.
+        /// ListViewContent2 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ListView ListView1;
+        protected global::System.Web.UI.WebControls.ListView ListViewContent2;
     }
 }
