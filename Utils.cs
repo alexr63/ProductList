@@ -155,9 +155,7 @@ namespace ProductList
             radTreeView.Nodes.Clear();
             IOrderedQueryable<Category> topCategories = from c in db.Categories
                                                         where !c.IsDeleted &&
-                                                              (categoryId == null
-                                                                   ? c.ParentId == null
-                                                                   : c.ParentId == categoryId)
+                                                              c.Id == categoryId
                                                         orderby c.Name
                                                         select c;
             foreach (Category category in topCategories)
@@ -185,9 +183,7 @@ namespace ProductList
             radTreeView.Nodes.Clear();
             IOrderedQueryable<Location> topLocations = from l in db.Locations
                                                        where !l.IsDeleted &&
-                                                           (locationId == null
-                                                                ? l.ParentId == null
-                                                                : l.ParentId == locationId)
+                                                             l.Id == locationId
                                                        orderby l.Name
                                                        select l;
             foreach (Location location in topLocations)
