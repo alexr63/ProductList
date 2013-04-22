@@ -29,7 +29,13 @@ namespace Cowrie.Modules.ProductList
                         int mode = (int)Enums.DisplayModeEnum.Hotels;
                         if (setting != null)
                         {
-                            mode = Convert.ToInt32(setting);
+                            try
+                            {
+                                mode = Convert.ToInt32(setting);
+                            }
+                            catch (Exception)
+                            {
+                            }
                         }
                         RadioButtonListMode.SelectedValue = mode.ToString();
 
@@ -37,9 +43,18 @@ namespace Cowrie.Modules.ProductList
                         int? categoryId = null;
                         if (setting != null)
                         {
-                            categoryId = Convert.ToInt32(setting);
-                            var category = db.Categories.SingleOrDefault(c => c.Id == categoryId);
-                            LabelCurrentCategory.Text = category.Name;
+                            try
+                            {
+                                categoryId = Convert.ToInt32(setting);
+                                var category = db.Categories.SingleOrDefault(c => c.Id == categoryId);
+                                if (category != null)
+                                {
+                                    LabelCurrentCategory.Text = category.Name;
+                                }
+                            }
+                            catch (Exception)
+                            {
+                            }
                         }
                         Utils.PopulateCategoryTree(RadTreeViewCategories, db, null, categoryId);
 
@@ -47,9 +62,18 @@ namespace Cowrie.Modules.ProductList
                         int? locationId = null;
                         if (setting != null)
                         {
-                            locationId = Convert.ToInt32(setting);
-                            var location = db.Locations.SingleOrDefault(l => l.Id == locationId);
-                            LabelCurrentLocation.Text = location.Name;
+                            try
+                            {
+                                locationId = Convert.ToInt32(setting);
+                                var location = db.Locations.SingleOrDefault(l => l.Id == locationId);
+                                if (location != null)
+                                {
+                                    LabelCurrentLocation.Text = location.Name;
+                                }
+                            }
+                            catch (Exception)
+                            {
+                            }
                         }
                         Utils.PopulateLocationTree(RadTreeViewLocations, db, null, locationId);
                     }

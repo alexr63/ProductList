@@ -27,10 +27,25 @@ namespace Cowrie.Modules.ProductList
                 {
                     using (SelectedHotelsEntities db = new SelectedHotelsEntities())
                     {
-                        int mode = Convert.ToInt32(Settings["mode"]);
+                        int mode = (int) Enums.DisplayModeEnum.Hotels;
+                        mode = Convert.ToInt32(Settings["mode"]);
+                        try
+                        {
+                            mode = Convert.ToInt32(Settings["mode"]);
+                        }
+                        catch (Exception)
+                        {
+                        }
                         if (mode == (int)Enums.DisplayModeEnum.Hotels)
                         {
-                            int locationId = Convert.ToInt32(Settings["location"]);
+                            int locationId = 1;
+                            try
+                            {
+                                locationId = Convert.ToInt32(Settings["location"]);
+                            }
+                            catch (Exception)
+                            {
+                            }
                             var location = db.Locations.SingleOrDefault(l => l.Id == locationId);
                             LabelLocation.Text = location.Name;
                             Utils.PopulateLocationTree(RadTreeViewLocations, db, locationId, locationId);
@@ -40,7 +55,14 @@ namespace Cowrie.Modules.ProductList
                         }
                         else
                         {
-                            int categoryId = Convert.ToInt32(Settings["category"]);
+                            int categoryId = 1;
+                            try
+                            {
+                                categoryId = Convert.ToInt32(Settings["category"]);
+                            }
+                            catch (Exception)
+                            {
+                            }
                             var category = db.Categories.SingleOrDefault(l => l.Id == categoryId);
                             LabelCategory.Text = category.Name;
                             BindDataByCategory(db, categoryId);

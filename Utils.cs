@@ -153,11 +153,23 @@ namespace ProductList
         public static int? PopulateCategoryTree(RadTreeView radTreeView, SelectedHotelsEntities db, int? categoryId = null, int? selectedCategoryId = null)
         {
             radTreeView.Nodes.Clear();
-            IOrderedQueryable<Category> topCategories = from c in db.Categories
-                                                        where !c.IsDeleted &&
-                                                              c.Id == categoryId
-                                                        orderby c.Name
-                                                        select c;
+            IOrderedQueryable<Category> topCategories;
+            if (categoryId == null)
+            {
+                topCategories = from c in db.Categories
+                                where !c.IsDeleted &&
+                                      c.ParentId == null
+                                orderby c.Name
+                                select c;
+            }
+            else
+            {
+                topCategories = from c in db.Categories
+                                where !c.IsDeleted &&
+                                      c.Id == categoryId
+                                orderby c.Name
+                                select c;
+            }
             foreach (Category category in topCategories)
             {
                 RadTreeNode node = new RadTreeNode();
@@ -181,11 +193,23 @@ namespace ProductList
         public static int? PopulateLocationTree(RadTreeView radTreeView, SelectedHotelsEntities db, int? locationId = null, int? selectedLocationId = null)
         {
             radTreeView.Nodes.Clear();
-            IOrderedQueryable<Location> topLocations = from l in db.Locations
-                                                       where !l.IsDeleted &&
-                                                             l.Id == locationId
-                                                       orderby l.Name
-                                                       select l;
+            IOrderedQueryable<Location> topLocations;
+            if (locationId == null)
+            {
+                topLocations = from l in db.Locations
+                               where !l.IsDeleted &&
+                                     l.ParentId == null
+                               orderby l.Name
+                               select l;
+            }
+            else
+            {
+                topLocations = from l in db.Locations
+                               where !l.IsDeleted &&
+                                     l.Id == locationId
+                               orderby l.Name
+                               select l;
+            }
             foreach (Location location in topLocations)
             {
                 RadTreeNode node = new RadTreeNode();
