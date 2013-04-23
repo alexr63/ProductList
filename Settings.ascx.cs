@@ -76,6 +76,25 @@ namespace Cowrie.Modules.ProductList
                             }
                         }
                         Utils.PopulateLocationTree(RadTreeViewLocations, db, null, locationId);
+
+                        setting = Settings["preselectedlocation"];
+                        int? preSelectedLocationId = null;
+                        if (setting != null)
+                        {
+                            try
+                            {
+                                preSelectedLocationId = Convert.ToInt32(setting);
+                                var preSelectedLocation = db.Locations.SingleOrDefault(l => l.Id == preSelectedLocationId);
+                                if (preSelectedLocation != null)
+                                {
+                                    LabelCurrentPreSelectedLocation.Text = preSelectedLocation.Name;
+                                }
+                            }
+                            catch (Exception)
+                            {
+                            }
+                        }
+                        Utils.PopulateLocationTree(RadTreeViewPreSelectedLocations, db, null, preSelectedLocationId);
                     }
                 }
             }
@@ -96,6 +115,7 @@ namespace Cowrie.Modules.ProductList
                 controller.UpdateModuleSetting(ModuleId, "mode", RadioButtonListMode.SelectedValue);
                 controller.UpdateModuleSetting(ModuleId, "category", RadTreeViewCategories.SelectedValue);
                 controller.UpdateModuleSetting(ModuleId, "location", RadTreeViewLocations.SelectedValue);
+                controller.UpdateModuleSetting(ModuleId, "preselectedlocation", RadTreeViewPreSelectedLocations.SelectedValue);
             }
             catch (Exception ex)
             {

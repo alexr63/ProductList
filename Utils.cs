@@ -220,9 +220,9 @@ namespace ProductList
                 if (selectedLocationId != null && location.Id == selectedLocationId)
                 {
                     node.Selected = true;
+                    node.Expanded = true;
                 }
                 radTreeView.Nodes.Add(node);
-                //CreateSubLocationNodes(location, objNode, selectedLocationId);
             }
             if (topLocations.Any())
             {

@@ -6,7 +6,7 @@
       <foldername>ProductList</foldername>
       <modulename>ProductList</modulename>
       <description>A ProductList module</description>
-      <version>01.04.08</version>
+      <version>01.04.09</version>
       <businesscontrollerclass></businesscontrollerclass>
       <modules>
         <module>

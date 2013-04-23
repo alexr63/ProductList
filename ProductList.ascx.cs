@@ -46,11 +46,21 @@ namespace Cowrie.Modules.ProductList
                             catch (Exception)
                             {
                             }
+                            int preSelectedLocationId = locationId;
+                            try
+                            {
+                                preSelectedLocationId = Convert.ToInt32(Settings["preselectedlocation"]);
+                            }
+                            catch (Exception)
+                            {
+                            }
                             var location = db.Locations.SingleOrDefault(l => l.Id == locationId);
                             LabelLocation.Text = location.Name;
-                            Utils.PopulateLocationTree(RadTreeViewLocations, db, locationId, locationId);
-                            ViewState["locationId"] = locationId;
-                            BindDataByLocation(db, locationId);
+                            var selectedLocation = db.Locations.SingleOrDefault(l => l.Id == preSelectedLocationId);
+                            LabelSelectedLocation.Text = selectedLocation.Name;
+                            Utils.PopulateLocationTree(RadTreeViewLocations, db, locationId, preSelectedLocationId);
+                            ViewState["locationId"] = preSelectedLocationId;
+                            BindDataByLocation(db, preSelectedLocationId);
                             MultiView1.SetActiveView(ViewHotels);
                         }
                         else
