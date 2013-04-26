@@ -3,6 +3,8 @@
 <%@ Register Assembly="DotNetNuke.WebControls" Namespace="DotNetNuke.UI.WebControls" TagPrefix="dnn" %>
 <%@ Import Namespace="ProductList" %>
 <%@ Register TagPrefix="telerik" Namespace="Telerik.Web.UI" Assembly="Telerik.Web.UI" %>
+<telerik:RadSkinManager ID="QsfSkinManager" runat="server" ShowChooser="false" />
+<telerik:RadFormDecorator ID="QsfFromDecorator" runat="server" DecoratedControls="All" EnableRoundedCorners="false" />
 <asp:MultiView ID="MultiView1" runat="server">
     <asp:View ID="ViewProducts" runat="server">
         <div id="categories">
@@ -85,7 +87,7 @@
         <div id="categories">
             Search:
             <asp:TextBox ID="TextBoxSearch2" runat="server"></asp:TextBox>&nbsp;<asp:Button ID="ButtonSubmit2" runat="server" Text="Submit" OnClick="ButtonSubmit2_Click" />
-            <telerik:radtreeview id="RadTreeViewLocations" runat="server" height="300px" width="100%"
+            <telerik:radtreeview id="RadTreeViewLocations" runat="server" height="800px" width="100%"
                 onnodeexpand="RadTreeViewLocations_NodeExpand" onnodeclick="RadTreeViewLocations_NodeClick">
             </telerik:radtreeview>
         </div>
@@ -143,16 +145,16 @@
                 <ItemTemplate>
                     <tr>
                         <td style="vertical-align: middle">
-                            <asp:HyperLink ID="HyperLinkName" runat="server" Text='<%# Eval("Name") %>' NavigateUrl='<%# DotNetNuke.Common.Globals.NavigateURL(TabId, "HotelDetails", "mid=" + ModuleId, "Id=" + Eval("Id")) %>' />
+                            <asp:HyperLink ID="HyperLinkName" runat="server" Text='<%# Eval("Name") %>' NavigateUrl='<%# DotNetNuke.Common.Globals.NavigateURL(TabId, "ProductDetails", "mid=" + ModuleId, "Id=" + Eval("Id")) %>' />
                         </td>
                         <td style="vertical-align: middle">
                             <asp:Label ID="LabelPrice" runat="server" Text='<%# Eval("UnitCost", "{0:c}") %>' />
                         </td>
                         <td>
-                            <asp:HyperLink ID="HyperLinkImage" runat="server" ImageUrl='<%# Eval("Image") %>' NavigateUrl='<%# DotNetNuke.Common.Globals.NavigateURL(TabId, "HotelDetails", "mid=" + ModuleId, "Id=" + Eval("Id")) %>' ImageWidth="100" />
+                            <asp:HyperLink ID="HyperLinkImage" runat="server" ImageUrl='<%# Eval("Image") %>' NavigateUrl='<%# DotNetNuke.Common.Globals.NavigateURL(TabId, "ProductDetails", "mid=" + ModuleId, "Id=" + Eval("Id")) %>' ImageWidth="100" />
                         </td>
                         <td>
-                            <asp:Literal ID="LiteralDescription" runat="server" Text='<%# Eval("Description") != null ? Server.HtmlDecode(Eval("Description").ToString()) : String.Empty %>'></asp:Literal>
+                            <asp:Literal ID="LiteralDescription" runat="server" Text='<%# Eval("Description") != null ? Server.HtmlDecode(Eval("Description").ToString().TruncateAtWord(240)) : String.Empty %>'></asp:Literal>
                         </td>
                     </tr>
                 </ItemTemplate>

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.UI;
 using DotNetNuke.UI.WebControls;
 using Telerik.Web.UI;
 using TreeNode = DotNetNuke.UI.WebControls.TreeNode;
@@ -10,6 +11,14 @@ namespace ProductList
 {
     public static class Utils
     {
+        public static void Raise(this RadTreeViewEventHandler eventToThrow, object sender, RadTreeNodeEventArgs args)
+        {
+            if (eventToThrow != null)
+            {
+                eventToThrow(sender, args);
+            }
+        }
+
         public static string TruncateAtWord(this string input, int length)
         {
             if (input == null || input.Length < length)
@@ -45,7 +54,6 @@ namespace ProductList
                     objNode.HasNodes = true;
                 }
                 DNNTreeLocations.TreeNodes.Add(objNode);
-                //CreateSubLocationNodes(location, objNode, selectedLocationId);
             }
             if (topLocations.Any())
             {
@@ -54,33 +62,29 @@ namespace ProductList
             return null;
         }
 
-        public static void CreateSubLocationNodes(Location location, TreeNode objNode, int? selectedLocationId)
+        public static void CreateSubLocationNodes(Location location, RadTreeNode objNode, int? selectedLocationId)
         {
             if (location.SubLocations.Any(l => !l.IsDeleted))
             {
-                objNode.HasNodes = true;
                 var subLocations = from l in location.SubLocations
                                    where !l.IsDeleted
                                    orderby l.Name
                                    select l;
                 foreach (Location subLocation in subLocations)
                 {
-                    int index = objNode.TreeNodes.Add();
-                    TreeNode objSubNode = objNode.TreeNodes[index];
-                    objSubNode.Text = subLocation.Name;
-                    objSubNode.ToolTip = subLocation.Name;
-                    objSubNode.ClickAction = eClickAction.PostBack;
-                    objSubNode.Key = subLocation.Id.ToString();
-                    if (selectedLocationId != null && location.Id == selectedLocationId)
+                    RadTreeNode node = new RadTreeNode();
+                    node.Text = subLocation.Name;
+                    node.ToolTip = subLocation.Name;
+                    if (subLocation.SubLocations.Any(l => !l.IsDeleted))
                     {
-                        objSubNode.Selected = true;
-                        objNode.Expand();
+                        node.ExpandMode = TreeNodeExpandMode.ServerSideCallBack;
                     }
-                    if (location.SubLocations.Any(l => !l.IsDeleted))
+                    node.Value = subLocation.Id.ToString();
+                    objNode.Nodes.Add(node);
+                    if (selectedLocationId != null && subLocation.Id == selectedLocationId)
                     {
-                        objNode.HasNodes = true;
+                        node.Selected = true;
                     }
-                    //CreateSubLocationNodes(subLocation, objSubNode, selectedLocationId);
                 }
             }
         }
@@ -110,7 +114,6 @@ namespace ProductList
                     objNode.HasNodes = true;
                 }
                 DNNTreeCategories.TreeNodes.Add(objNode);
-                //CreateSubLocationNodes(location, objNode, selectedLocationId);
             }
             if (topCategories.Any())
             {
@@ -215,44 +218,27 @@ namespace ProductList
                 RadTreeNode node = new RadTreeNode();
                 node.Text = location.Name;
                 node.ToolTip = location.Name;
-                node.ExpandMode = TreeNodeExpandMode.ServerSideCallBack;
+                if (location.SubLocations.Any(l => !l.IsDeleted))
+                {
+                    node.ExpandMode = TreeNodeExpandMode.ServerSideCallBack;
+                }
                 node.Value = location.Id.ToString();
                 if (selectedLocationId != null && location.Id == selectedLocationId)
                 {
                     node.Selected = true;
-                    node.Expanded = true;
                 }
                 radTreeView.Nodes.Add(node);
+                if (location.ParentId == null)
+                {
+                    CreateSubLocationNodes(location, node, selectedLocationId);
+                    node.Expanded = true;
+                }
             }
             if (topLocations.Any())
             {
                 return topLocations.First().Id;
             }
             return null;
-        }
-
-        public static void CreateSubLocationNodes(Location location, RadTreeNode objNode, int? selectedLocationId)
-        {
-            if (location.SubLocations.Any(c => !c.IsDeleted))
-            {
-                var subLocations = from l in location.SubLocations
-                                   where !l.IsDeleted
-                                   orderby l.Name
-                                   select l;
-                foreach (Location subLocation in subLocations)
-                {
-                    RadTreeNode node = new RadTreeNode();
-                    node.Text = subLocation.Name;
-                    node.ToolTip = subLocation.Name;
-                    node.ExpandMode = TreeNodeExpandMode.ServerSideCallBack;
-                    node.Value = subLocation.Id.ToString();
-                    if (selectedLocationId != null && location.Id == selectedLocationId)
-                    {
-                        node.Selected = true;
-                    }
-                    objNode.Nodes.Add(node);
-                }
-            }
         }
 
         public static void CreateSubCategoryNodes(Category category, RadTreeNode objNode, int? selectedCategoryId)

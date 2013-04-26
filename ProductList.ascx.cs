@@ -255,40 +255,16 @@ namespace Cowrie.Modules.ProductList
             }
         }
 
-        protected void RadTreeViewLocations_NodeExpand(object sender, RadTreeNodeEventArgs e)
+        public void RadTreeViewLocations_NodeExpand(object sender, RadTreeNodeEventArgs e)
         {
+            int? nodeId = Convert.ToInt32(e.Node.Value);
+            int locationId = Convert.ToInt32(ViewState["locationId"]);
             using (SelectedHotelsEntities db = new SelectedHotelsEntities())
             {
-                int? locationId = Convert.ToInt32(e.Node.Value);
-                var location = db.Locations.SingleOrDefault(l => l.Id == locationId);
-                CreateSubLocationNodes(location, e.Node, locationId);
+                var location = db.Locations.SingleOrDefault(l => l.Id == nodeId);
+                Utils.CreateSubLocationNodes(location, e.Node, locationId);
             }
             e.Node.Expanded = true;
-        }
-
-        public static void CreateSubLocationNodes(Location location, RadTreeNode objNode, int? selectedLocationId)
-        {
-            if (location.SubLocations.Any(l => !l.IsDeleted))
-            {
-                var subLocations = from l in location.SubLocations
-                                   where !l.IsDeleted
-                                   orderby l.Name
-                                   select l;
-                foreach (Location subLocation in subLocations)
-                {
-                    RadTreeNode node = new RadTreeNode();
-                    node.Text = subLocation.Name;
-                    node.ToolTip = subLocation.Name;
-                    node.ExpandMode = TreeNodeExpandMode.ServerSideCallBack;
-                    node.Value = subLocation.Id.ToString();
-                    if (selectedLocationId != null && location.Id == selectedLocationId)
-                    {
-                        node.Selected = true;
-                    }
-                    objNode.Nodes.Add(node);
-                    //CreateSubLocationNodes(subLocation, objSubNode, selectedLocationId);
-                }
-            }
         }
 
         protected void RadTreeViewLocations_NodeClick(object sender, RadTreeNodeEventArgs e)
