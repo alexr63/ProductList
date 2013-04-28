@@ -86,7 +86,7 @@
     <asp:View ID="ViewHotels" runat="server">
         <div id="categories">
             Search:
-            <asp:TextBox ID="TextBoxSearch2" runat="server"></asp:TextBox>&nbsp;<asp:Button ID="ButtonSubmit2" runat="server" Text="Submit" OnClick="ButtonSubmit2_Click" />
+            <asp:TextBox ID="TextBoxSearch2" runat="server" Width="100px"></asp:TextBox>&nbsp;<asp:Button ID="ButtonSubmit2" runat="server" Text="Go" OnClick="ButtonSubmit2_Click" />
             <telerik:radtreeview id="RadTreeViewLocations" runat="server" height="800px" width="100%"
                 onnodeexpand="RadTreeViewLocations_NodeExpand" onnodeclick="RadTreeViewLocations_NodeClick">
             </telerik:radtreeview>
