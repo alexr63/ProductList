@@ -114,6 +114,8 @@
           <Property Name="Id" Type="int" Nullable="false" />
           <Property Name="LocationId" Type="int" />
           <Property Name="Rooms" Type="int" />
+          <Property Name="Star" Type="nvarchar" MaxLength="50" />
+          <Property Name="CustomerRating" Type="int" />
         </EntityType>
         <EntityType Name="Cowrie_Locations">
           <Key>
@@ -338,7 +340,7 @@
             <End Role="Category1" EntitySet="Categories" />
           </AssociationSet>
           <FunctionImport Name="Cowrie_GetHotelsInLocation" ReturnType="Collection(SelectedHotelsModel.Cowrie_GetHotelsInLocation_Result)">
-            <Parameter Name="LocationId" Mode="In" Type="Int32" />
+          <Parameter Name="LocationId" Mode="In" Type="Int32" />
           </FunctionImport>
         </EntityContainer>
         <EntityType Name="Category">
@@ -432,6 +434,8 @@
           <Property Type="Int32" Name="LocationId" />
           <Property Type="Int32" Name="Rooms" />
           <NavigationProperty Name="Location" Relationship="SelectedHotelsModel.FK_Cowrie_Hotels_Cowrie_Locations" FromRole="Cowrie_Hotels" ToRole="Cowrie_Locations" />
+          <Property Type="String" Name="Star" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="CustomerRating" />
         </EntityType>
         <EntityType Name="Location">
           <Key>
@@ -533,6 +537,8 @@
             </EntityTypeMapping>
             <EntityTypeMapping TypeName="IsTypeOf(SelectedHotelsModel.Hotel)">
               <MappingFragment StoreEntitySet="Cowrie_Hotels">
+                <ScalarProperty Name="CustomerRating" ColumnName="CustomerRating" />
+                <ScalarProperty Name="Star" ColumnName="Star" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="LocationId" ColumnName="LocationId" />
                 <ScalarProperty Name="Rooms" ColumnName="Rooms" />

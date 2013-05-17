@@ -128,15 +128,14 @@
             </table>
             <asp:ListView ID="ListViewContent2" runat="server" OnPagePropertiesChanging="ListViewContent2_PagePropertiesChanging">
                 <LayoutTemplate>
-                    <h3>Product Listing</h3>
-                    <table>
+                    <table cellpadding="5px">
                         <asp:PlaceHolder runat="server" ID="itemPlaceholder"></asp:PlaceHolder>
                     </table>
                 </LayoutTemplate>
 
                 <ItemSeparatorTemplate>
                     <tr>
-                        <td colspan="4">
+                        <td colspan="2">
                             <hr />
                         </td>
                     </tr>
@@ -144,17 +143,31 @@
 
                 <ItemTemplate>
                     <tr>
-                        <td style="vertical-align: middle">
-                            <asp:HyperLink ID="HyperLinkName" runat="server" Text='<%# Eval("Name") %>' NavigateUrl='<%# DotNetNuke.Common.Globals.NavigateURL(TabId, "ProductDetails", "mid=" + ModuleId, "Id=" + Eval("Id")) %>' />
+                        <td style="vertical-align: middle" colspan="2">
+                            <table cellpadding="5px">
+                                <tr>
+                                    <td style="vertical-align: middle">
+                                        <h3><asp:HyperLink ID="HyperLinkName" runat="server" Text='<%# Eval("Name") %>' NavigateUrl='<%# DotNetNuke.Common.Globals.NavigateURL(TabId, "ProductDetails", "mid=" + ModuleId, "Id=" + Eval("Id")) %>' /></h3>
+                                    </td>
+                                    <td style="vertical-align: middle">
+                                        <telerik:RadRating ID="RadRatingCustomerRating" runat="server" Value='<%# Convert.ToDecimal(Eval("CustomerRating")) %>' ReadOnly="True" />
+                                    </td>
+                                    <td style="vertical-align: middle">
+                                        (from <asp:Label ID="LabelPrice" runat="server" Text='<%# Eval("UnitCost", "{0:c}") %>' /> per night)
+                                    </td>
+                                </tr>
+                            </table>
                         </td>
+                    </tr>
+                    <tr>
                         <td style="vertical-align: middle">
-                            <asp:Label ID="LabelPrice" runat="server" Text='<%# Eval("UnitCost", "{0:c}") %>' />
-                        </td>
-                        <td>
                             <asp:HyperLink ID="HyperLinkImage" runat="server" ImageUrl='<%# Eval("Image") %>' NavigateUrl='<%# DotNetNuke.Common.Globals.NavigateURL(TabId, "ProductDetails", "mid=" + ModuleId, "Id=" + Eval("Id")) %>' ImageWidth="100" />
                         </td>
-                        <td>
+                        <td style="vertical-align: middle">
                             <asp:Literal ID="LiteralDescription" runat="server" Text='<%# Eval("Description") != null ? Server.HtmlDecode(Eval("Description").ToString().TruncateAtWord(240)) : String.Empty %>'></asp:Literal>
+                            <br />
+                            <br />
+                            <asp:HyperLink ID="HyperLinkMoreHotelInfo" runat="server" Text='More hotel info' NavigateUrl='<%# DotNetNuke.Common.Globals.NavigateURL(TabId, "ProductDetails", "mid=" + ModuleId, "Id=" + Eval("Id")) %>' />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<asp:HyperLink ID="HyperLinkBookNow" runat="server" Text='Book Now!' NavigateUrl='<%# Eval("URL") %>' Target="_blank" />
                         </td>
                     </tr>
                 </ItemTemplate>
