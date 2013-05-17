@@ -6,7 +6,7 @@
       <foldername>ProductList</foldername>
       <modulename>ProductList</modulename>
       <description>A ProductList module</description>
-      <version>01.05.02</version>
+      <version>01.05.06</version>
       <businesscontrollerclass></businesscontrollerclass>
       <modules>
         <module>
@@ -22,6 +22,14 @@
               <key>ProductDetails</key>
               <title>Product Details</title>
               <src>DesktopModules/ProductList/ProductDetails.ascx</src>
+              <type>View</type>
+              <helpurl></helpurl>
+              <supportspartialrendering>true</supportspartialrendering>
+            </control>
+            <control>
+              <key>HotelDetails</key>
+              <title>Hotel Details</title>
+              <src>DesktopModules/ProductList/HotelDetails.ascx</src>
               <type>View</type>
               <helpurl></helpurl>
               <supportspartialrendering>true</supportspartialrendering>

@@ -59,7 +59,7 @@
                         <table>
                             <tr>
                                 <td style="vertical-align: middle">
-                                    <asp:HyperLink ID="HyperLinkName" runat="server" Text='<%# Eval("Name") %>' NavigateUrl='<%# DotNetNuke.Common.Globals.NavigateURL(TabId, "ProductDetails", "mid=" + ModuleId, "Id=" + Eval("Id")) %>' />
+                                    <h1><asp:HyperLink ID="HyperLinkName" runat="server" Text='<%# Eval("Name") %>' NavigateUrl='<%# DotNetNuke.Common.Globals.NavigateURL(TabId, "ProductDetails", "mid=" + ModuleId, "Id=" + Eval("Id")) %>' /></h1>
                                 </td>
                             </tr>
                             <tr>
@@ -106,6 +106,7 @@
                         <asp:DropDownList ID="DropDownListSortCriterias2" runat="server" AutoPostBack="True" OnSelectedIndexChanged="DropDownListSortCriterias2_SelectedIndexChanged">
                             <asp:ListItem Selected="True">Name</asp:ListItem>
                             <asp:ListItem>Price</asp:ListItem>
+                            <asp:ListItem>Rating</asp:ListItem>
                         </asp:DropDownList>
                     </td>
                     <td>View
@@ -126,7 +127,7 @@
                     </td>
                 </tr>
             </table>
-            <asp:ListView ID="ListViewContent2" runat="server" OnPagePropertiesChanging="ListViewContent2_PagePropertiesChanging">
+            <asp:ListView ID="ListViewContent2" runat="server" OnPagePropertiesChanging="ListViewContent2_PagePropertiesChanging" OnItemCommand="ListViewContent2_ItemCommand">
                 <LayoutTemplate>
                     <table cellpadding="5px">
                         <asp:PlaceHolder runat="server" ID="itemPlaceholder"></asp:PlaceHolder>
@@ -147,7 +148,7 @@
                             <table cellpadding="5px">
                                 <tr>
                                     <td style="vertical-align: middle">
-                                        <h3><asp:HyperLink ID="HyperLinkName" runat="server" Text='<%# Eval("Name") %>' NavigateUrl='<%# DotNetNuke.Common.Globals.NavigateURL(TabId, "ProductDetails", "mid=" + ModuleId, "Id=" + Eval("Id")) %>' /></h3>
+                                        <h1><asp:HyperLink ID="HyperLinkName" runat="server" Text='<%# Eval("Name") %>' NavigateUrl='<%# DotNetNuke.Common.Globals.NavigateURL(TabId, "HotelDetails", "mid=" + ModuleId, "Id=" + Eval("Id")) %>' /></h1>
                                     </td>
                                     <td style="vertical-align: middle">
                                         <telerik:RadRating ID="RadRatingStar" runat="server" Value='<%# Convert.ToDecimal(Eval("Star")) %>' ReadOnly="True" />
@@ -161,13 +162,13 @@
                     </tr>
                     <tr>
                         <td style="vertical-align: middle">
-                            <asp:HyperLink ID="HyperLinkImage" runat="server" ImageUrl='<%# Eval("Image") %>' NavigateUrl='<%# DotNetNuke.Common.Globals.NavigateURL(TabId, "ProductDetails", "mid=" + ModuleId, "Id=" + Eval("Id")) %>' ImageWidth="100" />
+                            <asp:HyperLink ID="HyperLinkImage" runat="server" ImageUrl='<%# Eval("Image") %>' NavigateUrl='<%# DotNetNuke.Common.Globals.NavigateURL(TabId, "HotelDetails", "mid=" + ModuleId, "Id=" + Eval("Id")) %>' ImageWidth="100" />
                         </td>
                         <td style="vertical-align: middle">
                             <asp:Literal ID="LiteralDescription" runat="server" Text='<%# Eval("Description") != null ? Server.HtmlDecode(Eval("Description").ToString().TruncateAtWord(240)) : String.Empty %>'></asp:Literal>
                             <br />
                             <br />
-                            <asp:HyperLink ID="HyperLinkMoreHotelInfo" runat="server" Text='More hotel info' NavigateUrl='<%# DotNetNuke.Common.Globals.NavigateURL(TabId, "ProductDetails", "mid=" + ModuleId, "Id=" + Eval("Id")) %>' />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<asp:HyperLink ID="HyperLinkBookNow" runat="server" Text='Book Now!' NavigateUrl='<%# Eval("URL") %>' Target="_blank" />
+                            <asp:HyperLink ID="HyperLinkMoreHotelInfo" runat="server" Text='More hotel info' NavigateUrl='<%# DotNetNuke.Common.Globals.NavigateURL(TabId, "HotelDetails", "mid=" + ModuleId, "Id=" + Eval("Id")) %>' />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<asp:Button ID="ButtonBookNow" runat="server" Text="Book Now!" CausesValidation="False" UseSubmitBehavior="False" CommandName="BookNow" CommandArgument='<%# Eval("URL") %>' />
                         </td>
                     </tr>
                 </ItemTemplate>

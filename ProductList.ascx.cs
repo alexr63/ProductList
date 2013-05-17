@@ -147,9 +147,13 @@ namespace Cowrie.Modules.ProductList
             {
                 ListViewContent2.DataSource = query.OrderBy(h => h.Name).ToList();
             }
-            else
+            else if (DropDownListSortCriterias2.SelectedValue == "Price")
             {
                 ListViewContent2.DataSource = query.OrderBy(h => h.UnitCost).ToList();
+            }
+            else
+            {
+                ListViewContent2.DataSource = query.OrderBy(h => h.Star).ToList();
             }
             ListViewContent2.DataBind();
 
@@ -298,6 +302,14 @@ namespace Cowrie.Modules.ProductList
                 {
                     BindDataByLocation(db, locationId);
                 }
+            }
+        }
+
+        protected void ListViewContent2_ItemCommand(object sender, ListViewCommandEventArgs e)
+        {
+            if (e.CommandName == "BookNow")
+            {
+                Response.Redirect(e.CommandArgument.ToString());
             }
         }
     }
