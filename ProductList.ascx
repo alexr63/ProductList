@@ -150,7 +150,7 @@
                                         <h3><asp:HyperLink ID="HyperLinkName" runat="server" Text='<%# Eval("Name") %>' NavigateUrl='<%# DotNetNuke.Common.Globals.NavigateURL(TabId, "ProductDetails", "mid=" + ModuleId, "Id=" + Eval("Id")) %>' /></h3>
                                     </td>
                                     <td style="vertical-align: middle">
-                                        <telerik:RadRating ID="RadRatingCustomerRating" runat="server" Value='<%# Convert.ToDecimal(Eval("CustomerRating")) %>' ReadOnly="True" />
+                                        <telerik:RadRating ID="RadRatingStar" runat="server" Value='<%# Convert.ToDecimal(Eval("Star")) %>' ReadOnly="True" />
                                     </td>
                                     <td style="vertical-align: middle">
                                         (from <asp:Label ID="LabelPrice" runat="server" Text='<%# Eval("UnitCost", "{0:c}") %>' /> per night)
