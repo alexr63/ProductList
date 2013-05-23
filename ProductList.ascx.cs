@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.UI.WebControls;
 using DotNetNuke.Entities.Modules;
+using DotNetNuke.Entities.Tabs;
 using DotNetNuke.Services.Exceptions;
 using DotNetNuke.UI.WebControls;
 using ProductList;
@@ -14,11 +15,19 @@ namespace Cowrie.Modules.ProductList
 {
     public partial class ProductList : PortalModuleBase
     {
+        public int DetailsTabId { get; set; }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (Settings["category"] == null)
             {
                 return;
+            }
+
+            var childTabs = TabController.GetTabsByParent(TabId, PortalId);
+            if (childTabs.Count() > 0)
+            {
+                DetailsTabId = childTabs[0].TabID;
             }
 
             try

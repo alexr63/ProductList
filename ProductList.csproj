@@ -140,13 +140,6 @@
     <Compile Include="HotelSettings.ascx.designer.cs">
       <DependentUpon>HotelSettings.ascx</DependentUpon>
     </Compile>
-    <Compile Include="HotelDetails.ascx.cs">
-      <DependentUpon>HotelDetails.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="HotelDetails.ascx.designer.cs">
-      <DependentUpon>HotelDetails.ascx</DependentUpon>
-    </Compile>
     <Compile Include="HotelList.ascx.cs">
       <DependentUpon>HotelList.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -186,13 +179,6 @@
     <Compile Include="PageQuery.cs" />
     <Compile Include="Product.cs">
       <DependentUpon>SelectedHotels.tt</DependentUpon>
-    </Compile>
-    <Compile Include="ProductDetails.ascx.cs">
-      <DependentUpon>ProductDetails.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="ProductDetails.ascx.designer.cs">
-      <DependentUpon>ProductDetails.ascx</DependentUpon>
     </Compile>
     <Compile Include="ProductImage.cs">
       <DependentUpon>SelectedHotels.tt</DependentUpon>
@@ -238,12 +224,10 @@
     <Content Include="ClothesDetails.ascx" />
     <Content Include="ClothesSettings.ascx" />
     <Content Include="HotelSettings.ascx" />
-    <Content Include="HotelDetails.ascx" />
     <Content Include="HotelList.ascx" />
     <Content Include="HomeAndGardensDetails.ascx" />
     <Content Include="HomeAndGardens.ascx" />
     <Content Include="module.css" />
-    <Content Include="ProductDetails.ascx" />
     <Content Include="packages.config" />
     <Content Include="Hotels_Standard.xsc">
       <DependentUpon>Hotels_Standard.xsd</DependentUpon>

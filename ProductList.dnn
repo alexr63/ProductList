@@ -6,7 +6,7 @@
       <foldername>ProductList</foldername>
       <modulename>ProductList</modulename>
       <description>A ProductList module</description>
-      <version>01.05.06</version>
+      <version>01.05.10</version>
       <businesscontrollerclass></businesscontrollerclass>
       <modules>
         <module>
@@ -17,22 +17,6 @@
               <src>DesktopModules/ProductList/ProductList.ascx</src>
               <type>View</type>
               <helpurl></helpurl>
-            </control>
-            <control>
-              <key>ProductDetails</key>
-              <title>Product Details</title>
-              <src>DesktopModules/ProductList/ProductDetails.ascx</src>
-              <type>View</type>
-              <helpurl></helpurl>
-              <supportspartialrendering>true</supportspartialrendering>
-            </control>
-            <control>
-              <key>HotelDetails</key>
-              <title>Hotel Details</title>
-              <src>DesktopModules/ProductList/HotelDetails.ascx</src>
-              <type>View</type>
-              <helpurl></helpurl>
-              <supportspartialrendering>true</supportspartialrendering>
             </control>
             <control>
               <key>Settings</key>
@@ -51,14 +35,6 @@
               <src>DesktopModules/ProductList/HotelList.ascx</src>
               <type>View</type>
               <helpurl></helpurl>
-            </control>
-            <control>
-              <key>HotelDetails</key>
-              <title>Hotel Details</title>
-              <src>DesktopModules/ProductList/HotelDetails.ascx</src>
-              <type>View</type>
-              <helpurl></helpurl>
-              <supportspartialrendering>true</supportspartialrendering>
             </control>
             <control>
               <key>Settings</key>
@@ -126,16 +102,10 @@
           <name>ProductList.ascx</name>
         </file>
         <file>
-          <name>ProductDetails.ascx</name>
-        </file>
-        <file>
           <name>Settings.ascx</name>
         </file>
         <file>
           <name>HotelList.ascx</name>
-        </file>
-        <file>
-          <name>HotelDetails.ascx</name>
         </file>
         <file>
           <name>HotelSettings.ascx</name>
