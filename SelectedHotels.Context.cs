@@ -33,6 +33,7 @@ namespace ProductList
         public DbSet<ProductImage> ProductImages { get; set; }
         public DbSet<ProductType> ProductTypes { get; set; }
         public DbSet<Location> Locations { get; set; }
+        public DbSet<ProductSpec> ProductSpecs { get; set; }
     
         public virtual ObjectResult<Cowrie_GetHotelsInLocation_Result> Cowrie_GetHotelsInLocation(Nullable<int> locationId)
         {

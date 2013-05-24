@@ -12,12 +12,13 @@ namespace ProductList
     using System;
     using System.Collections.Generic;
     
-    public partial class ProductImage
+    public partial class ProductSpec
     {
         public int Id { get; set; }
         public int ProductId { get; set; }
-        public string URL { get; set; }
-        public string Description { get; set; }
+        public string Name { get; set; }
+        public string DimensionMet { get; set; }
+        public string DimensionImp { get; set; }
     
         public virtual Product Product { get; set; }
     }

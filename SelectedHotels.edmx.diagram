@@ -24,6 +24,10 @@
         <EntityTypeShape EntityType="SelectedHotelsModel.HomeAndGarden" Width="1.5" PointX="6.5" PointY="14.875" />
         <InheritanceConnector EntityType="SelectedHotelsModel.HomeAndGarden" />
         <AssociationConnector Association="SelectedHotelsModel.FK_Cowrie_Categories_Cowrie_Categories" />
+        <EntityTypeShape EntityType="SelectedHotelsModel.Boat" Width="1.5" PointX="8.25" PointY="14.875" />
+        <EntityTypeShape EntityType="SelectedHotelsModel.ProductSpec" Width="1.5" PointX="8.375" PointY="12.125" />
+        <AssociationConnector Association="SelectedHotelsModel.FK_Cowrie_ProductSpecs_Cowrie_Products" />
+        <InheritanceConnector EntityType="SelectedHotelsModel.Boat" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

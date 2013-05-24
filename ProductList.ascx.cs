@@ -72,6 +72,16 @@ namespace Cowrie.Modules.ProductList
                             BindDataByLocation(db, preSelectedLocationId);
                             MultiView1.SetActiveView(ViewHotels);
                         }
+                        else if (mode == (int) Enums.DisplayModeEnum.Boats)
+                        {
+                            IList<Boat> boats = (from p in db.Products
+                                                 where !p.IsDeleted
+                                                 select p).OfType<Boat>().OrderBy(p => p.Name).ToList();
+                            ListViewContent3.DataSource = boats;
+                            ListViewContent3.DataBind();
+
+                            MultiView1.SetActiveView(ViewBoats);
+                        }
                         else
                         {
                             int categoryId = 1;

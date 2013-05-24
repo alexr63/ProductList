@@ -13,6 +13,7 @@
             <asp:RadioButtonList ID="RadioButtonListMode" runat="server">
                 <asp:ListItem Value="1">Hotels</asp:ListItem>
                 <asp:ListItem Value="2">Products</asp:ListItem>
+                <asp:ListItem Value="3">Boats</asp:ListItem>
             </asp:RadioButtonList>
         </td>
     </tr>

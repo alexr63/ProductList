@@ -12,13 +12,15 @@ namespace ProductList
     using System;
     using System.Collections.Generic;
     
-    public partial class ProductImage
+    public partial class Boat : Product
     {
-        public int Id { get; set; }
-        public int ProductId { get; set; }
-        public string URL { get; set; }
-        public string Description { get; set; }
-    
-        public virtual Product Product { get; set; }
+        public string FullName { get; set; }
+        public string Thumbnail { get; set; }
+        public Nullable<int> TypeId { get; set; }
+        public bool Featured { get; set; }
+        public string Manu { get; set; }
+        public string ManuTxt { get; set; }
+        public string ManuAdvert { get; set; }
+        public string ManuLink { get; set; }
     }
 }

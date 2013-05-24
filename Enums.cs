@@ -12,13 +12,15 @@ namespace ProductList
             Hotels = 1,
             Clothes,
             Books,
-            HomeAndGardens
+            HomeAndGardens,
+            Boats
         }
 
         public enum DisplayModeEnum 
         {
             Hotels = 1,
-            Products
+            Products,
+            Boats
         }
     }
 }
