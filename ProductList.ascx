@@ -212,7 +212,7 @@
                 <ItemTemplate>
                     <tr style="background-color: #80cfff;">
                         <td style="vertical-align: middle">
-                            <asp:HyperLink ID="HyperLinkImage" runat="server" ImageUrl='<%# Eval("Image") %>' NavigateUrl='<%# DotNetNuke.Common.Globals.NavigateURL(DetailsTabId, "", "Id=" + Eval("Id")) %>' ImageWidth="100" />
+                            <asp:HyperLink ID="HyperLinkImage" runat="server" ImageUrl='<%# String.Format("~/Portals/{0}{1}", PortalId, Eval("Image")) %>' NavigateUrl='<%# DotNetNuke.Common.Globals.NavigateURL(DetailsTabId, "", "Id=" + Eval("Id")) %>' ImageWidth="100" />
                         </td>
                         <td style="vertical-align: middle">
                             <asp:HyperLink ID="HyperLinkName" runat="server" Text='<%# Eval("Name") %>' NavigateUrl='<%# DotNetNuke.Common.Globals.NavigateURL(DetailsTabId, "", "Id=" + Eval("Id")) %>' />
@@ -226,7 +226,7 @@
                 <AlternatingItemTemplate>
                     <tr style="background-color: white;">
                         <td style="vertical-align: middle">
-                            <asp:HyperLink ID="HyperLinkImage" runat="server" ImageUrl='<%# Eval("Image") %>' NavigateUrl='<%# DotNetNuke.Common.Globals.NavigateURL(DetailsTabId, "", "Id=" + Eval("Id")) %>' ImageWidth="100" />
+                            <asp:HyperLink ID="HyperLinkImage" runat="server" ImageUrl='<%# String.Format("~/Portals/{0}{1}", PortalId, Eval("Image")) %>' NavigateUrl='<%# DotNetNuke.Common.Globals.NavigateURL(DetailsTabId, "", "Id=" + Eval("Id")) %>' ImageWidth="100" />
                         </td>
                         <td style="vertical-align: middle">
                             <asp:HyperLink ID="HyperLinkName" runat="server" Text='<%# Eval("Name") %>' NavigateUrl='<%# DotNetNuke.Common.Globals.NavigateURL(DetailsTabId, "", "Id=" + Eval("Id")) %>' />
