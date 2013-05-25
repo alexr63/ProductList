@@ -80,6 +80,9 @@ namespace Cowrie.Modules.ProductList
                             ListViewContent3.DataSource = boats;
                             ListViewContent3.DataBind();
 
+                            DropDownListModels.DataSource = boats;
+                            DropDownListModels.DataBind();
+
                             MultiView1.SetActiveView(ViewBoats);
                         }
                         else
@@ -329,6 +332,14 @@ namespace Cowrie.Modules.ProductList
             if (e.CommandName == "BookNow")
             {
                 Response.Redirect(e.CommandArgument.ToString());
+            }
+        }
+
+        protected void DropDownListModels_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (DropDownListModels.SelectedValue != String.Empty)
+            {
+                Response.Redirect(DotNetNuke.Common.Globals.NavigateURL(DetailsTabId, "", "Id=" + DropDownListModels.SelectedValue));
             }
         }
     }

@@ -181,7 +181,7 @@
         </div>
         <div id="categories">
             Product Range:
-            <asp:DropDownList ID="DropDownListModels" runat="server" AppendDataBoundItems="True">
+            <asp:DropDownList ID="DropDownListModels" runat="server" AppendDataBoundItems="True" DataValueField="Id" DataTextField="Name" AutoPostBack="True" OnSelectedIndexChanged="DropDownListModels_SelectedIndexChanged">
                 <Items>
                     <asp:ListItem Value="" Text="Please Select a Model"></asp:ListItem>
                 </Items>
