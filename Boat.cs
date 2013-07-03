@@ -22,5 +22,7 @@ namespace ProductList
         public string ManuTxt { get; set; }
         public string ManuAdvert { get; set; }
         public string ManuLink { get; set; }
+        public string CurrentBuilder { get; set; }
+        public string DesignHistory { get; set; }
     }
 }

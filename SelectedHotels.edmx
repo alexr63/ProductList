@@ -84,6 +84,8 @@
           <Property Name="ManuTxt" Type="nvarchar" MaxLength="50" />
           <Property Name="ManuAdvert" Type="nvarchar" MaxLength="50" />
           <Property Name="ManuLink" Type="nvarchar" MaxLength="50" />
+          <Property Name="CurrentBuilder" Type="nvarchar(max)" />
+          <Property Name="DesignHistory" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="Cowrie_Books">
           <Key>
@@ -583,6 +585,8 @@
           <Property Type="String" Name="ManuTxt" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="ManuAdvert" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="ManuLink" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="CurrentBuilder" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="DesignHistory" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="ProductSpec">
           <Key>
@@ -677,6 +681,8 @@
             </EntityTypeMapping>
             <EntityTypeMapping TypeName="IsTypeOf(SelectedHotelsModel.Boat)">
               <MappingFragment StoreEntitySet="Cowrie_Boats">
+                <ScalarProperty Name="DesignHistory" ColumnName="DesignHistory" />
+                <ScalarProperty Name="CurrentBuilder" ColumnName="CurrentBuilder" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="FullName" ColumnName="FullName" />
                 <ScalarProperty Name="Thumbnail" ColumnName="Thumbnail" />
