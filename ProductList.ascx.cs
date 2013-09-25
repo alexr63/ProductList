@@ -333,6 +333,10 @@ namespace Cowrie.Modules.ProductList
             {
                 Response.Redirect(e.CommandArgument.ToString());
             }
+            else if (e.CommandName == "MoreHotelInfo")
+            {
+                Response.Redirect(DotNetNuke.Common.Globals.NavigateURL(DetailsTabId, "", "Id=" + e.CommandArgument.ToString()));
+            }
         }
 
         protected void DropDownListModels_SelectedIndexChanged(object sender, EventArgs e)
