@@ -58,7 +58,14 @@ namespace Cowrie.Modules.ProductList
                             int preSelectedLocationId = locationId;
                             try
                             {
-                                preSelectedLocationId = Convert.ToInt32(Settings["preselectedlocation"]);
+                                if (Settings["preselectedlocation"] != String.Empty)
+                                {
+                                    preSelectedLocationId = Convert.ToInt32(Settings["preselectedlocation"]);
+                                }
+                                if (Session["locationId"] != null)
+                                {
+                                    preSelectedLocationId = Convert.ToInt32(Session["locationId"]);
+                                }
                             }
                             catch (Exception)
                             {
@@ -68,7 +75,7 @@ namespace Cowrie.Modules.ProductList
                             var selectedLocation = db.Locations.SingleOrDefault(l => l.Id == preSelectedLocationId);
                             LabelSelectedLocation.Text = selectedLocation.Name;
                             Utils.PopulateLocationTree(RadTreeViewLocations, db, locationId, preSelectedLocationId);
-                            ViewState["locationId"] = preSelectedLocationId;
+                            Session["locationId"] = preSelectedLocationId;
                             BindDataByLocation(db, preSelectedLocationId);
                             MultiView1.SetActiveView(ViewHotels);
                         }
@@ -219,9 +226,9 @@ namespace Cowrie.Modules.ProductList
 
         protected void DropDownListSortCriterias2_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (ViewState["locationId"] != null)
+            if (Session["locationId"] != null)
             {
-                int locationId = Convert.ToInt32(ViewState["locationId"]);
+                int locationId = Convert.ToInt32(Session["locationId"]);
                 using (SelectedHotelsEntities db = new SelectedHotelsEntities())
                 {
                     BindDataByLocation(db, locationId);
@@ -261,9 +268,9 @@ namespace Cowrie.Modules.ProductList
             DataPagerContent2.SetPageProperties(e.StartRowIndex, e.MaximumRows, false);
 
             //rebind List View
-            if (ViewState["locationId"] != null)
+            if (Session["locationId"] != null)
             {
-                int locationId = Convert.ToInt32(ViewState["locationId"]);
+                int locationId = Convert.ToInt32(Session["locationId"]);
                 using (SelectedHotelsEntities db = new SelectedHotelsEntities())
                 {
                     BindDataByLocation(db, locationId);
@@ -284,7 +291,7 @@ namespace Cowrie.Modules.ProductList
         public void RadTreeViewLocations_NodeExpand(object sender, RadTreeNodeEventArgs e)
         {
             int? nodeId = Convert.ToInt32(e.Node.Value);
-            int locationId = Convert.ToInt32(ViewState["locationId"]);
+            int locationId = Convert.ToInt32(Session["locationId"]);
             using (SelectedHotelsEntities db = new SelectedHotelsEntities())
             {
                 var location = db.Locations.SingleOrDefault(l => l.Id == nodeId);
@@ -296,7 +303,7 @@ namespace Cowrie.Modules.ProductList
         protected void RadTreeViewLocations_NodeClick(object sender, RadTreeNodeEventArgs e)
         {
             int locationId = int.Parse(e.Node.Value);
-            ViewState["locationId"] = locationId;
+            Session["locationId"] = locationId;
             using (SelectedHotelsEntities db = new SelectedHotelsEntities())
             {
                 BindDataByLocation(db, locationId);
@@ -317,9 +324,9 @@ namespace Cowrie.Modules.ProductList
 
         protected void ButtonSubmit2_Click(object sender, EventArgs e)
         {
-            if (ViewState["locationId"] != null)
+            if (Session["locationId"] != null)
             {
-                int locationId = Convert.ToInt32(ViewState["locationId"]);
+                int locationId = Convert.ToInt32(Session["locationId"]);
                 using (SelectedHotelsEntities db = new SelectedHotelsEntities())
                 {
                     BindDataByLocation(db, locationId);

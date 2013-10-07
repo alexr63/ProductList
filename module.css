@@ -1,18 +1,31 @@
-﻿#categories
-{
-	clear: left;
+﻿#categories {
+    clear: left;
 	float: left;
-	width: 25%;
 	padding: 20px 0;
 	margin: 0 0 0 30px;
 	display: inline;
+    -moz-min-width: 240px;
+    -ms-min-width: 240px;
+    -o-min-width: 240px;
+    -webkit-min-width: 240px;
+    min-width: 240px;
 }
 
 #products
 {
 	float: right;
-	width: 65%;
 	padding: 20px 0;
 	margin: 0 20px 0 0;
 	display: inline;
+    -moz-min-width: 450px;
+    -ms-min-width: 450px;
+    -o-min-width: 450px;
+    -webkit-min-width: 450px;
+    min-width: 450px;
+    width: 600px
+}
+
+div#footer
+{
+    text-align: right;
 }

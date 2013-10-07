@@ -100,10 +100,6 @@
                 <asp:Label ID="LabelSelectedLocation" runat="server" /></h2>
             <table style="width: 100%">
                 <tr>
-                    <td>
-                        <asp:Label ID="LabelCount2" runat="server" />
-                        hotels found
-                    </td>
                     <td>Sort by
                         <asp:DropDownList ID="DropDownListSortCriterias2" runat="server" AutoPostBack="True" OnSelectedIndexChanged="DropDownListSortCriterias2_SelectedIndexChanged">
                             <asp:ListItem Selected="True">Name</asp:ListItem>
@@ -126,6 +122,12 @@
                                 <asp:NextPreviousPagerField ShowLastPageButton="True" ShowNextPageButton="False" ShowPreviousPageButton="False" />
                             </Fields>
                         </asp:DataPager>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <asp:Label ID="LabelCount2" runat="server" />
+                        hotels found
                     </td>
                 </tr>
             </table>
@@ -163,14 +165,16 @@
                         </td>
                     </tr>
                     <tr>
-                        <td style="vertical-align: middle">
+                        <td style="padding: 10px; vertical-align: middle">
                             <asp:HyperLink ID="HyperLinkImage" runat="server" ImageUrl='<%# Eval("Image") %>' NavigateUrl='<%# DotNetNuke.Common.Globals.NavigateURL(DetailsTabId, "", "Id=" + Eval("Id")) %>' ImageWidth="100" />
                         </td>
                         <td style="vertical-align: middle">
                             <asp:Literal ID="LiteralDescription" runat="server" Text='<%# Eval("Description") != null ? Server.HtmlDecode(Eval("Description").ToString().TruncateAtWord(240)) : String.Empty %>'></asp:Literal>
                             <br />
                             <br />
-                            <asp:Button ID="ButtonMoreHotelInfo" runat="server" Text="More hotel info" CausesValidation="False" UseSubmitBehavior="False" CommandName="MoreHotelInfo" CommandArgument='<%# Eval("Id") %>' />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<asp:Button ID="ButtonBookNow" runat="server" Text="Book Now!" CausesValidation="False" UseSubmitBehavior="False" CommandName="BookNow" CommandArgument='<%# Eval("URL") %>' />
+                            <div id="footer">
+                                <asp:Button ID="ButtonMoreHotelInfo" runat="server" Text="More hotel info" CausesValidation="False" UseSubmitBehavior="False" CommandName="MoreHotelInfo" CommandArgument='<%# Eval("Id") %>' />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<asp:Button ID="ButtonBookNow" runat="server" Text="Book Now!" CausesValidation="False" UseSubmitBehavior="False" CommandName="BookNow" CommandArgument='<%# Eval("URL") %>' />
+                            </div>
                         </td>
                     </tr>
                 </ItemTemplate>
