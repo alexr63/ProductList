@@ -158,7 +158,7 @@
                                         <telerik:RadRating ID="RadRatingStar" runat="server" Value='<%# Convert.ToDecimal(Eval("Star")) %>' ReadOnly="True" />
                                     </td>
                                     <td style="vertical-align: middle">
-                                        (from <asp:Label ID="LabelPrice" runat="server" Text='<%# Eval("UnitCost", "{0:c}") %>' /> per night)
+                                        (from <asp:Label ID="LabelPrice" runat="server" Text='<%# String.Format("{0}{1:#0.00}", Eval("CurrencyCode"), Eval("UnitCost")) %>' /> per night)
                                     </td>
                                 </tr>
                             </table>
