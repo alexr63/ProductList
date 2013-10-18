@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -265,5 +266,17 @@ namespace ProductList
             }
         }
 
+        public static string GetCurrencySymbol(string currencyCode)
+        {
+            foreach (CultureInfo nfo in CultureInfo.GetCultures(CultureTypes.SpecificCultures))
+            {
+                RegionInfo region = new RegionInfo(nfo.LCID);
+                if (region.ISOCurrencySymbol == currencyCode)
+                {
+                    return region.CurrencySymbol;
+                }
+            }
+            return currencyCode;
+        }
     }
 }
