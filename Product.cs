@@ -31,6 +31,7 @@ namespace ProductList
         public bool IsDeleted { get; set; }
         public string Image { get; set; }
         public Nullable<int> ProductTypeId { get; set; }
+        public System.DateTime CreatedDate { get; set; }
     
         public virtual ICollection<Category> Categories { get; set; }
         public virtual ICollection<ProductImage> ProductImages { get; set; }
