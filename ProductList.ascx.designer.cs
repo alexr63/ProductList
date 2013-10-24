@@ -13,15 +13,6 @@ namespace Cowrie.Modules.ProductList {
     public partial class ProductList {
         
         /// <summary>
-        /// QsfSkinManager control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::Telerik.Web.UI.RadSkinManager QsfSkinManager;
-        
-        /// <summary>
         /// QsfFromDecorator control.
         /// </summary>
         /// <remarks>

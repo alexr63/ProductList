@@ -133,6 +133,13 @@
     <Compile Include="ClothesSettings.ascx.designer.cs">
       <DependentUpon>ClothesSettings.ascx</DependentUpon>
     </Compile>
+    <Compile Include="BoatList.ascx.cs">
+      <DependentUpon>BoatList.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="BoatList.ascx.designer.cs">
+      <DependentUpon>BoatList.ascx</DependentUpon>
+    </Compile>
     <Compile Include="Cowrie_GetHotelsInLocation_Result.cs">
       <DependentUpon>SelectedHotels.tt</DependentUpon>
     </Compile>
@@ -229,6 +236,7 @@
     <Content Include="Clothes.ascx" />
     <Content Include="ClothesDetails.ascx" />
     <Content Include="ClothesSettings.ascx" />
+    <Content Include="BoatList.ascx" />
     <Content Include="HotelSettings.ascx" />
     <Content Include="HotelList.ascx" />
     <Content Include="HomeAndGardensDetails.ascx" />
