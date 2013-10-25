@@ -229,11 +229,6 @@ namespace ProductList
                     node.Selected = true;
                 }
                 radTreeView.Nodes.Add(node);
-                if (location.ParentId == null)
-                {
-                    CreateSubLocationNodes(location, node, selectedLocationId);
-                    node.Expanded = true;
-                }
             }
             if (topLocations.Any())
             {

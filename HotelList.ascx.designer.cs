@@ -13,6 +13,42 @@ namespace Cowrie.Modules.ProductList {
     public partial class HotelList {
         
         /// <summary>
+        /// QsfSkinManager control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::Telerik.Web.UI.RadSkinManager QsfSkinManager;
+        
+        /// <summary>
+        /// QsfFromDecorator control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::Telerik.Web.UI.RadFormDecorator QsfFromDecorator;
+        
+        /// <summary>
+        /// TextBoxSearch control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TextBoxSearch;
+        
+        /// <summary>
+        /// ButtonSubmit control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button ButtonSubmit;
+        
+        /// <summary>
         /// RadTreeViewLocations control.
         /// </summary>
         /// <remarks>
@@ -40,15 +76,6 @@ namespace Cowrie.Modules.ProductList {
         protected global::System.Web.UI.WebControls.Label LabelSelectedLocation;
         
         /// <summary>
-        /// LabelCount control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label LabelCount;
-        
-        /// <summary>
         /// DropDownListSortCriterias control.
         /// </summary>
         /// <remarks>
@@ -74,6 +101,15 @@ namespace Cowrie.Modules.ProductList {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DataPager DataPagerContent;
+        
+        /// <summary>
+        /// LabelCount control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label LabelCount;
         
         /// <summary>
         /// ListViewContent control.

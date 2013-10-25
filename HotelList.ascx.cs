@@ -6,6 +6,7 @@ using System.Data.Objects;
 using System.Linq;
 using System.Web.UI.WebControls;
 using DotNetNuke.Entities.Modules;
+using DotNetNuke.Entities.Tabs;
 using DotNetNuke.Services.Exceptions;
 using DotNetNuke.UI.WebControls;
 using ProductList;
@@ -15,11 +16,19 @@ namespace Cowrie.Modules.ProductList
 {
     public partial class HotelList : PortalModuleBase
     {
+        public int DetailsTabId { get; set; }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (Settings["location"] == null)
             {
                 return;
+            }
+
+            var childTabs = TabController.GetTabsByParent(TabId, PortalId);
+            if (childTabs.Count() > 0)
+            {
+                DetailsTabId = childTabs[0].TabID;
             }
 
             try
@@ -28,12 +37,36 @@ namespace Cowrie.Modules.ProductList
                 {
                     using (SelectedHotelsEntities db = new SelectedHotelsEntities())
                     {
-                        int locationId = Convert.ToInt32(Settings["location"]);
+                        int locationId = 1;
+                        try
+                        {
+                            locationId = Convert.ToInt32(Settings["location"]);
+                        }
+                        catch (Exception)
+                        {
+                        }
+                        int preSelectedLocationId = locationId;
+                        try
+                        {
+                            if (Settings["preselectedlocation"] != String.Empty)
+                            {
+                                preSelectedLocationId = Convert.ToInt32(Settings["preselectedlocation"]);
+                            }
+                            if (Session["locationId"] != null)
+                            {
+                                preSelectedLocationId = Convert.ToInt32(Session["locationId"]);
+                            }
+                        }
+                        catch (Exception)
+                        {
+                        }
                         var location = db.Locations.SingleOrDefault(l => l.Id == locationId);
                         LabelLocation.Text = location.Name;
-                        PopulateTree(RadTreeViewLocations, db, locationId, locationId);
-                        ViewState["locationId"] = locationId;
-                        BindData(db, locationId);
+                        var selectedLocation = db.Locations.SingleOrDefault(l => l.Id == preSelectedLocationId);
+                        LabelSelectedLocation.Text = selectedLocation.Name;
+                        Utils.PopulateLocationTree(RadTreeViewLocations, db, locationId, preSelectedLocationId);
+                        Session["locationId"] = preSelectedLocationId;
+                        BindData(db, preSelectedLocationId);
                     }
                 }
             }
@@ -45,24 +78,36 @@ namespace Cowrie.Modules.ProductList
 
         private void BindData(SelectedHotelsEntities db, int locationId)
         {
-            var location = db.Locations.SingleOrDefault(l => l.Id == locationId);
-            if (location != null)
+            IList<Hotel> hotels = (from p in db.Products
+                                   where !p.IsDeleted
+                                   select p).OfType<Hotel>().ToList();
+            var query = from h in hotels
+                        where h.LocationId == locationId || h.Location.ParentId == locationId ||
+                              (h.Location.ParentLocation != null && h.Location.ParentLocation.ParentId == locationId)
+                        select h;
+            if (TextBoxSearch.Text != String.Empty)
             {
-                LabelSelectedLocation.Text = location.Name;
+                query =
+                    query.Where(
+                        p =>
+                        p.Name.ToLower().Contains(TextBoxSearch.Text.ToLower()) ||
+                        p.Description.ToLower().Contains(TextBoxSearch.Text.ToLower()));
             }
-            ObjectResult<Cowrie_GetHotelsInLocation_Result> hotels2 = db.Cowrie_GetHotelsInLocation(locationId);
             if (DropDownListSortCriterias.SelectedValue == "Name")
             {
-                ListViewContent.DataSource = hotels2.OrderBy(h => h.Name).ToList();
+                ListViewContent.DataSource = query.OrderBy(h => h.Name).ToList();
+            }
+            else if (DropDownListSortCriterias.SelectedValue == "Price")
+            {
+                ListViewContent.DataSource = query.OrderBy(h => h.UnitCost).ToList();
             }
             else
             {
-                ListViewContent.DataSource = hotels2.OrderBy(h => h.UnitCost).ToList();
+                ListViewContent.DataSource = query.OrderBy(h => h.Star).ToList();
             }
             ListViewContent.DataBind();
 
-            hotels2 = db.Cowrie_GetHotelsInLocation(locationId);
-            LabelCount.Text = hotels2.Count().ToString();
+            LabelCount.Text = query.Count().ToString();
         }
 
         #region IActionable Members
@@ -186,6 +231,30 @@ namespace Cowrie.Modules.ProductList
                     objNode.Nodes.Add(node);
                     //CreateSubLocationNodes(subLocation, objSubNode, selectedLocationId);
                 }
+            }
+        }
+
+        protected void ButtonSubmit_Click(object sender, EventArgs e)
+        {
+            if (Session["locationId"] != null)
+            {
+                int locationId = Convert.ToInt32(Session["locationId"]);
+                using (SelectedHotelsEntities db = new SelectedHotelsEntities())
+                {
+                    BindData(db, locationId);
+                }
+            }
+        }
+
+        protected void ListViewContent_ItemCommand(object sender, ListViewCommandEventArgs e)
+        {
+            if (e.CommandName == "BookNow")
+            {
+                Response.Redirect(e.CommandArgument.ToString());
+            }
+            else if (e.CommandName == "MoreHotelInfo")
+            {
+                Response.Redirect(DotNetNuke.Common.Globals.NavigateURL(DetailsTabId, "", "Id=" + e.CommandArgument.ToString()));
             }
         }
     }
