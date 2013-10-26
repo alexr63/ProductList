@@ -48,7 +48,7 @@ namespace Cowrie.Modules.ProductList
                         int preSelectedLocationId = locationId;
                         try
                         {
-                            if (Settings["preselectedlocation"] != String.Empty)
+                            if (Settings["preselectedlocation"].ToString() != String.Empty)
                             {
                                 preSelectedLocationId = Convert.ToInt32(Settings["preselectedlocation"]);
                             }
@@ -64,7 +64,7 @@ namespace Cowrie.Modules.ProductList
                         LabelLocation.Text = location.Name;
                         var selectedLocation = db.Locations.SingleOrDefault(l => l.Id == preSelectedLocationId);
                         LabelSelectedLocation.Text = selectedLocation.Name;
-                        Utils.PopulateLocationTree(RadTreeViewLocations, db, locationId, preSelectedLocationId);
+                        Utils.PopulateLocationTree(RadTreeViewLocations, db, locationId, preSelectedLocationId, true);
                         Session["locationId"] = preSelectedLocationId;
                         BindData(db, preSelectedLocationId);
                     }
@@ -125,7 +125,7 @@ namespace Cowrie.Modules.ProductList
         protected void RadTreeViewLocations_NodeClick(object sender, RadTreeNodeEventArgs e)
         {
             int locationId = int.Parse(e.Node.Value);
-            ViewState["locationId"] = locationId;
+            Session["locationId"] = locationId;
             using (SelectedHotelsEntities db = new SelectedHotelsEntities())
             {
                 BindData(db, locationId);

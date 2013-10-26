@@ -194,7 +194,7 @@ namespace ProductList
             return null;
         }
 
-        public static int? PopulateLocationTree(RadTreeView radTreeView, SelectedHotelsEntities db, int? locationId = null, int? selectedLocationId = null)
+        public static int? PopulateLocationTree(RadTreeView radTreeView, SelectedHotelsEntities db, int? locationId = null, int? selectedLocationId = null, bool createSubLocationNodes = false)
         {
             radTreeView.Nodes.Clear();
             IOrderedQueryable<Location> topLocations;
@@ -229,6 +229,11 @@ namespace ProductList
                     node.Selected = true;
                 }
                 radTreeView.Nodes.Add(node);
+                if (createSubLocationNodes && location.ParentId == null)
+                {
+                    CreateSubLocationNodes(location, node, selectedLocationId);
+                    node.Expanded = true;
+                }
             }
             if (topLocations.Any())
             {
