@@ -66,14 +66,6 @@
 							<helpurl></helpurl>
 						</control>
 						<control>
-							<key>ClothesDetails</key>
-							<title>Clothes Details</title>
-							<src>DesktopModules/ProductList/ClothesDetails.ascx</src>
-							<type>View</type>
-							<helpurl></helpurl>
-							<supportspartialrendering>true</supportspartialrendering>
-						</control>
-						<control>
 							<key>Settings</key>
 							<title>Clothes Settings</title>
 							<src>DesktopModules/ProductList/ClothesSettings.ascx</src>

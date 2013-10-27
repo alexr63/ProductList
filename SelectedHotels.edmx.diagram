@@ -13,14 +13,14 @@
         <EntityTypeShape EntityType="SelectedHotelsModel.ProductType" Width="1.5" PointX="1.125" PointY="8.25" />
         <AssociationConnector Association="SelectedHotelsModel.FK_Cowrie_Products_Cowrie_ProductTypes" />
         <EntityTypeShape EntityType="SelectedHotelsModel.Book" Width="1.5" PointX="2.75" PointY="14.875" />
-        <EntityTypeShape EntityType="SelectedHotelsModel.Clothe" Width="1.5" PointX="4.5" PointY="14.875" />
+        <EntityTypeShape EntityType="SelectedHotelsModel.Cloth" Width="1.5" PointX="4.5" PointY="14.875" />
         <EntityTypeShape EntityType="SelectedHotelsModel.Hotel" Width="1.5" PointX="1" PointY="14.875" />
         <EntityTypeShape EntityType="SelectedHotelsModel.Location" Width="1.5" PointX="0.75" PointY="1" />
         <AssociationConnector Association="SelectedHotelsModel.FK_Cowrie_Hotels_Cowrie_Locations" />
         <AssociationConnector Association="SelectedHotelsModel.FK_Cowrie_Locations_Cowrie_Locations" />
         <InheritanceConnector EntityType="SelectedHotelsModel.Hotel" />
         <InheritanceConnector EntityType="SelectedHotelsModel.Book" />
-        <InheritanceConnector EntityType="SelectedHotelsModel.Clothe" />
+        <InheritanceConnector EntityType="SelectedHotelsModel.Cloth" />
         <EntityTypeShape EntityType="SelectedHotelsModel.HomeAndGarden" Width="1.5" PointX="6.5" PointY="14.875" />
         <InheritanceConnector EntityType="SelectedHotelsModel.HomeAndGarden" />
         <AssociationConnector Association="SelectedHotelsModel.FK_Cowrie_Categories_Cowrie_Categories" />

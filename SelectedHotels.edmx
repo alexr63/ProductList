@@ -500,7 +500,7 @@
           <Property Type="String" Name="Author" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="ISBN" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
-        <EntityType Name="Clothe" BaseType="SelectedHotelsModel.Product">
+        <EntityType Name="Cloth" BaseType="SelectedHotelsModel.Product">
           <Property Type="String" Name="Size" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="Colour" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="Brand" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -669,7 +669,7 @@
                 <ScalarProperty Name="ISBN" ColumnName="ISBN" />
               </MappingFragment>
             </EntityTypeMapping>
-            <EntityTypeMapping TypeName="IsTypeOf(SelectedHotelsModel.Clothe)">
+            <EntityTypeMapping TypeName="IsTypeOf(SelectedHotelsModel.Cloth)">
               <MappingFragment StoreEntitySet="Cowrie_Clothes">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Size" ColumnName="Size" />

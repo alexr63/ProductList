@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.UI.WebControls;
 using DotNetNuke.Entities.Modules;
+using DotNetNuke.Entities.Tabs;
 using DotNetNuke.Services.Exceptions;
 using DotNetNuke.UI.WebControls;
 using ProductList;
@@ -14,8 +15,16 @@ namespace Cowrie.Modules.ProductList
 {
     public partial class Clothes : PortalModuleBase
     {
+        public int DetailsTabId { get; set; }
+
         protected void Page_Load(object sender, EventArgs e)
         {
+            var childTabs = TabController.GetTabsByParent(TabId, PortalId);
+            if (childTabs.Count() > 0)
+            {
+                DetailsTabId = childTabs[0].TabID;
+            }
+
             try
             {
                 if (!IsPostBack)
@@ -35,9 +44,9 @@ namespace Cowrie.Modules.ProductList
 
         private void BindSizes(SelectedHotelsEntities db)
         {
-            IList<Clothe> clothes = (from p in db.Products
+            IList<Cloth> clothes = (from p in db.Products
                                                    where !p.IsDeleted
-                                                   select p).OfType<Clothe>().ToList();
+                                                   select p).OfType<Cloth>().ToList();
             var query = (from h in clothes
                          where h.Size != String.Empty
                          orderby h.Size
@@ -48,11 +57,11 @@ namespace Cowrie.Modules.ProductList
 
         private void BindData(SelectedHotelsEntities db)
         {
-            IList<Clothe> clothes = (from p in db.Products
+            IList<Cloth> clothes = (from p in db.Products
                                                    where !p.IsDeleted
-                                                   select p).OfType<Clothe>().ToList();
+                                                   select p).OfType<Cloth>().ToList();
             List<string> selectedSizes = new List<string>();
-            IEnumerable<Clothe> query;
+            IEnumerable<Cloth> query;
             if (CheckBoxListSizes.Items[0].Selected)
             {
                 query = from h in clothes

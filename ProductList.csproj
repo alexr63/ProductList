@@ -109,7 +109,7 @@
     <Compile Include="Category.cs">
       <DependentUpon>SelectedHotels.tt</DependentUpon>
     </Compile>
-    <Compile Include="Clothe.cs">
+    <Compile Include="Cloth.cs">
       <DependentUpon>SelectedHotels.tt</DependentUpon>
     </Compile>
     <Compile Include="Clothes.ascx.cs">
@@ -118,13 +118,6 @@
     </Compile>
     <Compile Include="Clothes.ascx.designer.cs">
       <DependentUpon>Clothes.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="ClothesDetails.ascx.cs">
-      <DependentUpon>ClothesDetails.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="ClothesDetails.ascx.designer.cs">
-      <DependentUpon>ClothesDetails.ascx</DependentUpon>
     </Compile>
     <Compile Include="ClothesSettings.ascx.cs">
       <DependentUpon>ClothesSettings.ascx</DependentUpon>
@@ -234,7 +227,6 @@
   <ItemGroup>
     <None Include="Build\build.bat" />
     <Content Include="Clothes.ascx" />
-    <Content Include="ClothesDetails.ascx" />
     <Content Include="ClothesSettings.ascx" />
     <Content Include="BoatList.ascx" />
     <Content Include="HotelSettings.ascx" />

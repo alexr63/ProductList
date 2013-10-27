@@ -12,7 +12,7 @@ namespace ProductList
     using System;
     using System.Collections.Generic;
     
-    public partial class Clothe : Product
+    public partial class Cloth : Product
     {
         public string Size { get; set; }
         public string Colour { get; set; }
