@@ -58,7 +58,7 @@ namespace Cowrie.Modules.ProductList
                             int preSelectedLocationId = locationId;
                             try
                             {
-                                if (Settings["preselectedlocation"] != String.Empty)
+                                if (Settings["preselectedlocation"] != null && Settings["preselectedlocation"].ToString() != String.Empty)
                                 {
                                     preSelectedLocationId = Convert.ToInt32(Settings["preselectedlocation"]);
                                 }

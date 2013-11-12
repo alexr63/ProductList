@@ -9,6 +9,7 @@
     -o-min-width: 240px;
     -webkit-min-width: 240px;
     min-width: 240px;
+    width: 250px;
 }
 
 #products

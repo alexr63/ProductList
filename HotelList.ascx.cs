@@ -48,7 +48,7 @@ namespace Cowrie.Modules.ProductList
                         int preSelectedLocationId = locationId;
                         try
                         {
-                            if (Settings["preselectedlocation"].ToString() != String.Empty)
+                            if (Settings["preselectedlocation"] != null && Settings["preselectedlocation"].ToString() != String.Empty)
                             {
                                 preSelectedLocationId = Convert.ToInt32(Settings["preselectedlocation"]);
                             }
@@ -60,6 +60,9 @@ namespace Cowrie.Modules.ProductList
                         catch (Exception)
                         {
                         }
+
+                        DeleteEmptyLocations(db);
+
                         var location = db.Locations.SingleOrDefault(l => l.Id == locationId);
                         LabelLocation.Text = location.Name;
                         var selectedLocation = db.Locations.SingleOrDefault(l => l.Id == preSelectedLocationId);
@@ -76,38 +79,47 @@ namespace Cowrie.Modules.ProductList
             }
         }
 
+        private void DeleteEmptyLocations(SelectedHotelsEntities db)
+        {
+            foreach (Location location in db.Locations.Where(l => !l.IsDeleted))
+            {
+                if (!Utils.HotelsInLocation(db, location.Id).Any())
+                {
+                    location.IsDeleted = true;
+                }
+            }
+            db.SaveChanges();
+        }
+
         private void BindData(SelectedHotelsEntities db, int locationId)
         {
-            IList<Hotel> hotels = (from p in db.Products
-                                   where !p.IsDeleted
-                                   select p).OfType<Hotel>().ToList();
-            var query = from h in hotels
-                        where h.LocationId == locationId || h.Location.ParentId == locationId ||
-                              (h.Location.ParentLocation != null && h.Location.ParentLocation.ParentId == locationId)
-                        select h;
+            var hotels = Utils.HotelsInLocation(db, locationId);
             if (TextBoxSearch.Text != String.Empty)
             {
-                query =
-                    query.Where(
+                hotels =
+                    hotels.Where(
                         p =>
                         p.Name.ToLower().Contains(TextBoxSearch.Text.ToLower()) ||
                         p.Description.ToLower().Contains(TextBoxSearch.Text.ToLower()));
             }
             if (DropDownListSortCriterias.SelectedValue == "Name")
             {
-                ListViewContent.DataSource = query.OrderBy(h => h.Name).ToList();
+                ListViewContent.DataSource = hotels.OrderBy(h => h.Name).ToList();
             }
             else if (DropDownListSortCriterias.SelectedValue == "Price")
             {
-                ListViewContent.DataSource = query.OrderBy(h => h.UnitCost).ToList();
+                ListViewContent.DataSource = hotels.OrderBy(h => h.UnitCost).ToList();
             }
             else
             {
-                ListViewContent.DataSource = query.OrderBy(h => h.Star).ToList();
+                ListViewContent.DataSource = hotels.OrderBy(h => h.Star).ToList();
             }
             ListViewContent.DataBind();
 
-            LabelCount.Text = query.Count().ToString();
+            var selectedLocation = db.Locations.SingleOrDefault(l => l.Id == locationId);
+            LabelSelectedLocation.Text = selectedLocation.Name;
+
+            LabelCount.Text = hotels.Count().ToString();
         }
 
         #region IActionable Members
