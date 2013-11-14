@@ -102,22 +102,10 @@
 					<name>ProductList.dll</name>
 				</file>
 				<file>
-					<name>ProductList.ascx</name>
-				</file>
-				<file>
-					<name>Settings.ascx</name>
-				</file>
-				<file>
-					<name>HotelList.ascx</name>
-				</file>
-				<file>
-					<name>HotelSettings.ascx</name>
+					<name>BoatList.ascx</name>
 				</file>
 				<file>
 					<name>Clothes.ascx</name>
-				</file>
-				<file>
-					<name>ClothesDetails.ascx</name>
 				</file>
 				<file>
 					<name>ClothesSettings.ascx</name>
@@ -127,6 +115,18 @@
 				</file>
 				<file>
 					<name>HomeAndGardensDetails.ascx</name>
+				</file>
+				<file>
+					<name>HotelList.ascx</name>
+				</file>
+				<file>
+					<name>HotelSettings.ascx</name>
+				</file>
+				<file>
+					<name>ProductList.ascx</name>
+				</file>
+				<file>
+					<name>Settings.ascx</name>
 				</file>
 				<file>
 					<path>Scripts/fancybox</path>
