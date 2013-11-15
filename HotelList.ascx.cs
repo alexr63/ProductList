@@ -61,8 +61,6 @@ namespace Cowrie.Modules.ProductList
                         {
                         }
 
-                        DeleteEmptyLocations(db);
-
                         var location = db.Locations.SingleOrDefault(l => l.Id == locationId);
                         LabelLocation.Text = location.Name;
                         var selectedLocation = db.Locations.SingleOrDefault(l => l.Id == preSelectedLocationId);
