@@ -205,7 +205,7 @@ namespace Cowrie.Modules.ProductList
         protected void DNNTreeCategories_NodeClick(object source, DNNTreeNodeClickEventArgs e)
         {
             int categoryId = int.Parse(e.Node.Key);
-            ViewState["categoryId"] = categoryId;
+            Session["categoryId"] = categoryId;
             using (SelectedHotelsEntities db = new SelectedHotelsEntities())
             {
                 BindDataByCategory(db, categoryId);
@@ -214,9 +214,9 @@ namespace Cowrie.Modules.ProductList
 
         protected void DropDownListSortCriterias_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (ViewState["categoryId"] != null)
+            if (Session["categoryId"] != null)
             {
-                int categoryId = Convert.ToInt32(ViewState["categoryId"]);
+                int categoryId = Convert.ToInt32(Session["categoryId"]);
                 using (SelectedHotelsEntities db = new SelectedHotelsEntities())
                 {
                     BindDataByCategory(db, categoryId);
@@ -252,9 +252,9 @@ namespace Cowrie.Modules.ProductList
             DataPagerContent.SetPageProperties(e.StartRowIndex, e.MaximumRows, false);
 
             //rebind List View
-            if (ViewState["categoryId"] != null)
+            if (Session["categoryId"] != null)
             {
-                int categoryId = Convert.ToInt32(ViewState["categoryId"]);
+                int categoryId = Convert.ToInt32(Session["categoryId"]);
                 using (SelectedHotelsEntities db = new SelectedHotelsEntities())
                 {
                     BindDataByCategory(db, categoryId);
@@ -312,9 +312,9 @@ namespace Cowrie.Modules.ProductList
 
         protected void ButtonSubmit_Click(object sender, EventArgs e)
         {
-            if (ViewState["categoryId"] != null)
+            if (Session["categoryId"] != null)
             {
-                int categoryId = Convert.ToInt32(ViewState["categoryId"]);
+                int categoryId = Convert.ToInt32(Session["categoryId"]);
                 using (SelectedHotelsEntities db = new SelectedHotelsEntities())
                 {
                     BindDataByCategory(db, categoryId);
