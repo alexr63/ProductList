@@ -8,7 +8,7 @@
 <div id="categories">
     Search:
             <asp:textbox id="TextBoxSearch" runat="server" width="100px"></asp:textbox>
-    &nbsp;<asp:button id="ButtonSubmit" runat="server" text="Go" onclick="ButtonSubmit_Click" />
+    &nbsp;<asp:button id="ButtonSubmit" runat="server" text="Go" onclick="ButtonSubmit_Click" ValidationGroup="HotelListSearch" />
     <br />
     <br />
     <telerik:radtreeview id="RadTreeViewLocations" runat="server" height="800px" width="100%"
@@ -20,7 +20,7 @@
         <asp:label id="LabelLocation" runat="server" />
     </h1>
     <h2>
-        <asp:label id="LabelSelectedLocation" runat="server" />
+        <asp:label id="LabelSelectedLocation" runat="server" />&nbsp;<asp:label id="LabelFilteredBy" runat="server" Visible="False" />&nbsp;<asp:button id="ButtonClear" runat="server" text="Clear" onclick="ButtonClear_Click" CausesValidation="False" Visible="False" />
     </h2>
     <table style="width: 100%">
         <tr>
@@ -90,7 +90,7 @@
                     </tr>
                     <tr>
                         <td style="padding: 10px; vertical-align: middle">
-                            <asp:HyperLink ID="HyperLinkImage" runat="server" ImageUrl='<%# Eval("Image") %>' NavigateUrl='<%# DotNetNuke.Common.Globals.NavigateURL(DetailsTabId, "", "Id=" + Eval("Id")) %>' ImageWidth="100" />
+                            <asp:HyperLink ID="HyperLinkImage" runat="server" ImageUrl='<%# Eval("Image") %>' NavigateUrl='<%# DotNetNuke.Common.Globals.NavigateURL(DetailsTabId, "", "Id=" + Eval("Id")) %>' ImageWidth="150" />
                         </td>
                         <td style="vertical-align: middle">
                             <asp:Literal ID="LiteralDescription" runat="server" Text='<%# Eval("Description") != null ? Server.HtmlDecode(Eval("Description").ToString().TruncateAtWord(240)) : String.Empty %>'></asp:Literal>

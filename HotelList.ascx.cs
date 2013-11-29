@@ -87,6 +87,14 @@ namespace Cowrie.Modules.ProductList
                         p =>
                         p.Name.ToLower().Contains(TextBoxSearch.Text.ToLower()) ||
                         p.Description.ToLower().Contains(TextBoxSearch.Text.ToLower()));
+                LabelFilteredBy.Text = String.Format("and filtered by \"{0}\"", TextBoxSearch.Text);
+                LabelFilteredBy.Visible = true;
+                ButtonClear.Visible = true;
+            }
+            else
+            {
+                LabelFilteredBy.Visible = false;
+                ButtonClear.Visible = false;
             }
             if (DropDownListSortCriterias.SelectedValue == "Name")
             {
@@ -257,6 +265,22 @@ namespace Cowrie.Modules.ProductList
             else if (e.CommandName == "MoreHotelInfo")
             {
                 Response.Redirect(DotNetNuke.Common.Globals.NavigateURL(DetailsTabId, "", "Id=" + e.CommandArgument.ToString()));
+            }
+        }
+
+        protected void ButtonClear_Click(object sender, EventArgs e)
+        {
+            TextBoxSearch.Text = String.Empty;
+
+            DataPagerContent.SetPageProperties(0, int.Parse(DropDownListPageSizes.SelectedValue), false);
+
+            if (Session["locationId"] != null)
+            {
+                int locationId = Convert.ToInt32(Session["locationId"]);
+                using (SelectedHotelsEntities db = new SelectedHotelsEntities())
+                {
+                    BindData(db, locationId);
+                }
             }
         }
     }
