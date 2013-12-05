@@ -1,14 +1,11 @@
 ﻿// Copyright (c) 2012 Cowrie
 
 using System;
-using System.Collections.Generic;
-using System.Data.Objects;
 using System.Linq;
 using System.Web.UI.WebControls;
 using DotNetNuke.Entities.Modules;
 using DotNetNuke.Entities.Tabs;
 using DotNetNuke.Services.Exceptions;
-using DotNetNuke.UI.WebControls;
 using ProductList;
 using Telerik.Web.UI;
 

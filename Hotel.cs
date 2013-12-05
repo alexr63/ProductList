@@ -16,8 +16,8 @@ namespace ProductList
     {
         public Nullable<int> LocationId { get; set; }
         public Nullable<int> Rooms { get; set; }
-        public Nullable<int> Star { get; set; }
-        public Nullable<int> CustomerRating { get; set; }
+        public Nullable<decimal> Star { get; set; }
+        public Nullable<decimal> CustomerRating { get; set; }
         public string Address { get; set; }
         public string CurrencyCode { get; set; }
     

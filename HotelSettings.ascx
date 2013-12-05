@@ -21,7 +21,7 @@
         </td>
         <td valign="bottom">
             <telerik:RadTreeView ID="RadTreeViewLocations" runat="server" Height="300px" Width="100%"
-                OnNodeExpand="RadTreeViewLocations_NodeExpand">
+                OnNodeExpand="RadTreeViewLocations_NodeExpand" MultipleSelect="True">
             </telerik:RadTreeView>
         </td>
     </tr>
