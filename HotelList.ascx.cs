@@ -1,6 +1,7 @@
 ﻿// Copyright (c) 2012 Cowrie
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.UI.WebControls;
 using DotNetNuke.Entities.Modules;
@@ -17,7 +18,7 @@ namespace Cowrie.Modules.ProductList
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (Settings["location"] == null)
+            if (Settings["locations"] == null)
             {
                 return;
             }
@@ -34,15 +35,7 @@ namespace Cowrie.Modules.ProductList
                 {
                     using (SelectedHotelsEntities db = new SelectedHotelsEntities())
                     {
-                        int locationId = 1;
-                        try
-                        {
-                            locationId = Convert.ToInt32(Settings["location"]);
-                        }
-                        catch (Exception)
-                        {
-                        }
-                        int preSelectedLocationId = locationId;
+                        int preSelectedLocationId = 1069;
                         try
                         {
                             if (Settings["preselectedlocation"] != null && Settings["preselectedlocation"].ToString() != String.Empty)
@@ -58,11 +51,32 @@ namespace Cowrie.Modules.ProductList
                         {
                         }
 
-                        var location = db.Locations.SingleOrDefault(l => l.Id == locationId);
-                        LabelLocation.Text = location.Name;
+                        List<Location> selectedLocations = new List<Location>();
+                        object setting = Settings["locations"];
+                        if (setting != null)
+                        {
+                            try
+                            {
+                                string[] selectedLocationIds = setting.ToString().Split(';');
+                                foreach (string s in selectedLocationIds)
+                                {
+                                    int locationId = int.Parse(s);
+                                    var location = db.Locations.SingleOrDefault(l => l.Id == locationId);
+                                    if (location != null)
+                                    {
+                                        selectedLocations.Add(location);
+                                    }
+                                }
+                                LabelCurrentLocation.Text = String.Join(", ", selectedLocations);
+                            }
+                            catch (Exception)
+                            {
+                            }
+                        }
+
                         var selectedLocation = db.Locations.SingleOrDefault(l => l.Id == preSelectedLocationId);
                         LabelSelectedLocation.Text = selectedLocation.Name;
-                        Utils.PopulateLocationTree(RadTreeViewLocations, db, locationId, preSelectedLocationId, true);
+                        Utils.PopulateLocationTree(RadTreeViewLocations, db, selectedLocations, preSelectedLocationId, true);
                         Session["locationId"] = preSelectedLocationId;
                         BindData(db, preSelectedLocationId);
                     }

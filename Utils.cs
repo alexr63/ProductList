@@ -28,42 +28,7 @@ namespace ProductList
             return String.Format("{0}...", input.Substring(0, (iNextSpace > 0) ? iNextSpace : length).Trim());
         }
 
-        public static int? PopulateLocationTree(DnnTree DNNTreeLocations, SelectedHotelsEntities db, int? locationId = null, int? selectedLocationId = null)
-        {
-            DNNTreeLocations.TreeNodes.Clear();
-            IOrderedQueryable<Location> topLocations = from l in db.Locations
-                                                       where
-                                                           !l.IsDeleted &&
-                                                           (locationId == null
-                                                                ? l.ParentId == null
-                                                                : l.ParentId == locationId)
-                                                       orderby l.Name
-                                                       select l;
-            foreach (Location location in topLocations)
-            {
-                TreeNode objNode = new TreeNode(location.Name);
-                objNode.ToolTip = location.Name;
-                objNode.ClickAction = eClickAction.PostBack;
-                objNode.Key = location.Id.ToString();
-                if (selectedLocationId != null && location.Id == selectedLocationId)
-                {
-                    objNode.Selected = true;
-                    objNode.Expand();
-                }
-                if (location.SubLocations.Any(l => !l.IsDeleted))
-                {
-                    objNode.HasNodes = true;
-                }
-                DNNTreeLocations.TreeNodes.Add(objNode);
-            }
-            if (topLocations.Any())
-            {
-                return topLocations.First().Id;
-            }
-            return null;
-        }
-
-        public static void CreateSubLocationNodes(Location location, RadTreeNode objNode, int? selectedLocationId)
+        public static void CreateSubLocationNodes(Location location, RadTreeNode objNode, List<Location> selectedLocations)
         {
             if (location.SubLocations.Any(l => !l.IsDeleted))
             {
@@ -82,7 +47,7 @@ namespace ProductList
                     }
                     node.Value = subLocation.Id.ToString();
                     objNode.Nodes.Add(node);
-                    if (selectedLocationId != null && subLocation.Id == selectedLocationId)
+                    if (selectedLocations.Any(sl => sl.Id == subLocation.Id))
                     {
                         node.Selected = true;
                     }
@@ -206,7 +171,7 @@ namespace ProductList
             return query;
         }
 
-        public static int? PopulateLocationTree(RadTreeView radTreeView, SelectedHotelsEntities db, int? locationId = null, int? selectedLocationId = null, bool createSubLocationNodes = false)
+        public static int? PopulateLocationTree(RadTreeView radTreeView, SelectedHotelsEntities db, List<Location> selectedLocations, int? locationId = null, bool createSubLocationNodes = false)
         {
             radTreeView.Nodes.Clear();
             IOrderedQueryable<Location> topLocations;
@@ -236,14 +201,14 @@ namespace ProductList
                     node.ExpandMode = TreeNodeExpandMode.ServerSideCallBack;
                 }
                 node.Value = location.Id.ToString();
-                if (selectedLocationId != null && location.Id == selectedLocationId)
+                if (selectedLocations.Any(sl => sl.Id == location.Id))
                 {
                     node.Selected = true;
                 }
                 radTreeView.Nodes.Add(node);
                 if (createSubLocationNodes && location.ParentId == null)
                 {
-                    CreateSubLocationNodes(location, node, selectedLocationId);
+                    CreateSubLocationNodes(location, node, selectedLocations);
                     node.Expanded = true;
                 }
             }

@@ -17,7 +17,7 @@
 </div>
 <div id="products">
     <h1>
-        <asp:label id="LabelLocation" runat="server" />
+        <asp:label id="LabelCurrentLocation" runat="server" />
     </h1>
     <h2>
         <asp:label id="LabelSelectedLocation" runat="server" />&nbsp;<asp:label id="LabelFilteredBy" runat="server" Visible="False" />&nbsp;<asp:button id="ButtonClear" runat="server" text="Clear" onclick="ButtonClear_Click" CausesValidation="False" Visible="False" />

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Linq;
@@ -140,7 +141,7 @@ namespace Cowrie.Modules.ProductList
             {
                 int? locationId = Convert.ToInt32(e.Node.Value);
                 var location = db.Locations.SingleOrDefault(l => l.Id == locationId);
-                Utils.CreateSubLocationNodes(location, e.Node, locationId);
+                Utils.CreateSubLocationNodes(location, e.Node, new List<Location>());
             }
             e.Node.Expanded = true;
         }

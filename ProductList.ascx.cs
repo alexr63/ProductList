@@ -47,36 +47,6 @@ namespace Cowrie.Modules.ProductList
                         }
                         if (mode == (int)Enums.DisplayModeEnum.Hotels)
                         {
-                            int locationId = 1;
-                            try
-                            {
-                                locationId = Convert.ToInt32(Settings["location"]);
-                            }
-                            catch (Exception)
-                            {
-                            }
-                            int preSelectedLocationId = locationId;
-                            try
-                            {
-                                if (Settings["preselectedlocation"] != null && Settings["preselectedlocation"].ToString() != String.Empty)
-                                {
-                                    preSelectedLocationId = Convert.ToInt32(Settings["preselectedlocation"]);
-                                }
-                                if (Session["locationId"] != null)
-                                {
-                                    preSelectedLocationId = Convert.ToInt32(Session["locationId"]);
-                                }
-                            }
-                            catch (Exception)
-                            {
-                            }
-                            var location = db.Locations.SingleOrDefault(l => l.Id == locationId);
-                            LabelLocation.Text = location.Name;
-                            var selectedLocation = db.Locations.SingleOrDefault(l => l.Id == preSelectedLocationId);
-                            LabelSelectedLocation.Text = selectedLocation.Name;
-                            Utils.PopulateLocationTree(RadTreeViewLocations, db, locationId, preSelectedLocationId);
-                            Session["locationId"] = preSelectedLocationId;
-                            BindDataByLocation(db, preSelectedLocationId);
                             MultiView1.SetActiveView(ViewHotels);
                         }
                         else if (mode == (int) Enums.DisplayModeEnum.Boats)
@@ -290,24 +260,10 @@ namespace Cowrie.Modules.ProductList
 
         public void RadTreeViewLocations_NodeExpand(object sender, RadTreeNodeEventArgs e)
         {
-            int? nodeId = Convert.ToInt32(e.Node.Value);
-            int locationId = Convert.ToInt32(Session["locationId"]);
-            using (SelectedHotelsEntities db = new SelectedHotelsEntities())
-            {
-                var location = db.Locations.SingleOrDefault(l => l.Id == nodeId);
-                Utils.CreateSubLocationNodes(location, e.Node, locationId);
-            }
-            e.Node.Expanded = true;
         }
 
         protected void RadTreeViewLocations_NodeClick(object sender, RadTreeNodeEventArgs e)
         {
-            int locationId = int.Parse(e.Node.Value);
-            Session["locationId"] = locationId;
-            using (SelectedHotelsEntities db = new SelectedHotelsEntities())
-            {
-                BindDataByLocation(db, locationId);
-            }
         }
 
         protected void ButtonSubmit_Click(object sender, EventArgs e)

@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Linq;
+using System.Web.UI.MobileControls;
 using DotNetNuke.Entities.Modules;
 using DotNetNuke.Services.Exceptions;
 using DotNetNuke.UI.WebControls;
@@ -25,24 +27,29 @@ namespace Cowrie.Modules.ProductList
                 {
                     using (SelectedHotelsEntities db = new SelectedHotelsEntities())
                     {
-                        object setting = Settings["location"];
-                        int? locationId = null;
+                        List<Location> selectedLocations = new List<Location>();
+                        object setting = Settings["locations"];
                         if (setting != null)
                         {
                             try
                             {
-                                locationId = Convert.ToInt32(setting);
-                                var location = db.Locations.SingleOrDefault(l => l.Id == locationId);
-                                if (location != null)
+                                string[] selectedLocationIds = setting.ToString().Split(';');
+                                foreach (string s in selectedLocationIds)
                                 {
-                                    LabelCurrentLocation.Text = location.Name;
+                                    int locationId = int.Parse(s);
+                                    var location = db.Locations.SingleOrDefault(l => l.Id == locationId);
+                                    if (location != null)
+                                    {
+                                        selectedLocations.Add(location);
+                                    }
                                 }
+                                LabelCurrentLocation.Text = String.Join(", ", selectedLocations);
                             }
                             catch (Exception)
                             {
                             }
                         }
-                        Utils.PopulateLocationTree(RadTreeViewLocations, db, null, locationId);
+                        Utils.PopulateLocationTree(RadTreeViewLocations, db, selectedLocations);
 
                         setting = Settings["preselectedlocation"];
                         int? preSelectedLocationId = null;
@@ -61,7 +68,7 @@ namespace Cowrie.Modules.ProductList
                             {
                             }
                         }
-                        Utils.PopulateLocationTree(RadTreeViewPreSelectedLocations, db, null, preSelectedLocationId);
+                        Utils.PopulateLocationTree(RadTreeViewPreSelectedLocations, db, selectedLocations, preSelectedLocationId);
                     }
                 }
             }
@@ -79,7 +86,16 @@ namespace Cowrie.Modules.ProductList
             try
             {
                 ModuleController controller = new ModuleController();
-                controller.UpdateModuleSetting(ModuleId, "location", RadTreeViewLocations.SelectedValue);
+                string locations = String.Empty;
+                foreach (var node in RadTreeViewLocations.SelectedNodes)
+                {
+                    if (locations != String.Empty)
+                    {
+                        locations += ";";
+                    }
+                    locations += node.Value;
+                }
+                controller.UpdateModuleSetting(ModuleId, "locations", locations);
                 controller.UpdateModuleSetting(ModuleId, "preselectedlocation", RadTreeViewPreSelectedLocations.SelectedValue);
             }
             catch (Exception ex)
@@ -94,7 +110,7 @@ namespace Cowrie.Modules.ProductList
             {
                 int? locationId = Convert.ToInt32(e.Node.Value);
                 var location = db.Locations.SingleOrDefault(l => l.Id == locationId);
-                Utils.CreateSubLocationNodes(location, e.Node, locationId);
+                Utils.CreateSubLocationNodes(location, e.Node, new List<Location>());
             }
             e.Node.Expanded = true;
         }

@@ -9,7 +9,7 @@
                 Text="Current Location">
             </dnn:Label>
         </td>
-        <td valign="bottom">
+        <td valign="bottom"width="250">
             <asp:Label ID="LabelCurrentLocation" runat="server"></asp:Label>
         </td>
     </tr>
@@ -19,8 +19,8 @@
                 Text="Location">
             </dnn:Label>
         </td>
-        <td valign="bottom">
-            <telerik:RadTreeView ID="RadTreeViewLocations" runat="server" Height="300px" Width="100%"
+        <td valign="bottom" width="250">
+            <telerik:RadTreeView ID="RadTreeViewLocations" runat="server" Height="300px" Width="250px"
                 OnNodeExpand="RadTreeViewLocations_NodeExpand" MultipleSelect="True">
             </telerik:RadTreeView>
         </td>
@@ -31,7 +31,7 @@
                 Text="Current Pre-Selected Location">
             </dnn:Label>
         </td>
-        <td valign="bottom">
+        <td valign="bottom" width="250">
             <asp:Label ID="LabelCurrentPreSelectedLocation" runat="server"></asp:Label>
         </td>
     </tr>
@@ -41,8 +41,8 @@
                 Text="Pre-Selected Location">
             </dnn:Label>
         </td>
-        <td valign="bottom">
-            <telerik:RadTreeView ID="RadTreeViewPreSelectedLocations" runat="server" Height="300px" Width="100%"
+        <td valign="bottom"width="250">
+            <telerik:RadTreeView ID="RadTreeViewPreSelectedLocations" runat="server" Height="300px" Width="250px"
                 OnNodeExpand="RadTreeViewLocations_NodeExpand">
             </telerik:RadTreeView>
         </td>
