@@ -27,8 +27,30 @@ namespace Cowrie.Modules.ProductList
                 {
                     using (SelectedHotelsEntities db = new SelectedHotelsEntities())
                     {
+                        object setting;
+
+                        setting = Settings["location"];
+                        int? locationId = null;
+                        if (setting != null)
+                        {
+                            try
+                            {
+                                locationId = Convert.ToInt32(setting);
+                                var location = db.Locations.SingleOrDefault(l => l.Id == locationId);
+                                if (location != null)
+                                {
+                                    LabelCurrentLocation.Text = location.Name;
+                                }
+                            }
+                            catch (Exception)
+                            {
+                            }
+                        }
+                        Utils.PopulateLocationTree(RadTreeViewLocations, db, null, locationId);
+
+#if MULTIPLELOCATIONS
                         List<Location> selectedLocations = new List<Location>();
-                        object setting = Settings["locations"];
+                        setting = Settings["locations"];
                         if (setting != null)
                         {
                             try
@@ -49,7 +71,8 @@ namespace Cowrie.Modules.ProductList
                             {
                             }
                         }
-                        Utils.PopulateLocationTree(RadTreeViewLocations, db, selectedLocations);
+                        //Utils.PopulateLocationTree(RadTreeViewLocations, db, selectedLocations);
+#endif
 
                         setting = Settings["preselectedlocation"];
                         int? preSelectedLocationId = null;
@@ -58,7 +81,8 @@ namespace Cowrie.Modules.ProductList
                             try
                             {
                                 preSelectedLocationId = Convert.ToInt32(setting);
-                                var preSelectedLocation = db.Locations.SingleOrDefault(l => l.Id == preSelectedLocationId);
+                                var preSelectedLocation =
+                                    db.Locations.SingleOrDefault(l => l.Id == preSelectedLocationId);
                                 if (preSelectedLocation != null)
                                 {
                                     LabelCurrentPreSelectedLocation.Text = preSelectedLocation.Name;
@@ -68,7 +92,7 @@ namespace Cowrie.Modules.ProductList
                             {
                             }
                         }
-                        Utils.PopulateLocationTree(RadTreeViewPreSelectedLocations, db, selectedLocations, preSelectedLocationId);
+                        Utils.PopulateLocationTree(RadTreeViewPreSelectedLocations, db, null, preSelectedLocationId);
                     }
                 }
             }
@@ -86,6 +110,9 @@ namespace Cowrie.Modules.ProductList
             try
             {
                 ModuleController controller = new ModuleController();
+                controller.UpdateModuleSetting(ModuleId, "location", RadTreeViewLocations.SelectedValue);
+
+#if MULTIPLELOCATIONS
                 string locations = String.Empty;
                 foreach (var node in RadTreeViewLocations.SelectedNodes)
                 {
@@ -96,7 +123,10 @@ namespace Cowrie.Modules.ProductList
                     locations += node.Value;
                 }
                 controller.UpdateModuleSetting(ModuleId, "locations", locations);
-                controller.UpdateModuleSetting(ModuleId, "preselectedlocation", RadTreeViewPreSelectedLocations.SelectedValue);
+#endif
+
+                controller.UpdateModuleSetting(ModuleId, "preselectedlocation",
+                    RadTreeViewPreSelectedLocations.SelectedValue);
             }
             catch (Exception ex)
             {
@@ -110,7 +140,7 @@ namespace Cowrie.Modules.ProductList
             {
                 int? locationId = Convert.ToInt32(e.Node.Value);
                 var location = db.Locations.SingleOrDefault(l => l.Id == locationId);
-                Utils.CreateSubLocationNodes(location, e.Node, new List<Location>());
+                Utils.CreateSubLocationNodes(location, e.Node, locationId);
             }
             e.Node.Expanded = true;
         }

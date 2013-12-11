@@ -248,16 +248,6 @@ namespace Cowrie.Modules.ProductList
             }
         }
 
-        protected void DNNTreeCategories_PopulateOnDemand(object source, DotNetNuke.UI.WebControls.DNNTreeEventArgs e)
-        {
-            using (SelectedHotelsEntities db = new SelectedHotelsEntities())
-            {
-                int? categoryId = Convert.ToInt32(e.Node.Key);
-                var category = db.Categories.SingleOrDefault(l => l.Id == categoryId);
-                Utils.CreateSubCategoryNodes(category, e.Node, categoryId);
-            }
-        }
-
         public void RadTreeViewLocations_NodeExpand(object sender, RadTreeNodeEventArgs e)
         {
         }

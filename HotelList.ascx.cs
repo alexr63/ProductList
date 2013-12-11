@@ -18,7 +18,7 @@ namespace Cowrie.Modules.ProductList
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (Settings["locations"] == null)
+            if (Settings["location"] == null)
             {
                 return;
             }
@@ -35,7 +35,15 @@ namespace Cowrie.Modules.ProductList
                 {
                     using (SelectedHotelsEntities db = new SelectedHotelsEntities())
                     {
-                        int preSelectedLocationId = 1069;
+                        int locationId = 1069;
+                        try
+                        {
+                            locationId = Convert.ToInt32(Settings["location"]);
+                        }
+                        catch (Exception)
+                        {
+                        }
+                        int preSelectedLocationId = locationId;
                         try
                         {
                             if (Settings["preselectedlocation"] != null && Settings["preselectedlocation"].ToString() != String.Empty)
@@ -51,6 +59,7 @@ namespace Cowrie.Modules.ProductList
                         {
                         }
 
+#if MULTIPLELOCATIONS
                         List<Location> selectedLocations = new List<Location>();
                         object setting = Settings["locations"];
                         if (setting != null)
@@ -73,10 +82,11 @@ namespace Cowrie.Modules.ProductList
                             {
                             }
                         }
+#endif
 
                         var selectedLocation = db.Locations.SingleOrDefault(l => l.Id == preSelectedLocationId);
                         LabelSelectedLocation.Text = selectedLocation.Name;
-                        Utils.PopulateLocationTree(RadTreeViewLocations, db, selectedLocations, preSelectedLocationId, true);
+                        Utils.PopulateLocationTree(RadTreeViewLocations, db, locationId, preSelectedLocationId, true);
                         Session["locationId"] = preSelectedLocationId;
                         BindData(db, preSelectedLocationId);
                     }
