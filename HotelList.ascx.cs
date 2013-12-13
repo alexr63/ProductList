@@ -43,20 +43,28 @@ namespace Cowrie.Modules.ProductList
                         catch (Exception)
                         {
                         }
-                        int preSelectedLocationId = locationId;
-                        try
+                        int selectedLocationId = locationId;
+                        if (Session["ReturnFromDetails"] != null)
                         {
-                            if (Settings["preselectedlocation"] != null && Settings["preselectedlocation"].ToString() != String.Empty)
-                            {
-                                preSelectedLocationId = Convert.ToInt32(Settings["preselectedlocation"]);
-                            }
-                            if (Session["locationId"] != null)
-                            {
-                                preSelectedLocationId = Convert.ToInt32(Session["locationId"]);
-                            }
+                            LoadPersistentSettings(ref selectedLocationId);
                         }
-                        catch (Exception)
+                        else
                         {
+                            try
+                            {
+                                if (Settings["preselectedlocation"] != null && Settings["preselectedlocation"].ToString() != String.Empty)
+                                {
+                                    selectedLocationId = Convert.ToInt32(Settings["preselectedlocation"]);
+                                }
+                            }
+                            catch (Exception)
+                            {
+                            }
+                            if (Settings["search"] != null &&
+                                Settings["search"].ToString() != String.Empty)
+                            {
+                                TextBoxSearch.Text = Settings["search"].ToString();
+                            }
                         }
 
 #if MULTIPLELOCATIONS
@@ -83,17 +91,12 @@ namespace Cowrie.Modules.ProductList
                             }
                         }
 #endif
-
-                        var selectedLocation = db.Locations.SingleOrDefault(l => l.Id == preSelectedLocationId);
+                        var selectedLocation = db.Locations.SingleOrDefault(l => l.Id == selectedLocationId);
                         LabelSelectedLocation.Text = selectedLocation.Name;
-                        Utils.PopulateLocationTree(RadTreeViewLocations, db, locationId, preSelectedLocationId, true);
-                        Session["locationId"] = preSelectedLocationId;
-                        if (Settings["search"] != null &&
-                            Settings["search"].ToString() != String.Empty)
-                        {
-                            TextBoxSearch.Text = Settings["search"].ToString();
-                        }
-                        BindData(db, preSelectedLocationId);
+                        Utils.PopulateLocationTree(RadTreeViewLocations, db, locationId, selectedLocationId, true);
+                        BindData(db);
+
+                        SavePersistentSetting();
                     }
                 }
             }
@@ -103,8 +106,57 @@ namespace Cowrie.Modules.ProductList
             }
         }
 
-        private void BindData(SelectedHotelsEntities db, int locationId)
+        private void LoadPersistentSettings(ref int selectedLocationId)
         {
+            if (Session["locationId"] != null)
+            {
+                selectedLocationId = Convert.ToInt32(Session["locationId"]);
+            }
+            if (Session["search"] != null)
+            {
+                TextBoxSearch.Text = Session["search"].ToString();
+            }
+            DropDownListSortCriterias.SelectedValue = Session["sortCriteria"].ToString();
+            int startRowIndex = 0;
+            if (Session["startRowIndex"] != null)
+            {
+                startRowIndex = Convert.ToInt32(Session["startRowIndex"]);
+                DataPagerContent.SetPageProperties(startRowIndex, 10, false);
+            }
+            if (Session["pageSize"] != null)
+            {
+                int pageSize = Convert.ToInt32(Session["pageSize"]);
+                DropDownListPageSizes.SelectedValue = pageSize.ToString();
+                DataPagerContent.SetPageProperties(startRowIndex, pageSize, false);
+            }
+        }
+
+        private void SavePersistentSetting()
+        {
+            if (RadTreeViewLocations.SelectedValue != null)
+            {
+                Session["locationId"] = Convert.ToInt32(RadTreeViewLocations.SelectedValue);
+            }
+            else
+            {
+                Session.Remove("locationId");
+            }
+            if (TextBoxSearch.Text != String.Empty)
+            {
+                Session["search"] = TextBoxSearch.Text;
+            }
+            else
+            {
+                Session.Remove("search");
+            }
+            Session["sortCriteria"] = DropDownListSortCriterias.SelectedValue;
+            Session["startRowIndex"] = DataPagerContent.StartRowIndex;
+            Session["pageSize"] = Convert.ToInt32(DropDownListPageSizes.SelectedValue);
+        }
+
+        private void BindData(SelectedHotelsEntities db)
+        {
+            int locationId = Convert.ToInt32(RadTreeViewLocations.SelectedValue);
             var hotels = Utils.HotelsInLocation(db, locationId);
             if (TextBoxSearch.Text != String.Empty)
             {
@@ -156,46 +208,45 @@ namespace Cowrie.Modules.ProductList
 
         protected void RadTreeViewLocations_NodeClick(object sender, RadTreeNodeEventArgs e)
         {
+            int locationId = Convert.ToInt32(RadTreeViewLocations.SelectedValue);
+            Session["locationId"] = locationId;
+
             DataPagerContent.SetPageProperties(0, int.Parse(DropDownListPageSizes.SelectedValue), false); 
 
-            int locationId = int.Parse(e.Node.Value);
-            Session["locationId"] = locationId;
             using (SelectedHotelsEntities db = new SelectedHotelsEntities())
             {
-                BindData(db, locationId);
+                BindData(db);
             }
         }
 
         protected void DropDownListSortCriterias_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (Session["locationId"] != null)
+            Session["sortCriteria"] = DropDownListSortCriterias.SelectedValue;
+
+            using (SelectedHotelsEntities db = new SelectedHotelsEntities())
             {
-                int locationId = Convert.ToInt32(Session["locationId"]);
-                using (SelectedHotelsEntities db = new SelectedHotelsEntities())
-                {
-                    BindData(db, locationId);
-                }
+                BindData(db);
             }
         }
 
         protected void DropDownListPageSizes_SelectedIndexChanged(object sender, EventArgs e)
         {
-            DataPagerContent.PageSize = Convert.ToInt32(DropDownListPageSizes.SelectedValue);
+            int pageSize = Convert.ToInt32(DropDownListPageSizes.SelectedValue);
+            Session["pageSize"] = pageSize;
+
+            DataPagerContent.PageSize = pageSize;
         }
 
         protected void ListViewContent_PagePropertiesChanging(object sender, PagePropertiesChangingEventArgs e)
         {
+            Session["startRowIndex"] = e.StartRowIndex;
+
             //set current page startindex, max rows and rebind to false
             DataPagerContent.SetPageProperties(e.StartRowIndex, e.MaximumRows, false);
 
-            //rebind List View
-            if (Session["locationId"] != null)
+            using (SelectedHotelsEntities db = new SelectedHotelsEntities())
             {
-                int locationId = Convert.ToInt32(Session["locationId"]);
-                using (SelectedHotelsEntities db = new SelectedHotelsEntities())
-                {
-                    BindData(db, locationId);
-                }
+                BindData(db);
             }
         }
 
@@ -208,35 +259,6 @@ namespace Cowrie.Modules.ProductList
                 CreateSubLocationNodes(location, e.Node);
             }
             e.Node.Expanded = true;
-        }
-
-        public static int? PopulateTree(RadTreeView radTreeView, SelectedHotelsEntities db, int locationId, int? selectedLocationId = null)
-        {
-            radTreeView.Nodes.Clear();
-            IOrderedQueryable<Location> topLocations = from l in db.Locations
-                                                       where !l.IsDeleted &&
-                                                             l.Id == locationId
-                                                       orderby l.Name
-                                                       select l;
-            foreach (Location location in topLocations)
-            {
-                RadTreeNode node = new RadTreeNode();
-                node.Text = location.Name;
-                node.ToolTip = location.Name;
-                node.ExpandMode = TreeNodeExpandMode.ServerSideCallBack;
-                node.Value = location.Id.ToString();
-                if (selectedLocationId != null && location.Id == selectedLocationId)
-                {
-                    node.Selected = true;
-                }
-                radTreeView.Nodes.Add(node);
-                //CreateSubLocationNodes(location, objNode, selectedLocationId);
-            }
-            if (topLocations.Any())
-            {
-                return topLocations.First().Id;
-            }
-            return null;
         }
 
         public static void CreateSubLocationNodes(Location location, RadTreeNode objNode, int? selectedLocationId = null)
@@ -270,15 +292,26 @@ namespace Cowrie.Modules.ProductList
 
         protected void ButtonSubmit_Click(object sender, EventArgs e)
         {
+            Session["search"] = TextBoxSearch.Text;
+
             DataPagerContent.SetPageProperties(0, int.Parse(DropDownListPageSizes.SelectedValue), false); 
 
-            if (Session["locationId"] != null)
+            using (SelectedHotelsEntities db = new SelectedHotelsEntities())
             {
-                int locationId = Convert.ToInt32(Session["locationId"]);
-                using (SelectedHotelsEntities db = new SelectedHotelsEntities())
-                {
-                    BindData(db, locationId);
-                }
+                BindData(db);
+            }
+        }
+
+        protected void ButtonClear_Click(object sender, EventArgs e)
+        {
+            TextBoxSearch.Text = String.Empty;
+            Session.Remove("search");
+
+            DataPagerContent.SetPageProperties(0, int.Parse(DropDownListPageSizes.SelectedValue), false);
+
+            using (SelectedHotelsEntities db = new SelectedHotelsEntities())
+            {
+                BindData(db);
             }
         }
 
@@ -291,22 +324,6 @@ namespace Cowrie.Modules.ProductList
             else if (e.CommandName == "MoreHotelInfo")
             {
                 Response.Redirect(DotNetNuke.Common.Globals.NavigateURL(DetailsTabId, "", "Id=" + e.CommandArgument.ToString()));
-            }
-        }
-
-        protected void ButtonClear_Click(object sender, EventArgs e)
-        {
-            TextBoxSearch.Text = String.Empty;
-
-            DataPagerContent.SetPageProperties(0, int.Parse(DropDownListPageSizes.SelectedValue), false);
-
-            if (Session["locationId"] != null)
-            {
-                int locationId = Convert.ToInt32(Session["locationId"]);
-                using (SelectedHotelsEntities db = new SelectedHotelsEntities())
-                {
-                    BindData(db, locationId);
-                }
             }
         }
     }
