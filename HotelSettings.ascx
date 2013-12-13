@@ -47,4 +47,14 @@
             </telerik:RadTreeView>
         </td>
     </tr>
+    <tr>
+        <td class="SubHead" width="150" valign="top">
+            <dnn:Label ID="LabelSearch" runat="server" Suffix=":"
+                Text="Search">
+            </dnn:Label>
+        </td>
+        <td valign="bottom"width="250">
+            <asp:TextBox ID="TextBoxSearch" runat="server"></asp:TextBox>
+        </td>
+    </tr>
 </table>

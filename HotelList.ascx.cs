@@ -88,6 +88,11 @@ namespace Cowrie.Modules.ProductList
                         LabelSelectedLocation.Text = selectedLocation.Name;
                         Utils.PopulateLocationTree(RadTreeViewLocations, db, locationId, preSelectedLocationId, true);
                         Session["locationId"] = preSelectedLocationId;
+                        if (Settings["search"] != null &&
+                            Settings["search"].ToString() != String.Empty)
+                        {
+                            TextBoxSearch.Text = Settings["search"].ToString();
+                        }
                         BindData(db, preSelectedLocationId);
                     }
                 }

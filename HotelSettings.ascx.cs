@@ -93,6 +93,12 @@ namespace Cowrie.Modules.ProductList
                             }
                         }
                         Utils.PopulateLocationTree(RadTreeViewPreSelectedLocations, db, null, preSelectedLocationId);
+
+                        setting = Settings["search"];
+                        if (setting != null)
+                        {
+                            TextBoxSearch.Text = setting.ToString();
+                        }
                     }
                 }
             }
@@ -127,6 +133,7 @@ namespace Cowrie.Modules.ProductList
 
                 controller.UpdateModuleSetting(ModuleId, "preselectedlocation",
                     RadTreeViewPreSelectedLocations.SelectedValue);
+                controller.UpdateModuleSetting(ModuleId, "search", TextBoxSearch.Text);
             }
             catch (Exception ex)
             {
