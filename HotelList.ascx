@@ -26,9 +26,11 @@
         <tr width="280px">
             <td>Sort by
                         <asp:DropDownList ID="DropDownListSortCriterias" runat="server" AutoPostBack="True" OnSelectedIndexChanged="DropDownListSortCriterias_SelectedIndexChanged">
-                            <asp:ListItem Selected="True">Name</asp:ListItem>
-                            <asp:ListItem>Price</asp:ListItem>
-                            <asp:ListItem>Rating</asp:ListItem>
+                            <asp:ListItem Value="1" Selected="True">Name</asp:ListItem>
+                            <asp:ListItem Value="2">Price (low to high)</asp:ListItem>
+                            <asp:ListItem Value="3">Price (high to low)</asp:ListItem>
+                            <asp:ListItem Value="4">Rating (low to high)</asp:ListItem>
+                            <asp:ListItem Value="5">Rating (high to low)</asp:ListItem>
                         </asp:DropDownList>
             </td>
             <td width="150px">View

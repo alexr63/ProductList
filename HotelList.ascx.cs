@@ -176,17 +176,24 @@ namespace Cowrie.Modules.ProductList
                 LabelFilteredBy.Visible = false;
                 ButtonClear.Visible = false;
             }
-            if (DropDownListSortCriterias.SelectedValue == "Name")
+            Enums.SortCriteriaEnum sortCriteria = (Enums.SortCriteriaEnum)Enum.Parse(typeof(Enums.SortCriteriaEnum), DropDownListSortCriterias.SelectedValue);
+            switch (sortCriteria)
             {
-                ListViewContent.DataSource = hotels.OrderBy(h => h.Name).ToList();
-            }
-            else if (DropDownListSortCriterias.SelectedValue == "Price")
-            {
-                ListViewContent.DataSource = hotels.OrderBy(h => h.UnitCost).ToList();
-            }
-            else
-            {
-                ListViewContent.DataSource = hotels.OrderBy(h => h.Star).ToList();
+                case Enums.SortCriteriaEnum.Name:
+                    ListViewContent.DataSource = hotels.OrderBy(h => h.Name).ToList();
+                    break;
+                case Enums.SortCriteriaEnum.PriceAsc:
+                    ListViewContent.DataSource = hotels.OrderBy(h => h.UnitCost).ToList();
+                    break;
+                case Enums.SortCriteriaEnum.PriceDesc:
+                    ListViewContent.DataSource = hotels.OrderByDescending(h => h.UnitCost).ToList();
+                    break;
+                case Enums.SortCriteriaEnum.RatingAsc:
+                    ListViewContent.DataSource = hotels.OrderBy(h => h.Star).ToList();
+                    break;
+                case Enums.SortCriteriaEnum.RatingDesc:
+                    ListViewContent.DataSource = hotels.OrderByDescending(h => h.Star).ToList();
+                    break;
             }
             ListViewContent.DataBind();
 

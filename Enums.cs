@@ -22,5 +22,15 @@ namespace ProductList
             Products,
             Boats
         }
+        
+        public enum SortCriteriaEnum
+        {
+            Name = 1,
+            PriceAsc,
+            PriceDesc,
+            RatingAsc,
+            RatingDesc
+        }
+
     }
 }
