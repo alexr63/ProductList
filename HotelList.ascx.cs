@@ -122,12 +122,14 @@ namespace Cowrie.Modules.ProductList
             {
                 startRowIndex = Convert.ToInt32(Session["startRowIndex"]);
                 DataPagerContent.SetPageProperties(startRowIndex, 10, false);
+                DataPagerContent2.SetPageProperties(startRowIndex, 10, false);
             }
             if (Session["pageSize"] != null)
             {
                 int pageSize = Convert.ToInt32(Session["pageSize"]);
                 DropDownListPageSizes.SelectedValue = pageSize.ToString();
                 DataPagerContent.SetPageProperties(startRowIndex, pageSize, false);
+                DataPagerContent2.SetPageProperties(startRowIndex, pageSize, false);
             }
         }
 
@@ -211,7 +213,8 @@ namespace Cowrie.Modules.ProductList
             int locationId = Convert.ToInt32(RadTreeViewLocations.SelectedValue);
             Session["locationId"] = locationId;
 
-            DataPagerContent.SetPageProperties(0, int.Parse(DropDownListPageSizes.SelectedValue), false); 
+            DataPagerContent.SetPageProperties(0, int.Parse(DropDownListPageSizes.SelectedValue), false);
+            DataPagerContent2.SetPageProperties(0, int.Parse(DropDownListPageSizes.SelectedValue), false); 
 
             using (SelectedHotelsEntities db = new SelectedHotelsEntities())
             {
@@ -235,6 +238,7 @@ namespace Cowrie.Modules.ProductList
             Session["pageSize"] = pageSize;
 
             DataPagerContent.PageSize = pageSize;
+            DataPagerContent2.PageSize = pageSize;
         }
 
         protected void ListViewContent_PagePropertiesChanging(object sender, PagePropertiesChangingEventArgs e)
@@ -243,6 +247,7 @@ namespace Cowrie.Modules.ProductList
 
             //set current page startindex, max rows and rebind to false
             DataPagerContent.SetPageProperties(e.StartRowIndex, e.MaximumRows, false);
+            DataPagerContent2.SetPageProperties(e.StartRowIndex, e.MaximumRows, false);
 
             using (SelectedHotelsEntities db = new SelectedHotelsEntities())
             {
@@ -294,7 +299,8 @@ namespace Cowrie.Modules.ProductList
         {
             Session["search"] = TextBoxSearch.Text;
 
-            DataPagerContent.SetPageProperties(0, int.Parse(DropDownListPageSizes.SelectedValue), false); 
+            DataPagerContent.SetPageProperties(0, int.Parse(DropDownListPageSizes.SelectedValue), false);
+            DataPagerContent2.SetPageProperties(0, int.Parse(DropDownListPageSizes.SelectedValue), false); 
 
             using (SelectedHotelsEntities db = new SelectedHotelsEntities())
             {
@@ -308,6 +314,7 @@ namespace Cowrie.Modules.ProductList
             Session.Remove("search");
 
             DataPagerContent.SetPageProperties(0, int.Parse(DropDownListPageSizes.SelectedValue), false);
+            DataPagerContent2.SetPageProperties(0, int.Parse(DropDownListPageSizes.SelectedValue), false);
 
             using (SelectedHotelsEntities db = new SelectedHotelsEntities())
             {
