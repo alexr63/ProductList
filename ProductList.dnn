@@ -6,7 +6,7 @@
 			<foldername>ProductList</foldername>
 			<modulename>ProductList</modulename>
 			<description>A ProductList module</description>
-			<version>02.01.05</version>
+			<version>02.01.06</version>
 			<businesscontrollerclass></businesscontrollerclass>
 			<modules>
 				<module>
@@ -17,6 +17,7 @@
 							<src>DesktopModules/ProductList/ProductList.ascx</src>
 							<type>View</type>
 							<helpurl></helpurl>
+              <supportspartialrendering>true</supportspartialrendering>
 						</control>
 						<control>
 							<key>Settings</key>
