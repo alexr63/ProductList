@@ -116,7 +116,10 @@ namespace Cowrie.Modules.ProductList
             {
                 TextBoxSearch.Text = Session["search"].ToString();
             }
-            DropDownListSortCriterias.SelectedValue = Session["sortCriteria"].ToString();
+            if (Session["sortCriteria"] != null)
+            {
+                DropDownListSortCriterias.SelectedValue = Session["sortCriteria"].ToString();
+            }
             int startRowIndex = 0;
             if (Session["startRowIndex"] != null)
             {

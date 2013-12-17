@@ -7,13 +7,12 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using System.Data.Entity.Core.Objects;
-
 namespace ProductList
 {
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
+    using System.Data.Entity.Core.Objects;
     using System.Linq;
     
     public partial class SelectedHotelsEntities : DbContext

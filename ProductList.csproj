@@ -70,6 +70,10 @@
     <Reference Include="EntityFramework.SqlServer">
       <HintPath>..\ProductDetails\packages\EntityFramework.6.0.1\lib\net40\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="GMaps, Version=4.1.0.6, Culture=neutral, PublicKeyToken=564d55b144e7aa5a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ProductDetails\packages\Subgurim.Maps.4.1.0.6\lib\net20\GMaps.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.ApplicationBlocks.Data, Version=2.0.0.0, Culture=neutral">
       <Private>True</Private>
     </Reference>
