@@ -182,6 +182,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Hotels_Standard.xsd</DependentUpon>
     </Compile>
+    <Compile Include="HotelType.cs">
+      <DependentUpon>SelectedHotels.tt</DependentUpon>
+    </Compile>
     <Compile Include="Location.cs">
       <DependentUpon>SelectedHotels.tt</DependentUpon>
     </Compile>

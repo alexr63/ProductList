@@ -27,6 +27,9 @@ namespace Cowrie.Modules.ProductList
                 {
                     using (SelectedHotelsEntities db = new SelectedHotelsEntities())
                     {
+                        DropDownListTypes.DataSource = db.HotelTypes.ToList();
+                        DropDownListTypes.DataBind();
+
                         object setting;
 
                         setting = Settings["location"];
@@ -99,6 +102,12 @@ namespace Cowrie.Modules.ProductList
                         {
                             TextBoxSearch.Text = setting.ToString();
                         }
+
+                        setting = Settings["hoteltype"];
+                        if (setting != null)
+                        {
+                            DropDownListTypes.SelectedValue = Settings["hoteltype"].ToString();
+                        }
                     }
                 }
             }
@@ -134,6 +143,7 @@ namespace Cowrie.Modules.ProductList
                 controller.UpdateModuleSetting(ModuleId, "preselectedlocation",
                     RadTreeViewPreSelectedLocations.SelectedValue);
                 controller.UpdateModuleSetting(ModuleId, "search", TextBoxSearch.Text);
+                controller.UpdateModuleSetting(ModuleId, "hoteltype", DropDownListTypes.SelectedValue);
             }
             catch (Exception ex)
             {

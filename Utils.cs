@@ -88,7 +88,7 @@ namespace ProductList
             }
         }
 
-        public static int? PopulateLocationTree(RadTreeView radTreeView, SelectedHotelsEntities db, int? locationId = null, int? selectedLocationId = null, bool createSubLocationNodes = false)
+        public static int? PopulateLocationTree(RadTreeView radTreeView, SelectedHotelsEntities db, int? locationId = null, int? selectedLocationId = null, bool createSubLocationNodes = false, int? hotelTypeId = null)
         {
             radTreeView.Nodes.Clear();
             IOrderedQueryable<Location> topLocations;
@@ -110,10 +110,14 @@ namespace ProductList
             }
             foreach (Location location in topLocations)
             {
+                if (!HotelsInLocation(db, location.Id, hotelTypeId).Any())
+                {
+                    continue;
+                }
                 RadTreeNode node = new RadTreeNode();
                 node.Text = location.Name;
                 node.ToolTip = location.Name;
-                if (location.SubLocations.Any(l => !l.IsDeleted))
+                if (location.SubLocations.Any(l => !l.IsDeleted && HotelsInLocation(db, l.Id, hotelTypeId).Any()))
                 {
                     node.ExpandMode = TreeNodeExpandMode.ServerSideCallBack;
                 }
@@ -175,14 +179,15 @@ namespace ProductList
             }
         }
 
-        public static IEnumerable<Hotel> HotelsInLocation(SelectedHotelsEntities db, int locationId)
+        public static IEnumerable<Hotel> HotelsInLocation(SelectedHotelsEntities db, int locationId, int? hotelTypeId)
         {
             IList<Hotel> hotels = (from p in db.Products
                                    where !p.IsDeleted
                                    select p).OfType<Hotel>().ToList();
             var query = from h in hotels
-                        where h.LocationId == locationId || h.Location.ParentId == locationId ||
-                              (h.Location.ParentLocation != null && h.Location.ParentLocation.ParentId == locationId)
+                        where (h.LocationId == locationId || h.Location.ParentId == locationId ||
+                              (h.Location.ParentLocation != null && h.Location.ParentLocation.ParentId == locationId)) &&
+                              (hotelTypeId == null || h.HotelTypeId == hotelTypeId.Value)
                         select h;
             return query;
         }

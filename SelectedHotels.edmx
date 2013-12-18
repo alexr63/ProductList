@@ -81,6 +81,14 @@
           <Property Name="Lat" Type="float" />
           <Property Name="Lon" Type="float" />
           <Property Name="PostCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="HotelTypeId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Cowrie_HotelTypes">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityType Name="Cowrie_Locations">
           <Key>
@@ -229,6 +237,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Cowrie_Hotels_Cowrie_HotelTypes">
+          <End Role="Cowrie_HotelTypes" Type="Self.Cowrie_HotelTypes" Multiplicity="1" />
+          <End Role="Cowrie_Hotels" Type="Self.Cowrie_Hotels" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cowrie_HotelTypes">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Cowrie_Hotels">
+              <PropertyRef Name="HotelTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Cowrie_Hotels_Cowrie_Locations">
           <End Role="Cowrie_Locations" Type="Self.Cowrie_Locations" Multiplicity="0..1" />
           <End Role="Cowrie_Hotels" Type="Self.Cowrie_Hotels" Multiplicity="*" />
@@ -318,6 +338,7 @@
           <EntitySet Name="Cowrie_Clothes" EntityType="Self.Cowrie_Clothes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Cowrie_HomeAndGardens" EntityType="Self.Cowrie_HomeAndGardens" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Cowrie_Hotels" EntityType="Self.Cowrie_Hotels" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Cowrie_HotelTypes" EntityType="Self.Cowrie_HotelTypes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Cowrie_Locations" EntityType="Self.Cowrie_Locations" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Cowrie_ProductImages" EntityType="Self.Cowrie_ProductImages" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Cowrie_Products" EntityType="Self.Cowrie_Products" Schema="dbo" store:Type="Tables" />
@@ -350,6 +371,10 @@
           <AssociationSet Name="FK_Cowrie_HomeAndGardens_Cowrie_Products" Association="Self.FK_Cowrie_HomeAndGardens_Cowrie_Products">
             <End Role="Cowrie_Products" EntitySet="Cowrie_Products" />
             <End Role="Cowrie_HomeAndGardens" EntitySet="Cowrie_HomeAndGardens" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Cowrie_Hotels_Cowrie_HotelTypes" Association="Self.FK_Cowrie_Hotels_Cowrie_HotelTypes">
+            <End Role="Cowrie_HotelTypes" EntitySet="Cowrie_HotelTypes" />
+            <End Role="Cowrie_Hotels" EntitySet="Cowrie_Hotels" />
           </AssociationSet>
           <AssociationSet Name="FK_Cowrie_Hotels_Cowrie_Locations" Association="Self.FK_Cowrie_Hotels_Cowrie_Locations">
             <End Role="Cowrie_Locations" EntitySet="Cowrie_Locations" />
@@ -399,8 +424,8 @@
           </AssociationSet>
           <EntitySet Name="Locations" EntityType="SelectedHotelsModel.Location" />
           <AssociationSet Name="FK_Cowrie_Hotels_Cowrie_Locations" Association="SelectedHotelsModel.FK_Cowrie_Hotels_Cowrie_Locations">
-            <End Role="Cowrie_Locations" EntitySet="Locations" />
-            <End Role="Cowrie_Hotels" EntitySet="Products" />
+            <End EntitySet="Locations" Role="Cowrie_Locations" />
+            <End EntitySet="Products" Role="Cowrie_Hotels" />
           </AssociationSet>
           <AssociationSet Name="FK_Cowrie_Locations_Cowrie_Locations" Association="SelectedHotelsModel.FK_Cowrie_Locations_Cowrie_Locations">
             <End Role="Cowrie_Locations" EntitySet="Locations" />
@@ -417,6 +442,11 @@
           <AssociationSet Name="FK_Cowrie_ProductSpecs_Cowrie_Products" Association="SelectedHotelsModel.FK_Cowrie_ProductSpecs_Cowrie_Products">
             <End Role="Product" EntitySet="Products" />
             <End Role="ProductSpec" EntitySet="ProductSpecs" />
+          </AssociationSet>
+          <EntitySet Name="HotelTypes" EntityType="SelectedHotelsModel.HotelType" />
+          <AssociationSet Name="FK_Cowrie_Hotels_Cowrie_HotelTypes" Association="SelectedHotelsModel.FK_Cowrie_Hotels_Cowrie_HotelTypes">
+            <End Role="Cowrie_HotelTypes" EntitySet="HotelTypes" />
+            <End Role="Hotel" EntitySet="Products" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="Category">
@@ -510,16 +540,18 @@
           <Property Type="String" Name="Style" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Hotel" BaseType="SelectedHotelsModel.Product">
-          <Property Type="Int32" Name="LocationId" />
-          <Property Type="Int32" Name="Rooms" />
+          <Property Name="LocationId" Type="Int32" />
+          <Property Name="Rooms" Type="Int32" />
           <NavigationProperty Name="Location" Relationship="SelectedHotelsModel.FK_Cowrie_Hotels_Cowrie_Locations" FromRole="Cowrie_Hotels" ToRole="Cowrie_Locations" />
-          <Property Type="Decimal" Name="Star" Precision="18" Scale="1" />
-          <Property Type="Decimal" Name="CustomerRating" Precision="18" Scale="1" />
-          <Property Type="String" Name="Address" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="CurrencyCode" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Star" Precision="18" Scale="1" Type="Decimal" />
+          <Property Name="CustomerRating" Precision="18" Scale="1" Type="Decimal" />
+          <Property Name="Address" MaxLength="Max" FixedLength="false" Unicode="true" Type="String" />
+          <Property Name="CurrencyCode" MaxLength="50" FixedLength="false" Unicode="true" Type="String" />
           <Property Name="Lat" Type="Double" />
           <Property Name="Lon" Type="Double" />
-          <Property Name="PostCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PostCode" MaxLength="50" FixedLength="false" Unicode="true" Type="String" />
+          <Property Name="HotelTypeId" Nullable="false" Type="Int32" />
+          <NavigationProperty Name="HotelType" Relationship="SelectedHotelsModel.FK_Cowrie_Hotels_Cowrie_HotelTypes" FromRole="Hotel" ToRole="Cowrie_HotelTypes" />
         </EntityType>
         <EntityType Name="Location">
           <Key>
@@ -529,13 +561,13 @@
           <Property Type="String" Name="Name" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Type="Int32" Name="ParentId" />
           <Property Type="Boolean" Name="IsDeleted" Nullable="false" />
-          <NavigationProperty Name="Cowrie_Hotels" Relationship="SelectedHotelsModel.FK_Cowrie_Hotels_Cowrie_Locations" FromRole="Cowrie_Locations" ToRole="Cowrie_Hotels" />
+          <NavigationProperty Name="Hotels" Relationship="SelectedHotelsModel.FK_Cowrie_Hotels_Cowrie_Locations" FromRole="Cowrie_Locations" ToRole="Cowrie_Hotels" />
           <NavigationProperty Name="SubLocations" Relationship="SelectedHotelsModel.FK_Cowrie_Locations_Cowrie_Locations" FromRole="Cowrie_Locations" ToRole="Cowrie_Locations1" />
           <NavigationProperty Name="ParentLocation" Relationship="SelectedHotelsModel.FK_Cowrie_Locations_Cowrie_Locations" FromRole="Cowrie_Locations1" ToRole="Cowrie_Locations" />
         </EntityType>
         <Association Name="FK_Cowrie_Hotels_Cowrie_Locations">
-          <End Type="SelectedHotelsModel.Location" Role="Cowrie_Locations" Multiplicity="0..1" />
-          <End Type="SelectedHotelsModel.Hotel" Role="Cowrie_Hotels" Multiplicity="*" />
+          <End Type="SelectedHotelsModel.Location" Multiplicity="0..1" Role="Cowrie_Locations" />
+          <End Type="SelectedHotelsModel.Hotel" Multiplicity="*" Role="Cowrie_Hotels" />
           <ReferentialConstraint>
             <Principal Role="Cowrie_Locations">
               <PropertyRef Name="Id" />
@@ -625,6 +657,26 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="HotelType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Hotels" Relationship="SelectedHotelsModel.FK_Cowrie_Hotels_Cowrie_HotelTypes" FromRole="Cowrie_HotelTypes" ToRole="Hotel" />
+        </EntityType>
+        <Association Name="FK_Cowrie_Hotels_Cowrie_HotelTypes">
+          <End Type="SelectedHotelsModel.HotelType" Role="Cowrie_HotelTypes" Multiplicity="1" />
+          <End Type="SelectedHotelsModel.Hotel" Role="Hotel" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cowrie_HotelTypes">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Hotel">
+              <PropertyRef Name="HotelTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -659,6 +711,7 @@
             </EntityTypeMapping>
             <EntityTypeMapping TypeName="IsTypeOf(SelectedHotelsModel.Hotel)">
               <MappingFragment StoreEntitySet="Cowrie_Hotels">
+                <ScalarProperty Name="HotelTypeId" ColumnName="HotelTypeId" />
                 <ScalarProperty Name="PostCode" ColumnName="PostCode" />
                 <ScalarProperty Name="Lon" ColumnName="Lon" />
                 <ScalarProperty Name="Lat" ColumnName="Lat" />
@@ -772,6 +825,14 @@
                 <ScalarProperty Name="DimensionMet" ColumnName="DimensionMet" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="HotelTypes">
+            <EntityTypeMapping TypeName="SelectedHotelsModel.HotelType">
+              <MappingFragment StoreEntitySet="Cowrie_HotelTypes">
+                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

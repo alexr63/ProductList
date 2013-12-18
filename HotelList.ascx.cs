@@ -93,7 +93,12 @@ namespace Cowrie.Modules.ProductList
 #endif
                         var selectedLocation = db.Locations.SingleOrDefault(l => l.Id == selectedLocationId);
                         LabelSelectedLocation.Text = selectedLocation.Name;
-                        Utils.PopulateLocationTree(RadTreeViewLocations, db, locationId, selectedLocationId, true);
+                        int? hotelTypeId = null;
+                        if (Settings["hoteltype"] != null)
+                        {
+                            hotelTypeId = Convert.ToInt32(Settings["hoteltype"]);
+                        }
+                        Utils.PopulateLocationTree(RadTreeViewLocations, db, locationId, selectedLocationId, true, hotelTypeId);
                         BindData(db);
 
                         SavePersistentSetting();
@@ -162,7 +167,12 @@ namespace Cowrie.Modules.ProductList
         private void BindData(SelectedHotelsEntities db)
         {
             int locationId = Convert.ToInt32(RadTreeViewLocations.SelectedValue);
-            var hotels = Utils.HotelsInLocation(db, locationId);
+            int? hotelTypeId = null;
+            if (Settings["hoteltype"] != null)
+            {
+                hotelTypeId = Convert.ToInt32(Settings["hoteltype"]);
+            }
+            var hotels = Utils.HotelsInLocation(db, locationId, hotelTypeId);
             if (TextBoxSearch.Text != String.Empty)
             {
                 hotels =

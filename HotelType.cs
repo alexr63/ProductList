@@ -12,21 +12,16 @@ namespace ProductList
     using System;
     using System.Collections.Generic;
     
-    public partial class Location
+    public partial class HotelType
     {
-        public Location()
+        public HotelType()
         {
             this.Hotels = new HashSet<Hotel>();
-            this.SubLocations = new HashSet<Location>();
         }
     
         public int Id { get; set; }
         public string Name { get; set; }
-        public Nullable<int> ParentId { get; set; }
-        public bool IsDeleted { get; set; }
     
         public virtual ICollection<Hotel> Hotels { get; set; }
-        public virtual ICollection<Location> SubLocations { get; set; }
-        public virtual Location ParentLocation { get; set; }
     }
 }

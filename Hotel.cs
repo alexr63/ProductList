@@ -23,7 +23,9 @@ namespace ProductList
         public Nullable<double> Lat { get; set; }
         public Nullable<double> Lon { get; set; }
         public string PostCode { get; set; }
+        public int HotelTypeId { get; set; }
     
         public virtual Location Location { get; set; }
+        public virtual HotelType HotelType { get; set; }
     }
 }

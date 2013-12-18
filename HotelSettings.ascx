@@ -57,4 +57,14 @@
             <asp:TextBox ID="TextBoxSearch" runat="server"></asp:TextBox>
         </td>
     </tr>
+    <tr>
+        <td class="SubHead" width="150" valign="top">
+            <dnn:Label ID="LabelType" runat="server" Suffix=":"
+                Text="Type">
+            </dnn:Label>
+        </td>
+        <td valign="bottom"width="250">
+            <asp:DropDownList ID="DropDownListTypes" runat="server" DataTextField="Name" DataValueField="Id"></asp:DropDownList>
+        </td>
+    </tr>
 </table>
