@@ -18,6 +18,7 @@ namespace ProductList
         {
             this.Hotels = new HashSet<Hotel>();
             this.SubLocations = new HashSet<Location>();
+            this.HotelLocations = new HashSet<HotelLocation>();
         }
     
         public int Id { get; set; }
@@ -28,5 +29,6 @@ namespace ProductList
         public virtual ICollection<Hotel> Hotels { get; set; }
         public virtual ICollection<Location> SubLocations { get; set; }
         public virtual Location ParentLocation { get; set; }
+        public virtual ICollection<HotelLocation> HotelLocations { get; set; }
     }
 }

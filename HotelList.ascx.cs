@@ -281,38 +281,15 @@ namespace Cowrie.Modules.ProductList
             {
                 int? locationId = Convert.ToInt32(e.Node.Value);
                 var location = db.Locations.SingleOrDefault(l => l.Id == locationId);
-                CreateSubLocationNodes(location, e.Node);
+                int selectedLocationId = Convert.ToInt32(RadTreeViewLocations.SelectedValue);
+                int? hotelTypeId = null;
+                if (Settings["hoteltype"] != null)
+                {
+                    hotelTypeId = Convert.ToInt32(Settings["hoteltype"]);
+                }
+                Utils.CreateSubLocationNodes(db, location, e.Node, selectedLocationId, hotelTypeId);
             }
             e.Node.Expanded = true;
-        }
-
-        public static void CreateSubLocationNodes(Location location, RadTreeNode objNode, int? selectedLocationId = null)
-        {
-            if (location.SubLocations.Any(l => !l.IsDeleted))
-            {
-                var subLocations = from l in location.SubLocations
-                                   where !l.IsDeleted
-                                   orderby l.Name
-                                   select l;
-                foreach (Location subLocation in subLocations)
-                {
-                    RadTreeNode node = new RadTreeNode();
-                    node.Text = subLocation.Name;
-                    node.ToolTip = subLocation.Name;
-                    node.ExpandMode = TreeNodeExpandMode.ServerSideCallBack;
-                    node.Value = subLocation.Id.ToString();
-                    if (selectedLocationId != null && subLocation.Id == selectedLocationId)
-                    {
-                        node.Selected = true;
-                    }
-                    if (subLocation.SubLocations.Any())
-                    {
-                                            node.ExpandMode = TreeNodeExpandMode.ServerSideCallBack;
-                    }
-                    objNode.Nodes.Add(node);
-                    //CreateSubLocationNodes(subLocation, objSubNode, selectedLocationId);
-                }
-            }
         }
 
         protected void ButtonSubmit_Click(object sender, EventArgs e)

@@ -110,14 +110,14 @@ namespace ProductList
             }
             foreach (Location location in topLocations)
             {
-                if (!HotelsInLocation(db, location.Id, hotelTypeId).Any())
+                if (!Utils.AnyHotelInLocation(db, location.Id, hotelTypeId))
                 {
                     continue;
                 }
                 RadTreeNode node = new RadTreeNode();
                 node.Text = location.Name;
                 node.ToolTip = location.Name;
-                if (location.SubLocations.Any(l => !l.IsDeleted && HotelsInLocation(db, l.Id, hotelTypeId).Any()))
+                if (location.SubLocations.Any(l => !l.IsDeleted && AnyHotelInLocation(db, l.Id, hotelTypeId)))
                 {
                     node.ExpandMode = TreeNodeExpandMode.ServerSideCallBack;
                 }
@@ -135,7 +135,7 @@ namespace ProductList
                 radTreeView.Nodes.Add(node);
                 if (createSubLocationNodes && location.ParentId == null)
                 {
-                    CreateSubLocationNodes(location, node, selectedLocationId);
+                    CreateSubLocationNodes(db, location, node, selectedLocationId, hotelTypeId);
                     node.Expanded = true;
                 }
             }
@@ -146,9 +146,9 @@ namespace ProductList
             return null;
         }
 
-        public static void CreateSubLocationNodes(Location location, RadTreeNode objNode, int? selectedLocationId)
+        public static void CreateSubLocationNodes(SelectedHotelsEntities db, Location location, RadTreeNode objNode, int? selectedLocationId, int? hotelTypeId = null)
         {
-            if (location.SubLocations.Any(l => !l.IsDeleted))
+            if (location.SubLocations.Any(l => !l.IsDeleted) && AnyHotelInLocation(db, location.Id, hotelTypeId))
             {
                 var subLocations = from l in location.SubLocations
                                    where !l.IsDeleted
@@ -156,10 +156,14 @@ namespace ProductList
                                    select l;
                 foreach (Location subLocation in subLocations)
                 {
+                    if (!AnyHotelInLocation(db, subLocation.Id, hotelTypeId))
+                    {
+                        continue;
+                    }
                     RadTreeNode node = new RadTreeNode();
                     node.Text = subLocation.Name;
                     node.ToolTip = subLocation.Name;
-                    if (subLocation.SubLocations.Any(l => !l.IsDeleted))
+                    if (subLocation.SubLocations.Any(l => !l.IsDeleted) && AnyHotelInLocation(db, location.Id, hotelTypeId))
                     {
                         node.ExpandMode = TreeNodeExpandMode.ServerSideCallBack;
                     }
@@ -177,6 +181,11 @@ namespace ProductList
                     }
                 }
             }
+        }
+
+        public static bool AnyHotelInLocation(SelectedHotelsEntities db, int locationId, int? hotelTypeId)
+        {
+            return db.HotelLocations.Any(hl => hl.LocationId == locationId && (hotelTypeId == null || hl.HotelTypeId == hotelTypeId));
         }
 
         public static IEnumerable<Hotel> HotelsInLocation(SelectedHotelsEntities db, int locationId, int? hotelTypeId)

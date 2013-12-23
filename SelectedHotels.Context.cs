@@ -8,7 +8,6 @@
 //------------------------------------------------------------------------------
 
 using System.Data.Entity.Core.Objects;
-
 namespace ProductList
 {
     using System;
@@ -35,6 +34,7 @@ namespace ProductList
         public DbSet<Location> Locations { get; set; }
         public DbSet<ProductSpec> ProductSpecs { get; set; }
         public DbSet<HotelType> HotelTypes { get; set; }
+        public DbSet<HotelLocation> HotelLocations { get; set; }
     
         public virtual ObjectResult<Cowrie_GetHotelsInLocation_Result> Cowrie_GetHotelsInLocation(Nullable<int> locationId)
         {

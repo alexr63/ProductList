@@ -142,6 +142,9 @@
     <Compile Include="Cowrie_GetHotelsInLocation_Result.cs">
       <DependentUpon>SelectedHotels.tt</DependentUpon>
     </Compile>
+    <Compile Include="HotelLocation.cs">
+      <DependentUpon>SelectedHotels.tt</DependentUpon>
+    </Compile>
     <Compile Include="HotelSettings.ascx.cs">
       <DependentUpon>HotelSettings.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
