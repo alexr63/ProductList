@@ -2,7 +2,7 @@
     inherits="Cowrie.Modules.ProductList.Clothes" %>
 <%@ Import Namespace="ProductList" %>
 <%@ Register assembly="DotNetNuke.WebControls" namespace="DotNetNuke.UI.WebControls" tagPrefix="dnn" %>
-<div id="categories">
+<div class="categories">
     <h3>Sizes</h3>
     <asp:Button ID="ButtonSearch1" runat="server" Text="Search" OnClick="ButtonSearch_Click" />
     <asp:CheckBoxList ID="CheckBoxListSizes" runat="server" AppendDataBoundItems="True">
@@ -10,7 +10,7 @@
     </asp:CheckBoxList>
     <asp:Button ID="ButtonSearch2" runat="server" Text="Search" OnClick="ButtonSearch_Click" />
 </div>
-<div id="products">
+<div class="products">
     <h1><asp:Label ID="LabelLocation" runat="server" /></h1>
     <table style="width: 100%">
         <tr>

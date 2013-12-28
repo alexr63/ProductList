@@ -1,4 +1,4 @@
-﻿#categories {
+﻿.categories {
     clear: left;
 	float: left;
 	padding: 20px 0;
@@ -12,7 +12,7 @@
     width: 250px;
 }
 
-#products
+.products
 {
 	float: right;
 	padding: 20px 0;
@@ -23,10 +23,14 @@
     -o-min-width: 450px;
     -webkit-min-width: 450px;
     min-width: 450px;
-    width: 600px
 }
 
-div#footer
+div.footer
+{
+    text-align: right;
+}
+
+div.search
 {
     text-align: right;
 }

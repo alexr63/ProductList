@@ -7,11 +7,11 @@
 <telerik:RadFormDecorator ID="QsfFromDecorator" runat="server" DecoratedControls="All" EnableRoundedCorners="false" />
 <asp:MultiView ID="MultiView1" runat="server">
     <asp:View ID="ViewProducts" runat="server">
-        <div id="categories">
+        <div class="categories">
             Search:
             <asp:TextBox ID="TextBoxSearch" runat="server"></asp:TextBox>&nbsp;<asp:Button ID="ButtonSubmit" runat="server" Text="Submit" OnClick="ButtonSubmit_Click" />
         </div>
-        <div id="products">
+        <div class="products">
             <h1>
                 <asp:Label ID="LabelCategory" runat="server" /></h1>
             <h2>
@@ -84,7 +84,7 @@
         </div>
     </asp:View>
     <asp:View ID="ViewHotels" runat="server">
-        <div id="categories">
+        <div class="categories">
             Search:
             <asp:TextBox ID="TextBoxSearch2" runat="server" Width="100px"></asp:TextBox>&nbsp;<asp:Button ID="ButtonSubmit2" runat="server" Text="Go" OnClick="ButtonSubmit2_Click" />
             <br />
@@ -93,7 +93,7 @@
                 onnodeexpand="RadTreeViewLocations_NodeExpand" onnodeclick="RadTreeViewLocations_NodeClick">
             </telerik:radtreeview>
         </div>
-        <div id="products">
+        <div class="products">
             <h1>
                 <asp:Label ID="LabelLocation" runat="server" /></h1>
             <h2>
@@ -172,7 +172,7 @@
                             <asp:Literal ID="LiteralDescription" runat="server" Text='<%# Eval("Description") != null ? Server.HtmlDecode(Eval("Description").ToString().TruncateAtWord(240)) : String.Empty %>'></asp:Literal>
                             <br />
                             <br />
-                            <div id="footer">
+                            <div class="footer">
                                 <asp:Button ID="ButtonMoreHotelInfo" runat="server" Text="More hotel info" CausesValidation="False" UseSubmitBehavior="False" CommandName="MoreHotelInfo" CommandArgument='<%# Eval("Id") %>' />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<asp:Button ID="ButtonBookNow" runat="server" Text="Book Now!" CausesValidation="False" UseSubmitBehavior="False" CommandName="BookNow" CommandArgument='<%# Eval("URL") %>' />
                             </div>
                         </td>
@@ -185,7 +185,7 @@
         <div id="info1">
             If you know the name of the base model you wish to view use the quick navigation drop down below
         </div>
-        <div id="categories">
+        <div class="categories">
             Product Range:
             <asp:DropDownList ID="DropDownListModels" runat="server" AppendDataBoundItems="True" DataValueField="Id" DataTextField="Name" AutoPostBack="True" OnSelectedIndexChanged="DropDownListModels_SelectedIndexChanged">
                 <Items>
@@ -196,7 +196,7 @@
         <div id="Div1">
             Else you can browse the thumbnails below for a suitable looking vessel to base your requirements on.
         </div>
-        <div id="products">
+        <div class="products">
             <asp:ListView ID="ListViewContent3" runat="server">
                 <LayoutTemplate>
                     <table cellpadding="5px">

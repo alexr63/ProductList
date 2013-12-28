@@ -67,4 +67,14 @@
             <asp:DropDownList ID="DropDownListTypes" runat="server" DataTextField="Name" DataValueField="Id"></asp:DropDownList>
         </td>
     </tr>
+    <tr>
+        <td class="SubHead" width="150" valign="top">
+            <dnn:Label ID="LabelHideTree" runat="server" Suffix=":"
+                Text="Hide the navigation tree">
+            </dnn:Label>
+        </td>
+        <td valign="bottom"width="250">
+            <asp:CheckBox ID="CheckBoxHideTree" runat="server"></asp:CheckBox>
+        </td>
+    </tr>
 </table>

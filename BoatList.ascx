@@ -7,7 +7,7 @@
 <div id="info1">
     If you know the name of the base model you wish to view use the quick navigation drop down below
 </div>
-<div id="categories">
+<div class="categories">
     Product Range:
             <asp:DropDownList ID="DropDownListModels" runat="server" AppendDataBoundItems="True" DataValueField="Id" DataTextField="Name" AutoPostBack="True" OnSelectedIndexChanged="DropDownListModels_SelectedIndexChanged">
                 <Items>
@@ -18,7 +18,7 @@
 <div id="Div1">
     Else you can browse the thumbnails below for a suitable looking vessel to base your requirements on.
 </div>
-<div id="products">
+<div class="products">
     <asp:ListView ID="ListViewContent3" runat="server">
         <LayoutTemplate>
             <table cellpadding="5px">

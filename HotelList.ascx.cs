@@ -93,12 +93,20 @@ namespace Cowrie.Modules.ProductList
 #endif
                         var selectedLocation = db.Locations.SingleOrDefault(l => l.Id == selectedLocationId);
                         LabelSelectedLocation.Text = selectedLocation.Name;
-                        int? hotelTypeId = null;
-                        if (Settings["hoteltype"] != null)
+                        if (Settings["hidetree"] == null || !Convert.ToBoolean(Settings["hidetree"]))
                         {
-                            hotelTypeId = Convert.ToInt32(Settings["hoteltype"]);
+                            int? hotelTypeId = null;
+                            if (Settings["hoteltype"] != null)
+                            {
+                                hotelTypeId = Convert.ToInt32(Settings["hoteltype"]);
+                            }
+                            Utils.PopulateLocationTree(RadTreeViewLocations, db, locationId, selectedLocationId, true,
+                                hotelTypeId);
                         }
-                        Utils.PopulateLocationTree(RadTreeViewLocations, db, locationId, selectedLocationId, true, hotelTypeId);
+                        else
+                        {
+                            PanelCategories.Visible = false;
+                        }
                         BindData(db);
 
                         SavePersistentSetting();
@@ -143,13 +151,16 @@ namespace Cowrie.Modules.ProductList
 
         private void SavePersistentSetting()
         {
-            if (RadTreeViewLocations.SelectedValue != null)
+            if (PanelCategories.Visible)
             {
-                Session["locationId"] = Convert.ToInt32(RadTreeViewLocations.SelectedValue);
-            }
-            else
-            {
-                Session.Remove("locationId");
+                if (RadTreeViewLocations.SelectedValue != null)
+                {
+                    Session["locationId"] = Convert.ToInt32(RadTreeViewLocations.SelectedValue);
+                }
+                else
+                {
+                    Session.Remove("locationId");
+                }
             }
             if (TextBoxSearch.Text != String.Empty)
             {
@@ -166,7 +177,11 @@ namespace Cowrie.Modules.ProductList
 
         private void BindData(SelectedHotelsEntities db)
         {
-            int locationId = Convert.ToInt32(RadTreeViewLocations.SelectedValue);
+            int locationId = Convert.ToInt32(Settings["location"]);
+            if (PanelCategories.Visible)
+            {
+               locationId = Convert.ToInt32(RadTreeViewLocations.SelectedValue);
+            }
             int? hotelTypeId = null;
             if (Settings["hoteltype"] != null)
             {

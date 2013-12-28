@@ -5,22 +5,23 @@
 <%@ Register TagPrefix="telerik" Namespace="Telerik.Web.UI" Assembly="Telerik.Web.UI" %>
 <telerik:radskinmanager id="QsfSkinManager" runat="server" showchooser="false" />
 <telerik:radformdecorator id="QsfFromDecorator" runat="server" decoratedcontrols="All" enableroundedcorners="false" />
-<div id="categories">
-    Search:
-            <asp:TextBox ID="TextBoxSearch" runat="server" Width="100px"></asp:TextBox>
-    &nbsp;<asp:Button ID="ButtonSubmit" runat="server" Text="Go" OnClick="ButtonSubmit_Click" ValidationGroup="HotelListSearch" />
-    <br />
+<asp:Panel ID="PanelCategories" runat="server" CssClass="categories">
     <br />
     <telerik:radtreeview id="RadTreeViewLocations" runat="server" height="800px" width="100%"
         onnodeexpand="RadTreeViewLocations_NodeExpand" onnodeclick="RadTreeViewLocations_NodeClick">
     </telerik:radtreeview>
-</div>
-<div id="products">
+</asp:Panel>
+<div class="products">
     <h1>
         <asp:Label ID="LabelCurrentLocation" runat="server" />
     </h1>
+    <div class="search">
+        Search:
+            <asp:TextBox ID="TextBoxSearch" runat="server" Width="100px"></asp:TextBox>
+        &nbsp;<asp:Button ID="ButtonSubmit" runat="server" Text="Go" OnClick="ButtonSubmit_Click" ValidationGroup="HotelListSearch" />&nbsp;<asp:Button ID="ButtonClear" runat="server" Text="Clear" OnClick="ButtonClear_Click" CausesValidation="False" Visible="False" />
+    </div>
     <h2>
-        <asp:Label ID="LabelSelectedLocation" runat="server" />&nbsp;<asp:Label ID="LabelFilteredBy" runat="server" Visible="False" />&nbsp;<asp:Button ID="ButtonClear" runat="server" Text="Clear" OnClick="ButtonClear_Click" CausesValidation="False" Visible="False" />
+        <asp:Label ID="LabelSelectedLocation" runat="server" />&nbsp;<asp:Label ID="LabelFilteredBy" runat="server" Visible="False" />
     </h2>
     <table style="width: 100%">
         <tr width="280px">
@@ -99,7 +100,7 @@
                     <asp:Literal ID="LiteralDescription" runat="server" Text='<%# Eval("Description") != null ? Server.HtmlDecode(Eval("Description").ToString().TruncateAtWord(240)) : String.Empty %>'></asp:Literal>
                     <br />
                     <br />
-                    <div id="footer">
+                    <div class="footer">
                         <asp:Button ID="ButtonMoreHotelInfo" runat="server" Text="More hotel info" CausesValidation="False" UseSubmitBehavior="False" CommandName="MoreHotelInfo" CommandArgument='<%# Eval("Id") %>' />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<asp:Button ID="ButtonBookNow" runat="server" Text="Book Now!" CausesValidation="False" UseSubmitBehavior="False" CommandName="BookNow" CommandArgument='<%# Eval("URL") %>' />
                     </div>
                 </td>

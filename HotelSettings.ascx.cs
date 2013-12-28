@@ -106,7 +106,13 @@ namespace Cowrie.Modules.ProductList
                         setting = Settings["hoteltype"];
                         if (setting != null)
                         {
-                            DropDownListTypes.SelectedValue = Settings["hoteltype"].ToString();
+                            DropDownListTypes.SelectedValue = setting.ToString();
+                        }
+
+                        setting = Settings["hidetree"];
+                        if (setting != null)
+                        {
+                            CheckBoxHideTree.Checked = Convert.ToBoolean(setting);
                         }
                     }
                 }
@@ -144,6 +150,7 @@ namespace Cowrie.Modules.ProductList
                     RadTreeViewPreSelectedLocations.SelectedValue);
                 controller.UpdateModuleSetting(ModuleId, "search", TextBoxSearch.Text);
                 controller.UpdateModuleSetting(ModuleId, "hoteltype", DropDownListTypes.SelectedValue);
+                controller.UpdateModuleSetting(ModuleId, "hidetree", CheckBoxHideTree.Checked.ToString());
             }
             catch (Exception ex)
             {
