@@ -106,6 +106,7 @@ namespace Cowrie.Modules.ProductList
                         else
                         {
                             PanelCategories.Visible = false;
+                            PanelProducts.Width = Unit.Pixel(870);
                         }
                         BindData(db);
 

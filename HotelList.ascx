@@ -11,7 +11,7 @@
         onnodeexpand="RadTreeViewLocations_NodeExpand" onnodeclick="RadTreeViewLocations_NodeClick">
     </telerik:radtreeview>
 </asp:Panel>
-<div class="products">
+<asp:Panel ID="PanelProducts" runat="server" CssClass="products" Width="600px">
     <h1>
         <asp:Label ID="LabelCurrentLocation" runat="server" />
     </h1>
@@ -123,4 +123,4 @@
         </tr>
 
     </table>
-</div>
+</asp:Panel>

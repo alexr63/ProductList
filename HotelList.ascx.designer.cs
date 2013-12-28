@@ -49,6 +49,15 @@ namespace Cowrie.Modules.ProductList {
         protected global::Telerik.Web.UI.RadTreeView RadTreeViewLocations;
         
         /// <summary>
+        /// PanelProducts control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel PanelProducts;
+        
+        /// <summary>
         /// LabelCurrentLocation control.
         /// </summary>
         /// <remarks>
