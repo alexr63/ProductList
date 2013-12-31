@@ -1,6 +1,6 @@
 ﻿<%@ control language="C#" autoeventwireup="true" codebehind="Clothes.ascx.cs"
     inherits="Cowrie.Modules.ProductList.Clothes" %>
-<%@ Import Namespace="ProductList" %>
+<%@ Import Namespace="Common" %>
 <%@ Register assembly="DotNetNuke.WebControls" namespace="DotNetNuke.UI.WebControls" tagPrefix="dnn" %>
 <div class="categories">
     <h3>Sizes</h3>

@@ -1,7 +1,7 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="ProductList.ascx.cs"
     Inherits="Cowrie.Modules.ProductList.ProductList" %>
 <%@ Register Assembly="DotNetNuke.WebControls" Namespace="DotNetNuke.UI.WebControls" TagPrefix="dnn" %>
-<%@ Import Namespace="ProductList" %>
+<%@ Import Namespace="Common" %>
 <%@ Register TagPrefix="telerik" Namespace="Telerik.Web.UI" Assembly="Telerik.Web.UI" %>
 <telerik:RadSkinManager ID="QsfSkinManager" runat="server" ShowChooser="false" />
 <telerik:RadFormDecorator ID="QsfFromDecorator" runat="server" DecoratedControls="All" EnableRoundedCorners="false" />

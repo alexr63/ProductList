@@ -4,6 +4,7 @@ using System;
 using DotNetNuke.Entities.Modules;
 using DotNetNuke.Services.Exceptions;
 using ProductList;
+using SelectedHotelsModel;
 
 namespace Cowrie.Modules.ProductList
 {

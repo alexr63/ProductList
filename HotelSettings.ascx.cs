@@ -8,6 +8,7 @@ using DotNetNuke.Entities.Modules;
 using DotNetNuke.Services.Exceptions;
 using DotNetNuke.UI.WebControls;
 using ProductList;
+using SelectedHotelsModel;
 using Telerik.Web.UI;
 
 namespace Cowrie.Modules.ProductList

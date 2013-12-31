@@ -9,6 +9,7 @@ using DotNetNuke.Entities.Tabs;
 using DotNetNuke.Services.Exceptions;
 using DotNetNuke.UI.WebControls;
 using ProductList;
+using SelectedHotelsModel;
 using TreeNode = DotNetNuke.UI.WebControls.TreeNode;
 
 namespace Cowrie.Modules.ProductList

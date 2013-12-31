@@ -65,10 +65,11 @@
     </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\ProductDetails\packages\EntityFramework.6.0.1\lib\net40\EntityFramework.dll</HintPath>
+      <HintPath>packages\EntityFramework.6.0.1\lib\net40\EntityFramework.dll</HintPath>
     </Reference>
-    <Reference Include="EntityFramework.SqlServer">
-      <HintPath>..\ProductDetails\packages\EntityFramework.6.0.1\lib\net40\EntityFramework.SqlServer.dll</HintPath>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>packages\EntityFramework.6.0.1\lib\net40\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="GMaps, Version=4.1.0.6, Culture=neutral, PublicKeyToken=564d55b144e7aa5a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -106,18 +107,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Boat.cs">
-      <DependentUpon>SelectedHotels.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Book.cs">
-      <DependentUpon>SelectedHotels.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Category.cs">
-      <DependentUpon>SelectedHotels.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Cloth.cs">
-      <DependentUpon>SelectedHotels.tt</DependentUpon>
-    </Compile>
     <Compile Include="Clothes.ascx.cs">
       <DependentUpon>Clothes.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -138,12 +127,6 @@
     </Compile>
     <Compile Include="BoatList.ascx.designer.cs">
       <DependentUpon>BoatList.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="Cowrie_GetHotelsInLocation_Result.cs">
-      <DependentUpon>SelectedHotels.tt</DependentUpon>
-    </Compile>
-    <Compile Include="HotelLocation.cs">
-      <DependentUpon>SelectedHotels.tt</DependentUpon>
     </Compile>
     <Compile Include="HotelSettings.ascx.cs">
       <DependentUpon>HotelSettings.ascx</DependentUpon>
@@ -167,9 +150,6 @@
       <DependentUpon>HomeAndGardensDetails.ascx</DependentUpon>
     </Compile>
     <Compile Include="Enums.cs" />
-    <Compile Include="HomeAndGarden.cs">
-      <DependentUpon>SelectedHotels.tt</DependentUpon>
-    </Compile>
     <Compile Include="HomeAndGardens.ascx.cs">
       <DependentUpon>HomeAndGardens.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -177,34 +157,12 @@
     <Compile Include="HomeAndGardens.ascx.designer.cs">
       <DependentUpon>HomeAndGardens.ascx</DependentUpon>
     </Compile>
-    <Compile Include="Hotel.cs">
-      <DependentUpon>SelectedHotels.tt</DependentUpon>
-    </Compile>
     <Compile Include="Hotels_Standard.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Hotels_Standard.xsd</DependentUpon>
     </Compile>
-    <Compile Include="HotelType.cs">
-      <DependentUpon>SelectedHotels.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Location.cs">
-      <DependentUpon>SelectedHotels.tt</DependentUpon>
-    </Compile>
-    <Compile Include="LocationExt.cs" />
     <Compile Include="PageQuery.cs" />
-    <Compile Include="Product.cs">
-      <DependentUpon>SelectedHotels.tt</DependentUpon>
-    </Compile>
-    <Compile Include="ProductImage.cs">
-      <DependentUpon>SelectedHotels.tt</DependentUpon>
-    </Compile>
-    <Compile Include="ProductSpec.cs">
-      <DependentUpon>SelectedHotels.tt</DependentUpon>
-    </Compile>
-    <Compile Include="ProductType.cs">
-      <DependentUpon>SelectedHotels.tt</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ProductList.ascx.cs">
       <DependentUpon>ProductList.ascx</DependentUpon>
@@ -212,21 +170,6 @@
     </Compile>
     <Compile Include="ProductList.ascx.designer.cs">
       <DependentUpon>ProductList.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="SelectedHotels.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>SelectedHotels.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="SelectedHotels.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>SelectedHotels.tt</DependentUpon>
-    </Compile>
-    <Compile Include="SelectedHotels.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>SelectedHotels.edmx</DependentUpon>
     </Compile>
     <Compile Include="Settings.ascx.cs">
       <DependentUpon>Settings.ascx</DependentUpon>
@@ -262,10 +205,6 @@
     <None Include="ProductList.dnn">
       <SubType>Designer</SubType>
     </None>
-    <EntityDeploy Include="SelectedHotels.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>SelectedHotels.Designer.cs</LastGenOutput>
-    </EntityDeploy>
     <Content Include="Scripts\fancybox\blank.gif" />
     <Content Include="Scripts\fancybox\fancybox-x.png" />
     <Content Include="Scripts\fancybox\fancybox-y.png" />
@@ -291,19 +230,6 @@
     <Content Include="Scripts\fancybox\jquery.fancybox-1.3.4.js" />
     <Content Include="Scripts\fancybox\jquery.fancybox-1.3.4.pack.js" />
     <Content Include="Scripts\fancybox\jquery.mousewheel-3.0.4.pack.js" />
-    <Content Include="SelectedHotels.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>SelectedHotels.edmx</DependentUpon>
-      <LastGenOutput>SelectedHotels.Context.cs</LastGenOutput>
-    </Content>
-    <Content Include="SelectedHotels.edmx.diagram">
-      <DependentUpon>SelectedHotels.edmx</DependentUpon>
-    </Content>
-    <Content Include="SelectedHotels.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>SelectedHotels.edmx</DependentUpon>
-      <LastGenOutput>SelectedHotels.cs</LastGenOutput>
-    </Content>
     <Content Include="Settings.ascx" />
     <Content Include="Web.Config">
       <SubType>Designer</SubType>
@@ -323,6 +249,16 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\Projects\Cowrie\Common\Common.csproj">
+      <Project>{17f13398-02f4-43e3-9343-1191c2372cc9}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\Projects\Cowrie\SelectedHotelsModel\SelectedHotelsModel.csproj">
+      <Project>{58ed5699-0ce6-4868-9876-f99d40899857}</Project>
+      <Name>SelectedHotelsModel</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

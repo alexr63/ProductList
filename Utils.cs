@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using SelectedHotelsModel;
 using Telerik.Web.UI;
 
 namespace ProductList
@@ -14,14 +15,6 @@ namespace ProductList
             {
                 eventToThrow(sender, args);
             }
-        }
-
-        public static string TruncateAtWord(this string input, int length)
-        {
-            if (input == null || input.Length < length)
-                return input;
-            int iNextSpace = input.LastIndexOf(" ", length);
-            return String.Format("{0}...", input.Substring(0, (iNextSpace > 0) ? iNextSpace : length).Trim());
         }
 
         public static int? PopulateCategoryTree(RadTreeView radTreeView, SelectedHotelsEntities db, int? categoryId = null, int? selectedCategoryId = null)
@@ -199,19 +192,6 @@ namespace ProductList
                               (hotelTypeId == null || h.HotelTypeId == hotelTypeId.Value)
                         select h;
             return query;
-        }
-
-        public static string GetCurrencySymbol(string currencyCode)
-        {
-            foreach (CultureInfo nfo in CultureInfo.GetCultures(CultureTypes.SpecificCultures))
-            {
-                RegionInfo region = new RegionInfo(nfo.LCID);
-                if (region.ISOCurrencySymbol == currencyCode)
-                {
-                    return region.CurrencySymbol;
-                }
-            }
-            return currencyCode;
         }
     }
 }
