@@ -6,7 +6,7 @@
 			<foldername>ProductList</foldername>
 			<modulename>ProductList</modulename>
 			<description>A ProductList module</description>
-			<version>02.03.01</version>
+			<version>02.04.00</version>
 			<businesscontrollerclass></businesscontrollerclass>
 			<modules>
 				<module>
@@ -96,10 +96,16 @@
 				</module>
 			</modules>
 			<files>
-				<file>
-					<name>module.css</name>
-				</file>
-				<file>
+        <file>
+          <name>SelectedHotelsModel.dll</name>
+        </file>
+        <file>
+          <name>Common.dll</name>
+        </file>
+        <file>
+          <name>module.css</name>
+        </file>
+        <file>
 					<name>ProductList.dll</name>
 				</file>
 				<file>
