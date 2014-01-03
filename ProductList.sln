@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SelectedHotelsModel", "..\.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "..\..\..\..\..\Projects\Cowrie\Common\Common.csproj", "{17F13398-02F4-43E3-9343-1191C2372CC9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductDetails_OpenUrlRewriter", "..\..\..\..\..\Projects\Cowrie\ProductDetails_OpenUrlRewriter\ProductDetails_OpenUrlRewriter.csproj", "{8B2CBA4D-2ACA-47B5-BE47-3900F41A79CA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -72,6 +74,16 @@ Global
 		{17F13398-02F4-43E3-9343-1191C2372CC9}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{17F13398-02F4-43E3-9343-1191C2372CC9}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{17F13398-02F4-43E3-9343-1191C2372CC9}.Release|x86.ActiveCfg = Release|Any CPU
+		{8B2CBA4D-2ACA-47B5-BE47-3900F41A79CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B2CBA4D-2ACA-47B5-BE47-3900F41A79CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B2CBA4D-2ACA-47B5-BE47-3900F41A79CA}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{8B2CBA4D-2ACA-47B5-BE47-3900F41A79CA}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{8B2CBA4D-2ACA-47B5-BE47-3900F41A79CA}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{8B2CBA4D-2ACA-47B5-BE47-3900F41A79CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B2CBA4D-2ACA-47B5-BE47-3900F41A79CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B2CBA4D-2ACA-47B5-BE47-3900F41A79CA}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{8B2CBA4D-2ACA-47B5-BE47-3900F41A79CA}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{8B2CBA4D-2ACA-47B5-BE47-3900F41A79CA}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

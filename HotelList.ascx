@@ -7,7 +7,7 @@
 <telerik:radformdecorator id="QsfFromDecorator" runat="server" decoratedcontrols="All" enableroundedcorners="false" />
 <asp:Panel ID="PanelCategories" runat="server" CssClass="categories">
     <br />
-    <telerik:radtreeview id="RadTreeViewLocations" runat="server" height="800px" width="100%"
+    <telerik:radtreeview id="RadTreeViewLocations" runat="server" height="1800px" width="100%"
         onnodeexpand="RadTreeViewLocations_NodeExpand" onnodeclick="RadTreeViewLocations_NodeClick">
     </telerik:radtreeview>
 </asp:Panel>
