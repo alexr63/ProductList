@@ -165,7 +165,7 @@ namespace Cowrie.Modules.ProductList
             {
                 int? locationId = Convert.ToInt32(e.Node.Value);
                 var location = db.Locations.SingleOrDefault(l => l.Id == locationId);
-                Utils.CreateSubLocationNodes(db, location, e.Node, locationId, locationId);
+                Utils.CreateSubLocationNodes(db, location, e.Node, locationId);
             }
             e.Node.Expanded = true;
         }
