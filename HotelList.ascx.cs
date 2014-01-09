@@ -155,7 +155,7 @@ namespace Cowrie.Modules.ProductList
         {
             if (PanelCategories.Visible)
             {
-                if (RadTreeViewLocations.SelectedValue != null)
+                if (!String.IsNullOrEmpty(RadTreeViewLocations.SelectedValue))
                 {
                     Session["locationId"] = Convert.ToInt32(RadTreeViewLocations.SelectedValue);
                 }
@@ -180,9 +180,9 @@ namespace Cowrie.Modules.ProductList
         private void BindData(SelectedHotelsEntities db)
         {
             int locationId = Convert.ToInt32(Settings["location"]);
-            if (PanelCategories.Visible)
+            if (PanelCategories.Visible && Session["locationId"] != null)
             {
-               locationId = Convert.ToInt32(RadTreeViewLocations.SelectedValue);
+                locationId = Convert.ToInt32(Session["locationId"]);
             }
             int? hotelTypeId = null;
             if (Settings["hoteltype"] != null)
