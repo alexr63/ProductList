@@ -93,7 +93,7 @@
                 </td>
             </tr>
             <tr>
-                <td style="padding: 10px; vertical-align: middle">
+                <td style="padding: 10px; vertical-align: top">
                     <asp:HyperLink ID="HyperLinkImage" runat="server" ImageUrl='<%# Eval("Image") %>' NavigateUrl='<%# DotNetNuke.Common.Globals.NavigateURL(DetailsTabId, "", "Id=" + Eval("Id")) %>' ImageWidth="150" />
                 </td>
                 <td style="vertical-align: middle">
