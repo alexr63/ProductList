@@ -54,6 +54,10 @@
       <HintPath>..\..\bin\DotNetNuke.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="DotNetNuke.Web, Version=7.0.2.1, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\bin\DotNetNuke.Web.dll</HintPath>
+    </Reference>
     <Reference Include="DotNetNuke.WebControls, Version=2.4.0.598, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\bin\DotNetNuke.WebControls.dll</HintPath>
@@ -101,9 +105,10 @@
     <Reference Include="System.EnterpriseServices" />
     <Reference Include="System.Web.Mobile" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="Telerik.Web.UI, Version=2011.3.1115.35, Culture=neutral, PublicKeyToken=121fae78165ba3d4, processorArchitecture=MSIL">
+    <Reference Include="Telerik.Web.UI, Version=2012.3.1205.40, Culture=neutral, PublicKeyToken=121fae78165ba3d4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\bin\Telerik.Web.UI.dll</HintPath>
+      <Private>False</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -127,6 +132,13 @@
     </Compile>
     <Compile Include="BoatList.ascx.designer.cs">
       <DependentUpon>BoatList.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="EditHotel.ascx.cs">
+      <DependentUpon>EditHotel.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="EditHotel.ascx.designer.cs">
+      <DependentUpon>EditHotel.ascx</DependentUpon>
     </Compile>
     <Compile Include="HotelSettings.ascx.cs">
       <DependentUpon>HotelSettings.ascx</DependentUpon>
@@ -185,6 +197,7 @@
     <Content Include="Clothes.ascx" />
     <Content Include="ClothesSettings.ascx" />
     <Content Include="BoatList.ascx" />
+    <Content Include="EditHotel.ascx" />
     <Content Include="HotelSettings.ascx" />
     <Content Include="HotelList.ascx" />
     <Content Include="HomeAndGardensDetails.ascx" />

@@ -10,52 +10,79 @@
 namespace Cowrie.Modules.ProductList {
     
     
-    public partial class HotelList {
+    public partial class EditHotel {
         
         /// <summary>
-        /// QsfSkinManager control.
+        /// TextBoxName control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Telerik.Web.UI.RadSkinManager QsfSkinManager;
+        protected global::System.Web.UI.WebControls.TextBox TextBoxName;
         
         /// <summary>
-        /// QsfFromDecorator control.
+        /// RequiredFieldValidatorUserName control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Telerik.Web.UI.RadFormDecorator QsfFromDecorator;
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidatorUserName;
         
         /// <summary>
-        /// PanelCategories control.
+        /// TextBoxNumber control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel PanelCategories;
+        protected global::System.Web.UI.WebControls.TextBox TextBoxNumber;
         
         /// <summary>
-        /// RadTreeViewLocations control.
+        /// TextBoxUnitCost control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Telerik.Web.UI.RadTreeView RadTreeViewLocations;
+        protected global::System.Web.UI.WebControls.TextBox TextBoxUnitCost;
         
         /// <summary>
-        /// PanelProducts control.
+        /// CompareValidatorUnitCost control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel PanelProducts;
+        protected global::System.Web.UI.WebControls.CompareValidator CompareValidatorUnitCost;
+        
+        /// <summary>
+        /// txtDescription control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DotNetNuke.UI.UserControls.TextEditor txtDescription;
+        
+        /// <summary>
+        /// TextBoxURL control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TextBoxURL;
+        
+        /// <summary>
+        /// TextBoxImage control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TextBoxImage;
         
         /// <summary>
         /// LabelCurrentLocation control.
@@ -67,111 +94,57 @@ namespace Cowrie.Modules.ProductList {
         protected global::System.Web.UI.WebControls.Label LabelCurrentLocation;
         
         /// <summary>
-        /// TextBoxSearch control.
+        /// RadTreeViewLocations control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TextBoxSearch;
+        protected global::Telerik.Web.UI.RadTreeView RadTreeViewLocations;
         
         /// <summary>
-        /// ButtonSubmit control.
+        /// DnnTreeViewLocations control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button ButtonSubmit;
+        protected global::DotNetNuke.Web.UI.WebControls.DnnTreeView DnnTreeViewLocations;
         
         /// <summary>
-        /// ButtonClear control.
+        /// DropDownListTypes control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button ButtonClear;
+        protected global::System.Web.UI.WebControls.DropDownList DropDownListTypes;
         
         /// <summary>
-        /// LabelSelectedLocation control.
+        /// cmdSave control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label LabelSelectedLocation;
+        protected global::DotNetNuke.UI.WebControls.CommandButton cmdSave;
         
         /// <summary>
-        /// LabelFilteredBy control.
+        /// cmdCancel control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label LabelFilteredBy;
+        protected global::DotNetNuke.UI.WebControls.CommandButton cmdCancel;
         
         /// <summary>
-        /// DropDownListSortCriterias control.
+        /// cmdDelete control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList DropDownListSortCriterias;
-        
-        /// <summary>
-        /// DropDownListPageSizes control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList DropDownListPageSizes;
-        
-        /// <summary>
-        /// DataPagerContent control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DataPager DataPagerContent;
-        
-        /// <summary>
-        /// LabelCount control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label LabelCount;
-        
-        /// <summary>
-        /// ListViewContent control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.ListView ListViewContent;
-        
-        /// <summary>
-        /// DataPagerContent2 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DataPager DataPagerContent2;
-        
-        /// <summary>
-        /// HyperLinkAdd control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink HyperLinkAdd;
+        protected global::DotNetNuke.UI.WebControls.CommandButton cmdDelete;
     }
 }

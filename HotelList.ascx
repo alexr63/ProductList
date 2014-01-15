@@ -78,6 +78,12 @@
                 <td style="vertical-align: middle" colspan="2">
                     <table cellpadding="5px">
                         <tr>
+                            <td>
+                                <asp:HyperLink ID="editLink" NavigateUrl='<%# DotNetNuke.Common.Globals.NavigateURL(EditTabId, "", "ItemId=" + Eval("Id").ToString()) %>'
+                                    Visible="<%# IsEditable %>" runat="server">
+                                    <asp:Image ID="editLinkImage" AlternateText="Edit" Visible="<%# IsEditable %>" ImageUrl="~/images/edit.gif"
+                                        runat="Server" resourcekey="Edit" /></asp:HyperLink>
+                            </td>
                             <td style="vertical-align: middle">
                                 <h1>
                                     <asp:HyperLink ID="HyperLinkName" runat="server" Text='<%# Eval("Name") %>' NavigateUrl='<%# DotNetNuke.Common.Globals.NavigateURL(DetailsTabId, "", "Id=" + Eval("Id")) %>' /></h1>
@@ -121,6 +127,6 @@
                 </asp:DataPager>
             </td>
         </tr>
-
     </table>
+    <asp:HyperLink ID="HyperLinkAdd" runat="server" NavigateUrl='<%# DotNetNuke.Common.Globals.NavigateURL(EditTabId) %>'>Add New Item</asp:HyperLink>
 </asp:Panel>

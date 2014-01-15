@@ -6,7 +6,7 @@
 			<foldername>ProductList</foldername>
 			<modulename>ProductList</modulename>
 			<description>A ProductList module</description>
-			<version>02.04.03</version>
+			<version>02.05.00</version>
 			<businesscontrollerclass></businesscontrollerclass>
 			<modules>
 				<module>
@@ -19,7 +19,7 @@
 							<helpurl></helpurl>
               <supportspartialrendering>true</supportspartialrendering>
 						</control>
-						<control>
+            <control>
 							<key>Settings</key>
 							<title>ProductList Settings</title>
 							<src>DesktopModules/ProductList/Settings.ascx</src>
@@ -28,25 +28,43 @@
 						</control>
 					</controls>
 				</module>
-				<module>
-					<friendlyname>HotelList</friendlyname>
-					<cachetime>0</cachetime>
-					<controls>
-						<control>
-							<src>DesktopModules/ProductList/HotelList.ascx</src>
-							<type>View</type>
-							<helpurl></helpurl>
-						</control>
-						<control>
-							<key>Settings</key>
-							<title>Hotel Settings</title>
-							<src>DesktopModules/ProductList/HotelSettings.ascx</src>
-							<type>Edit</type>
-							<helpurl></helpurl>
-						</control>
-					</controls>
-				</module>
-				<module>
+        <module>
+          <friendlyname>HotelList</friendlyname>
+          <cachetime>0</cachetime>
+          <controls>
+            <control>
+              <src>DesktopModules/ProductList/HotelList.ascx</src>
+              <type>View</type>
+              <helpurl></helpurl>
+            </control>
+            <control>
+              <key>EditHotel</key>
+              <title>Edit Hotel</title>
+              <src>DesktopModules/ProductList/EditHotel.ascx</src>
+              <type>View</type>
+            </control>
+            <control>
+              <key>Settings</key>
+              <title>Hotel Settings</title>
+              <src>DesktopModules/ProductList/HotelSettings.ascx</src>
+              <type>Edit</type>
+              <helpurl></helpurl>
+            </control>
+          </controls>
+        </module>
+        <module>
+          <friendlyname>Edit Hotel</friendlyname>
+          <cachetime>0</cachetime>
+          <controls>
+            <control>
+              <key></key>
+              <title>Edit Hotel</title>
+              <src>DesktopModules/ProductList/EditHotel.ascx</src>
+              <type>View</type>
+            </control>
+          </controls>
+        </module>
+        <module>
 					<friendlyname>BoatList</friendlyname>
 					<cachetime>0</cachetime>
 					<controls>
@@ -96,6 +114,9 @@
 				</module>
 			</modules>
 			<files>
+        <file>
+          <name>EditHotel.ascx</name>
+        </file>
         <file>
           <name>module.css</name>
         </file>

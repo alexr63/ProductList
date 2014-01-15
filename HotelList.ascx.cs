@@ -5,17 +5,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.UI.WebControls;
 using DotNetNuke.Entities.Modules;
+using DotNetNuke.Entities.Modules.Actions;
 using DotNetNuke.Entities.Tabs;
+using DotNetNuke.Security;
 using DotNetNuke.Services.Exceptions;
+using DotNetNuke.Services.Localization;
 using ProductList;
 using SelectedHotelsModel;
 using Telerik.Web.UI;
 
 namespace Cowrie.Modules.ProductList
 {
-    public partial class HotelList : PortalModuleBase
+    public partial class HotelList : PortalModuleBase, IActionable
     {
         public int DetailsTabId { get; set; }
+        public int EditTabId { get; set; }
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -29,11 +33,17 @@ namespace Cowrie.Modules.ProductList
             {
                 DetailsTabId = childTabs[0].TabID;
             }
+            if (childTabs.Count() > 1)
+            {
+                EditTabId = childTabs[1].TabID;
+            }
 
             try
             {
                 if (!IsPostBack)
                 {
+                    DataBind();
+
                     using (SelectedHotelsEntities db = new SelectedHotelsEntities())
                     {
                         int locationId = 1069;
@@ -345,6 +355,21 @@ namespace Cowrie.Modules.ProductList
             else if (e.CommandName == "MoreHotelInfo")
             {
                 Response.Redirect(DotNetNuke.Common.Globals.NavigateURL(DetailsTabId, "", "Id=" + e.CommandArgument.ToString()));
+            }
+        }
+
+        public ModuleActionCollection ModuleActions
+        {
+            get
+            {
+                var actions = new ModuleActionCollection
+                    {
+                        {
+                            GetNextActionID(), "Add Hotel", "", "", "",
+                            EditUrl(), false, SecurityAccessLevel.Edit, true, false
+                        }
+                    };
+                return actions;
             }
         }
     }

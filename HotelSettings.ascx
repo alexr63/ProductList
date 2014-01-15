@@ -9,7 +9,7 @@
                 Text="Current Location">
             </dnn:Label>
         </td>
-        <td valign="bottom"width="250">
+        <td valign="bottom" width="250">
             <asp:Label ID="LabelCurrentLocation" runat="server"></asp:Label>
         </td>
     </tr>
@@ -41,7 +41,7 @@
                 Text="Pre-Selected Location">
             </dnn:Label>
         </td>
-        <td valign="bottom"width="250">
+        <td valign="bottom" width="250">
             <telerik:RadTreeView ID="RadTreeViewPreSelectedLocations" runat="server" Height="300px" Width="250px"
                 OnNodeExpand="RadTreeViewLocations_NodeExpand">
             </telerik:RadTreeView>
@@ -53,7 +53,7 @@
                 Text="Search">
             </dnn:Label>
         </td>
-        <td valign="bottom"width="250">
+        <td valign="bottom" width="250">
             <asp:TextBox ID="TextBoxSearch" runat="server"></asp:TextBox>
         </td>
     </tr>
@@ -63,7 +63,7 @@
                 Text="Type">
             </dnn:Label>
         </td>
-        <td valign="bottom"width="250">
+        <td valign="bottom" width="250">
             <asp:DropDownList ID="DropDownListTypes" runat="server" DataTextField="Name" DataValueField="Id"></asp:DropDownList>
         </td>
     </tr>
@@ -73,7 +73,7 @@
                 Text="Hide the navigation tree">
             </dnn:Label>
         </td>
-        <td valign="bottom"width="250">
+        <td valign="bottom" width="250">
             <asp:CheckBox ID="CheckBoxHideTree" runat="server"></asp:CheckBox>
         </td>
     </tr>
