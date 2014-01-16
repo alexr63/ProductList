@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using DotNetNuke.Entities.Modules;
 using DotNetNuke.Web;
 using ProductList;
 using SelectedHotelsModel;
 using Telerik.Web.UI;
+using Telerik.Web.UI.PivotGrid.Core.Totals;
 
 namespace Cowrie.Modules.ProductList
 {
@@ -23,9 +25,9 @@ namespace Cowrie.Modules.ProductList
                     DropDownListTypes.DataSource = db.HotelTypes.ToList();
                     DropDownListTypes.DataBind();
 
-                    if (Request.QueryString["Id"] != null)
+                    if (Request.QueryString["ItemId"] != null)
                     {
-                        int id = int.Parse(Request.QueryString["Id"]);
+                        int id = int.Parse(Request.QueryString["ItemId"]);
                         Hotel hotel = db.Products.Find(id) as Hotel;
                         if (hotel != null)
                         {
@@ -34,9 +36,7 @@ namespace Cowrie.Modules.ProductList
                             TextBoxName.Text = hotel.Name;
                             TextBoxNumber.Text = hotel.Number;
                             if (hotel.UnitCost.HasValue)
-                            {
                                 TextBoxUnitCost.Text = hotel.UnitCost.Value.ToString("#0.00");
-                            }
                             txtDescription.Text = hotel.Description;
                             TextBoxURL.Text = hotel.URL;
                             TextBoxImage.Text = hotel.Image;
@@ -44,7 +44,19 @@ namespace Cowrie.Modules.ProductList
                             LabelCurrentLocation.Text = hotel.Location.Name;
                             Utils.PopulateLocationTree(RadTreeViewLocations, db, null, hotel.LocationId);
 
-                            Utils.PopulateLocationTree(DnnTreeViewLocations, db, null, hotel.LocationId);
+                            TextBoxRooms.Text = hotel.Rooms.ToString();
+                            if (hotel.Star.HasValue)
+                                TextBoxStar.Text = hotel.Star.Value.ToString("0.0");
+                            if (hotel.CustomerRating.HasValue)
+                                TextBoxCustomerRating.Text = hotel.CustomerRating.Value.ToString("0.0");
+                            TextBoxAddress.Text = hotel.Address;
+                            TextBoxCurrencyCode.Text = hotel.CurrencyCode;
+                            if (hotel.Lat.HasValue)
+                                TextBoxLat.Text = hotel.Lat.Value.ToString();
+                            if (hotel.Lon.HasValue)
+                                TextBoxLon.Text = hotel.Lon.Value.ToString();
+                            TextBoxPostCode.Text = hotel.PostCode;
+                            DropDownListTypes.SelectedValue = hotel.HotelTypeId.ToString();
                         }
                     }
                     else
@@ -57,20 +69,86 @@ namespace Cowrie.Modules.ProductList
 
         protected void cmdSave_Command(object sender, System.Web.UI.WebControls.CommandEventArgs e)
         {
+            if (!Page.IsValid)
+            {
+                return;
+            }
+
             using (SelectedHotelsEntities db = new SelectedHotelsEntities())
             {
                 Hotel hotel = null;
-                if (Request.QueryString["Id"] != null)
+                if (Request.QueryString["ItemId"] != null)
                 {
-                    int id = int.Parse(Request.QueryString["Id"]);
+                    int id = int.Parse(Request.QueryString["ItemId"]);
                     hotel = db.Products.Find(id) as Hotel;
                     if (hotel != null)
                     {
                         hotel.Name = TextBoxName.Text;
                         hotel.Number = TextBoxNumber.Text;
+                        if (TextBoxUnitCost.Text != String.Empty)
+                        {
+                            hotel.UnitCost = decimal.Parse(TextBoxUnitCost.Text);
+                        }
+                        else
+                        {
+                            hotel.UnitCost = null;
+                        }
                         hotel.Description = txtDescription.Text;
                         hotel.URL = TextBoxURL.Text;
                         hotel.Image = TextBoxImage.Text;
+                        var locationId = hotel.LocationId;
+                        var newLocationId = int.Parse(RadTreeViewLocations.SelectedValue);
+                        if (locationId != newLocationId)
+                        {
+                            hotel.LocationId = newLocationId;
+                            var oldHotelLocations = db.HotelLocations.Where(hl => hl.HotelId == id);
+                            db.HotelLocations.RemoveRange(oldHotelLocations);
+                            UpdateHotelLocations(db, hotel);
+                        }
+                        if (TextBoxRooms.Text != String.Empty)
+                        {
+                            hotel.Rooms = int.Parse(TextBoxRooms.Text);
+                        }
+                        else
+                        {
+                            hotel.Rooms = null;
+                        }
+                        if (TextBoxStar.Text != String.Empty)
+                        {
+                            hotel.Star = decimal.Parse(TextBoxStar.Text);
+                        }
+                        else
+                        {
+                            hotel.Star = null;
+                        }
+                        if (TextBoxCustomerRating.Text != String.Empty)
+                        {
+                            hotel.CustomerRating = decimal.Parse(TextBoxCustomerRating.Text);
+                        }
+                        else
+                        {
+                            hotel.CustomerRating = null;
+                        }
+                        hotel.Address = TextBoxAddress.Text;
+                        hotel.CurrencyCode = TextBoxCurrencyCode.Text;
+                        if (TextBoxLat.Text != String.Empty)
+                        {
+                            hotel.Lat = double.Parse(TextBoxLat.Text);
+                        }
+                        else
+                        {
+                            hotel.Lat = null;
+                        }
+                        if (TextBoxLon.Text != String.Empty)
+                        {
+                            hotel.Lon = double.Parse(TextBoxLon.Text);
+                        }
+                        else
+                        {
+                            hotel.Lon = null;
+                        }
+                        hotel.PostCode = TextBoxPostCode.Text;
+                        hotel.HotelTypeId = int.Parse(DropDownListTypes.SelectedValue);
                         db.SaveChanges();
                     }
                 }
@@ -79,14 +157,36 @@ namespace Cowrie.Modules.ProductList
                     hotel = new Hotel
                     {
                         Name = TextBoxName.Text,
+                        Number = TextBoxNumber.Text,
                         Description = txtDescription.Text,
+                        URL = TextBoxURL.Text,
+                        Image = TextBoxImage.Text,
+                        LocationId = int.Parse(RadTreeViewLocations.SelectedValue),
+                        Address = TextBoxAddress.Text,
+                        CurrencyCode = TextBoxCurrencyCode.Text,
+                        PostCode = TextBoxPostCode.Text,
+                        HotelTypeId = int.Parse(DropDownListTypes.SelectedValue),
                         CreatedByUser = UserId,
                         CreatedDate = DateTime.Now,
                         IsDeleted = false,
-                        URL = TextBoxURL.Text,
-                        Image = TextBoxImage.Text
                     };
+                    if (TextBoxRooms.Text != String.Empty)
+                        hotel.Rooms = int.Parse(TextBoxRooms.Text);
+                    if (TextBoxUnitCost.Text != String.Empty)
+                        hotel.UnitCost = decimal.Parse(TextBoxUnitCost.Text);
+                    if (TextBoxStar.Text != String.Empty)
+                        hotel.Star = decimal.Parse(TextBoxStar.Text);
+                    if (TextBoxCustomerRating.Text != String.Empty)
+                        hotel.CustomerRating = decimal.Parse(TextBoxCustomerRating.Text);
+                    if (TextBoxLat.Text != String.Empty)
+                        hotel.Lat = double.Parse(TextBoxLat.Text);
+                    if (TextBoxLon.Text != String.Empty)
+                        hotel.Lon = double.Parse(TextBoxLon.Text);
                     db.Products.Add(hotel);
+                    db.SaveChanges();
+
+                    db.Entry(hotel).Reference(h => h.Location).Load();
+                    UpdateHotelLocations(db, hotel);
                     db.SaveChanges();
                 }
             }
@@ -101,7 +201,7 @@ namespace Cowrie.Modules.ProductList
 
         protected void cmdDelete_Command(object sender, System.Web.UI.WebControls.CommandEventArgs e)
         {
-            int id = int.Parse(Request.QueryString["Id"]);
+            int id = int.Parse(Request.QueryString["ItemId"]);
             using (SelectedHotelsEntities db = new SelectedHotelsEntities())
             {
                 var hotel = db.Products.Find(id) as Hotel;
@@ -125,13 +225,63 @@ namespace Cowrie.Modules.ProductList
             e.Node.Expanded = true;
         }
 
-        protected void DnnTreeViewLocations_NodeExpand(object o, Telerik.Web.UI.RadTreeNodeEventArgs e)
+        protected void CustomValidatorCurrencyCode_ServerValidate(object source, System.Web.UI.WebControls.ServerValidateEventArgs args)
         {
+            args.IsValid = Common.Utils.GetCurrencySymbol(args.Value) != args.Value;
+        }
 
-            DnnTreeNode nodeClicked = (DnnTreeNode)e.Node;
-
-            nodeClicked.Nodes.Clear();
-
+        private void UpdateHotelLocations(SelectedHotelsEntities db, Hotel hotel)
+        {
+            if (
+                db.HotelLocations.SingleOrDefault(
+                    hl =>
+                        hl.HotelId == hotel.Id && hl.LocationId == hotel.Location.Id &&
+                        hl.HotelTypeId == hotel.HotelType.Id) == null)
+            {
+                HotelLocation hotelLocation = new HotelLocation
+                {
+                    HotelId = hotel.Id,
+                    LocationId = hotel.Location.Id,
+                    HotelTypeId = hotel.HotelType.Id
+                };
+                hotel.HotelLocations.Add(hotelLocation);
+            }
+            if (hotel.Location.ParentLocation != null)
+            {
+                if (
+                    db.HotelLocations.SingleOrDefault(
+                        hl =>
+                            hl.HotelId == hotel.Id && hl.LocationId == hotel.Location.ParentLocation.Id &&
+                            hl.HotelTypeId == hotel.HotelType.Id) == null)
+                {
+                    HotelLocation hotelLocation = new HotelLocation
+                    {
+                        HotelId = hotel.Id,
+                        LocationId = hotel.Location.ParentLocation.Id,
+                        HotelTypeId = hotel.HotelType.Id
+                    };
+                    hotel.HotelLocations.Add(hotelLocation);
+                }
+                if (hotel.Location.ParentLocation.ParentLocation != null)
+                {
+                    if (
+                        db.HotelLocations.SingleOrDefault(
+                            hl =>
+                                hl.HotelId == hotel.Id &&
+                                hl.LocationId == hotel.Location.ParentLocation.ParentLocation.Id &&
+                                hl.HotelTypeId == hotel.HotelType.Id) == null)
+                    {
+                        HotelLocation hotelLocation = new HotelLocation
+                        {
+                            HotelId = hotel.Id,
+                            LocationId = hotel.Location.ParentLocation.ParentLocation.Id,
+                            HotelTypeId = hotel.HotelType.Id
+                        };
+                        hotel.HotelLocations.Add(hotelLocation);
+                    }
+                }
+            }
+            db.SaveChanges();
         }
     }
 }

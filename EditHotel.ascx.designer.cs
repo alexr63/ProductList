@@ -103,13 +103,175 @@ namespace Cowrie.Modules.ProductList {
         protected global::Telerik.Web.UI.RadTreeView RadTreeViewLocations;
         
         /// <summary>
-        /// DnnTreeViewLocations control.
+        /// TextBoxRooms control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DotNetNuke.Web.UI.WebControls.DnnTreeView DnnTreeViewLocations;
+        protected global::System.Web.UI.WebControls.TextBox TextBoxRooms;
+        
+        /// <summary>
+        /// CompareValidatorRooms control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CompareValidator CompareValidatorRooms;
+        
+        /// <summary>
+        /// RangeValidatorRooms control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RangeValidator RangeValidatorRooms;
+        
+        /// <summary>
+        /// TextBoxStar control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TextBoxStar;
+        
+        /// <summary>
+        /// CompareValidatorStar control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CompareValidator CompareValidatorStar;
+        
+        /// <summary>
+        /// RangeValidatorStar control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RangeValidator RangeValidatorStar;
+        
+        /// <summary>
+        /// TextBoxCustomerRating control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TextBoxCustomerRating;
+        
+        /// <summary>
+        /// CompareValidatorCustomerRating control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CompareValidator CompareValidatorCustomerRating;
+        
+        /// <summary>
+        /// RangeValidatorCustomerRating control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RangeValidator RangeValidatorCustomerRating;
+        
+        /// <summary>
+        /// TextBoxAddress control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TextBoxAddress;
+        
+        /// <summary>
+        /// TextBoxCurrencyCode control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TextBoxCurrencyCode;
+        
+        /// <summary>
+        /// CustomValidatorCurrencyCode control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator CustomValidatorCurrencyCode;
+        
+        /// <summary>
+        /// TextBoxLat control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TextBoxLat;
+        
+        /// <summary>
+        /// CompareValidatorLat control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CompareValidator CompareValidatorLat;
+        
+        /// <summary>
+        /// RangeValidatorLat control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RangeValidator RangeValidatorLat;
+        
+        /// <summary>
+        /// TextBoxLon control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TextBoxLon;
+        
+        /// <summary>
+        /// CompareValidatorLon control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CompareValidator CompareValidatorLon;
+        
+        /// <summary>
+        /// RangeValidatorLon control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RangeValidator RangeValidatorLon;
+        
+        /// <summary>
+        /// TextBoxPostCode control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TextBoxPostCode;
         
         /// <summary>
         /// DropDownListTypes control.
@@ -119,6 +281,15 @@ namespace Cowrie.Modules.ProductList {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList DropDownListTypes;
+        
+        /// <summary>
+        /// ValidationSummary1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ValidationSummary ValidationSummary1;
         
         /// <summary>
         /// cmdSave control.

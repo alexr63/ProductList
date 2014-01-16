@@ -79,7 +79,7 @@
                     <table cellpadding="5px">
                         <tr>
                             <td>
-                                <asp:HyperLink ID="editLink" NavigateUrl='<%# DotNetNuke.Common.Globals.NavigateURL(EditTabId, "", "ItemId=" + Eval("Id").ToString()) %>'
+                                <asp:HyperLink ID="editLink" NavigateUrl='<%# EditUrl("ItemId", Eval("Id").ToString()) %>'
                                     Visible="<%# IsEditable %>" runat="server">
                                     <asp:Image ID="editLinkImage" AlternateText="Edit" Visible="<%# IsEditable %>" ImageUrl="~/images/edit.gif"
                                         runat="Server" resourcekey="Edit" /></asp:HyperLink>
@@ -128,5 +128,4 @@
             </td>
         </tr>
     </table>
-    <asp:HyperLink ID="HyperLinkAdd" runat="server" NavigateUrl='<%# DotNetNuke.Common.Globals.NavigateURL(EditTabId) %>'>Add New Item</asp:HyperLink>
 </asp:Panel>
