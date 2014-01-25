@@ -44,6 +44,13 @@
         </td>
     </tr>
     <tr>
+        <td class="SubHead" valign="top" width="150">Extra Description
+        </td>
+        <td valign="top">
+            <dnn:texteditor ID="txtExtraDescription" runat="server" Height="400" Width="100%" HtmlEncode="False" />
+        </td>
+    </tr>
+    <tr>
         <td class="SubHead" valign="top" width="150">URL
         </td>
         <td class="NormalTextBox">

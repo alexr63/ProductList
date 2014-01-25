@@ -38,6 +38,7 @@ namespace Cowrie.Modules.ProductList
                             if (hotel.UnitCost.HasValue)
                                 TextBoxUnitCost.Text = hotel.UnitCost.Value.ToString("#0.00");
                             txtDescription.Text = hotel.Description;
+                            txtExtraDescription.Text = hotel.ExtraDescription;
                             TextBoxURL.Text = hotel.URL;
                             TextBoxImage.Text = hotel.Image;
 
@@ -94,16 +95,20 @@ namespace Cowrie.Modules.ProductList
                             hotel.UnitCost = null;
                         }
                         hotel.Description = txtDescription.Text;
+                        hotel.ExtraDescription = txtExtraDescription.Text;
                         hotel.URL = TextBoxURL.Text;
                         hotel.Image = TextBoxImage.Text;
-                        var locationId = hotel.LocationId;
-                        var newLocationId = int.Parse(RadTreeViewLocations.SelectedValue);
-                        if (locationId != newLocationId)
+                        if (RadTreeViewLocations.SelectedValue != String.Empty)
                         {
-                            hotel.LocationId = newLocationId;
-                            var oldHotelLocations = db.HotelLocations.Where(hl => hl.HotelId == id);
-                            db.HotelLocations.RemoveRange(oldHotelLocations);
-                            UpdateHotelLocations(db, hotel);
+                            var locationId = hotel.LocationId;
+                            var newLocationId = int.Parse(RadTreeViewLocations.SelectedValue);
+                            if (locationId != newLocationId)
+                            {
+                                hotel.LocationId = newLocationId;
+                                var oldHotelLocations = db.HotelLocations.Where(hl => hl.HotelId == id);
+                                db.HotelLocations.RemoveRange(oldHotelLocations);
+                                UpdateHotelLocations(db, hotel);
+                            }
                         }
                         if (TextBoxRooms.Text != String.Empty)
                         {
@@ -159,6 +164,7 @@ namespace Cowrie.Modules.ProductList
                         Name = TextBoxName.Text,
                         Number = TextBoxNumber.Text,
                         Description = txtDescription.Text,
+                        ExtraDescription = txtExtraDescription.Text,
                         URL = TextBoxURL.Text,
                         Image = TextBoxImage.Text,
                         LocationId = int.Parse(RadTreeViewLocations.SelectedValue),

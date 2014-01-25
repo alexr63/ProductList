@@ -67,6 +67,15 @@ namespace Cowrie.Modules.ProductList {
         protected global::DotNetNuke.UI.UserControls.TextEditor txtDescription;
         
         /// <summary>
+        /// txtExtraDescription control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DotNetNuke.UI.UserControls.TextEditor txtExtraDescription;
+        
+        /// <summary>
         /// TextBoxURL control.
         /// </summary>
         /// <remarks>
