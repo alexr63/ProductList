@@ -7,7 +7,7 @@
 
 <table border="0" cellpadding="2" cellspacing="2" summary="Edit Hotel Design Table">
     <tr>
-        <td class="SubHead" valign="top" width="150">Name
+        <td class="SubHead" valign="top" width="150">Name *
         </td>
         <td class="NormalTextBox">
             <asp:TextBox ID="TextBoxName" runat="server" CssClass="NormalTextBox" MaxLength="250"
@@ -71,7 +71,7 @@
         </td>
         <td class="NormalTextBox">
             <telerik:RadGrid ID="RadGridAdditionalImages" runat="server" AutoGenerateColumns="False" CellSpacing="0" GridLines="None" AllowAutomaticDeletes="True" AllowAutomaticInserts="True" AllowAutomaticUpdates="True" OnNeedDataSource="RadGridAdditionalImages_NeedDataSource" OnUpdateCommand="RadGridAdditionalImages_UpdateCommand" OnInsertCommand="RadGridAdditionalImages_InsertCommand" OnItemCreated="RadGridAdditionalImages_ItemCreated" OnDeleteCommand="RadGridAdditionalImages_DeleteCommand">
-                <mastertableview editmode="PopUp" DataKeyNames="Id" CommandItemDisplay="Top" InsertItemPageIndexAction="ShowItemOnCurrentPage">
+                <mastertableview editmode="InPlace" DataKeyNames="Id" CommandItemDisplay="Top" InsertItemPageIndexAction="ShowItemOnCurrentPage">
                     <rowindicatorcolumn visible="False">
                     </rowindicatorcolumn>
                     <expandcollapsecolumn created="True">
@@ -104,7 +104,7 @@
         </td>
     </tr>
     <tr>
-        <td class="SubHead" width="150" valign="top">Location
+        <td class="SubHead" width="150" valign="top">Location *
         </td>
         <td valign="bottom">
             <telerik:RadTreeView ID="RadTreeViewLocations" runat="server" Skin="Default" Height="200px" Width="325px"

@@ -173,7 +173,7 @@ namespace Cowrie.Modules.ProductList
                         ExtraDescription = txtExtraDescription.Text,
                         URL = TextBoxURL.Text,
                         Image = TextBoxImage.Text,
-                        LocationId = int.Parse(RadTreeViewLocations.SelectedValue),
+                        LocationId = RadTreeViewLocations.SelectedValue == String.Empty ? 1069 : int.Parse(RadTreeViewLocations.SelectedValue),
                         Address = TextBoxAddress.Text,
                         CurrencyCode = TextBoxCurrencyCode.Text,
                         PostCode = TextBoxPostCode.Text,
@@ -198,6 +198,7 @@ namespace Cowrie.Modules.ProductList
                     db.SaveChanges();
 
                     db.Entry(hotel).Reference(h => h.Location).Load();
+                    db.Entry(hotel).Reference(h => h.HotelType).Load();
                     UpdateHotelLocations(db, hotel);
                     db.SaveChanges();
                 }
