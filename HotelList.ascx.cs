@@ -245,6 +245,21 @@ namespace Cowrie.Modules.ProductList
 
         #region IActionable Members
 
+        public ModuleActionCollection ModuleActions
+        {
+            get
+            {
+                var actions = new ModuleActionCollection
+                    {
+                        {
+                            GetNextActionID(), "Add Product", "", "", "",
+                            EditUrl(), false, SecurityAccessLevel.Edit, true, false
+                        }
+                    };
+                return actions;
+            }
+        }
+
         #endregion
 
         protected void DataListContent_DataBound(object sender, DataListItemEventArgs e)
@@ -355,21 +370,6 @@ namespace Cowrie.Modules.ProductList
             else if (e.CommandName == "MoreHotelInfo")
             {
                 Response.Redirect(DotNetNuke.Common.Globals.NavigateURL(DetailsTabId, "", "Id=" + e.CommandArgument.ToString()));
-            }
-        }
-
-        public ModuleActionCollection ModuleActions
-        {
-            get
-            {
-                var actions = new ModuleActionCollection
-                    {
-                        {
-                            GetNextActionID(), "Add Hotel", "", "", "",
-                            EditUrl(), false, SecurityAccessLevel.Edit, true, false
-                        }
-                    };
-                return actions;
             }
         }
     }

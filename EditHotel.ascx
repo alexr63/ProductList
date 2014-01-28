@@ -67,6 +67,36 @@
         </td>
     </tr>
     <tr>
+        <td class="SubHead" valign="top" width="150">Additional Images
+        </td>
+        <td class="NormalTextBox">
+            <telerik:RadGrid ID="RadGridAdditionalImages" runat="server" AutoGenerateColumns="False" CellSpacing="0" GridLines="None" AllowAutomaticDeletes="True" AllowAutomaticInserts="True" AllowAutomaticUpdates="True" OnNeedDataSource="RadGridAdditionalImages_NeedDataSource" OnUpdateCommand="RadGridAdditionalImages_UpdateCommand" OnInsertCommand="RadGridAdditionalImages_InsertCommand" OnItemCreated="RadGridAdditionalImages_ItemCreated" OnDeleteCommand="RadGridAdditionalImages_DeleteCommand">
+                <mastertableview editmode="PopUp" DataKeyNames="Id" CommandItemDisplay="Top" InsertItemPageIndexAction="ShowItemOnCurrentPage">
+                    <rowindicatorcolumn visible="False">
+                    </rowindicatorcolumn>
+                    <expandcollapsecolumn created="True">
+                    </expandcollapsecolumn>
+                    <Columns>
+                        <telerik:GridEditCommandColumn ButtonType="ImageButton" />
+                        <telerik:GridBoundColumn DataField="Id" UniqueName="Id" HeaderText="Id" ReadOnly="True" ForceExtractValue="Always" ConvertEmptyStringToNull="true">
+                        </telerik:GridBoundColumn>
+                        <telerik:GridBoundColumn DataField="URL" UniqueName="URL" HeaderText="URL">
+                        </telerik:GridBoundColumn>
+                        <telerik:GridButtonColumn ConfirmText="Delete this image?" ConfirmDialogType="RadWindow"
+                            ConfirmTitle="Delete" ButtonType="ImageButton" CommandName="Delete" />
+                    </Columns>
+                    <EditFormSettings> 
+                        <EditColumn ButtonType="ImageButton" /> 
+                    </EditFormSettings> 
+                </mastertableview>
+            </telerik:RadGrid>
+            <telerik:RadInputManager runat="server" ID="RadInputManager1" Enabled="true"> 
+                <telerik:TextBoxSetting BehaviorID="TextBoxSetting1"> 
+                </telerik:TextBoxSetting> 
+            </telerik:RadInputManager> 
+        </td>
+    </tr>
+    <tr>
         <td class="SubHead" width="150" valign="top">Current Location
         </td>
         <td valign="bottom">
@@ -182,7 +212,6 @@
 </table>
 <p>
     <asp:ValidationSummary ID="ValidationSummary1" runat="server" />
-</p>
 <p>
     <dnn:CommandButton ID="cmdSave" runat="server" class="CommandButton" ResourceKey="cmdSave"
         ImageUrl="~/images/save.gif" oncommand="cmdSave_Command" />

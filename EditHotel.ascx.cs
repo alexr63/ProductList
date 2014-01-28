@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web.UI.WebControls;
 using DotNetNuke.Entities.Modules;
 using DotNetNuke.Web;
 using ProductList;
@@ -18,7 +20,8 @@ namespace Cowrie.Modules.ProductList
             {
                 //MessageWindowParameters messageWindowParameters = new MessageWindowParameters("Are you sure you wish to delete this item?", "Confirm Detele");
                 //cmdDelete.OnClientClick = Utilities.GetOnClientClickConfirm(ref cmdDelete, messageWindowParameters);
-                cmdDelete.Attributes.Add("onClick", "javascript:return confirm('Are you sure you wish to delete this item?');");
+                cmdDelete.Attributes.Add("onClick",
+                    "javascript:return confirm('Are you sure you wish to delete this item?');");
 
                 using (SelectedHotelsEntities db = new SelectedHotelsEntities())
                 {
@@ -58,11 +61,14 @@ namespace Cowrie.Modules.ProductList
                                 TextBoxLon.Text = hotel.Lon.Value.ToString();
                             TextBoxPostCode.Text = hotel.PostCode;
                             DropDownListTypes.SelectedValue = hotel.HotelTypeId.ToString();
+
+                            RadGridAdditionalImages.Visible = true;
                         }
                     }
                     else
                     {
                         Utils.PopulateLocationTree(RadTreeViewLocations, db);
+                        RadGridAdditionalImages.Visible = false;
                     }
                 }
             }
@@ -231,7 +237,8 @@ namespace Cowrie.Modules.ProductList
             e.Node.Expanded = true;
         }
 
-        protected void CustomValidatorCurrencyCode_ServerValidate(object source, System.Web.UI.WebControls.ServerValidateEventArgs args)
+        protected void CustomValidatorCurrencyCode_ServerValidate(object source,
+            System.Web.UI.WebControls.ServerValidateEventArgs args)
         {
             args.IsValid = Common.Utils.GetCurrencySymbol(args.Value) != args.Value;
         }
@@ -288,6 +295,112 @@ namespace Cowrie.Modules.ProductList
                 }
             }
             db.SaveChanges();
+        }
+
+        protected void RadGridAdditionalImages_NeedDataSource(object sender, GridNeedDataSourceEventArgs e)
+        {
+            int id = int.Parse(Request.QueryString["ItemId"]);
+            using (SelectedHotelsEntities db = new SelectedHotelsEntities())
+            {
+                var hotel = db.Products.Find(id) as Hotel;
+                RadGridAdditionalImages.DataSource = hotel.ProductImages.ToList();
+            }
+        }
+
+        protected void RadGridAdditionalImages_UpdateCommand(object sender, GridCommandEventArgs e)
+        {
+            var editableItem = ((GridEditableItem) e.Item);
+            var id = (int) editableItem.GetDataKeyValue("Id");
+
+            //retrive entity form the Db 
+            using (SelectedHotelsEntities db = new SelectedHotelsEntities())
+            {
+                var productImage = db.ProductImages.Find(id);
+                if (productImage != null)
+                {
+                    //update entity's state 
+                    editableItem.UpdateValues(productImage);
+
+                    try
+                    {
+                        //submit chanages to Db 
+                        db.SaveChanges();
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
+            }
+        }
+
+        protected void RadGridAdditionalImages_InsertCommand(object sender, GridCommandEventArgs e)
+        {
+            int id = int.Parse(Request.QueryString["ItemId"]);
+            var editableItem = ((GridEditableItem) e.Item);
+            //create new entity 
+            var productImage = new ProductImage {ProductId = id};
+            //populate its properties 
+            Hashtable values = new Hashtable();
+            editableItem.ExtractValues(values);
+            productImage.URL = (string) values["URL"];
+
+            using (SelectedHotelsEntities db = new SelectedHotelsEntities())
+            {
+                db.ProductImages.Add(productImage);
+                try
+                {
+                    //submit chanages to Db 
+                    db.SaveChanges();
+                }
+                catch (Exception)
+                {
+                }
+            }
+        }
+
+        protected void RadGridAdditionalImages_ItemCreated(object sender, GridItemEventArgs e)
+        {
+            if (e.Item is GridEditableItem && (e.Item.IsInEditMode))
+            {
+                GridEditableItem editableItem = (GridEditableItem) e.Item;
+                SetupInputManager(editableItem);
+            }
+        }
+
+        private void SetupInputManager(GridEditableItem editableItem)
+        {
+            // style and set URL column's textbox as required 
+            var textBox =
+                ((GridTextBoxColumnEditor) editableItem.EditManager.GetColumnEditor("URL")).TextBoxControl;
+
+            InputSetting inputSetting = RadInputManager1.GetSettingByBehaviorID("TextBoxSetting1");
+            inputSetting.TargetControls.Add(new TargetInput(textBox.UniqueID, true));
+            inputSetting.InitializeOnClient = true;
+            inputSetting.Validation.IsRequired = true;
+        }
+
+        protected void RadGridAdditionalImages_DeleteCommand(object sender, GridCommandEventArgs e)
+        {
+            var id = (int) ((GridDataItem) e.Item).GetDataKeyValue("Id");
+
+            //retrive entity form the Db 
+            using (SelectedHotelsEntities db = new SelectedHotelsEntities())
+            {
+                var productImage = db.ProductImages.Find(id);
+                if (productImage != null)
+                {
+                    //add the category for deletion 
+                    db.ProductImages.Remove(productImage);
+                    try
+                    {
+                        //submit chanages to Db 
+                        db.SaveChanges();
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
+            }
         }
     }
 }

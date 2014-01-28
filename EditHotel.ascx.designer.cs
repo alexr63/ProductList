@@ -94,6 +94,24 @@ namespace Cowrie.Modules.ProductList {
         protected global::System.Web.UI.WebControls.TextBox TextBoxImage;
         
         /// <summary>
+        /// RadGridAdditionalImages control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::Telerik.Web.UI.RadGrid RadGridAdditionalImages;
+        
+        /// <summary>
+        /// RadInputManager1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::Telerik.Web.UI.RadInputManager RadInputManager1;
+        
+        /// <summary>
         /// LabelCurrentLocation control.
         /// </summary>
         /// <remarks>
