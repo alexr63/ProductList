@@ -1,8 +1,10 @@
 ﻿<%@ control language="C#" autoeventwireup="true" codebehind="Clothes.ascx.cs"
     inherits="Cowrie.Modules.ProductList.Clothes" %>
 <%@ Import Namespace="Common" %>
-<%@ Register assembly="DotNetNuke.WebControls" namespace="DotNetNuke.UI.WebControls" tagPrefix="dnn" %>
-<div class="categories">
+<%@ Register TagPrefix="telerik" Namespace="Telerik.Web.UI" Assembly="Telerik.Web.UI" %>
+<telerik:radskinmanager id="QsfSkinManager" runat="server" showchooser="false" />
+<telerik:radformdecorator id="QsfFromDecorator" runat="server" decoratedcontrols="All" enableroundedcorners="false" />
+<div class="sizes">
     <h3>Sizes</h3>
     <asp:Button ID="ButtonSearch1" runat="server" Text="Search" OnClick="ButtonSearch_Click" />
     <asp:CheckBoxList ID="CheckBoxListSizes" runat="server" AppendDataBoundItems="True">
@@ -10,7 +12,7 @@
     </asp:CheckBoxList>
     <asp:Button ID="ButtonSearch2" runat="server" Text="Search" OnClick="ButtonSearch_Click" />
 </div>
-<div class="products">
+<div class="products" style="width: 660px;">
     <h1><asp:Label ID="LabelLocation" runat="server" /></h1>
     <table style="width: 100%">
         <tr>
@@ -59,7 +61,7 @@
                     </tr>
                     <tr>
                         <td style="vertical-align: middle">
-                            <asp:Label ID="LabelPrice" runat="server" Text='<%# Eval("UnitCost", "{0:c}") %>' />
+                            <%# Eval("UnitCost") != null ? String.Format("{0}{1:#0.00}", Utils.GetCurrencySymbol(Eval("CurrencyCode").ToString()), Eval("UnitCost")) : String.Empty %>
                         </td>
                     </tr>
                     <tr>

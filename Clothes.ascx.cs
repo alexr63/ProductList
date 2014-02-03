@@ -7,10 +7,7 @@ using System.Web.UI.WebControls;
 using DotNetNuke.Entities.Modules;
 using DotNetNuke.Entities.Tabs;
 using DotNetNuke.Services.Exceptions;
-using DotNetNuke.UI.WebControls;
-using ProductList;
 using SelectedHotelsModel;
-using TreeNode = DotNetNuke.UI.WebControls.TreeNode;
 
 namespace Cowrie.Modules.ProductList
 {
@@ -45,30 +42,19 @@ namespace Cowrie.Modules.ProductList
 
         private void BindSizes(SelectedHotelsEntities db)
         {
-            IList<Cloth> clothes = (from p in db.Products
-                                                   where !p.IsDeleted
-                                                   select p).OfType<Cloth>().ToList();
-            var query = (from h in clothes
-                         where h.Size != String.Empty
-                         orderby h.Size
-                         select h.Size).Distinct();
-            CheckBoxListSizes.DataSource = query.ToList();
+            List<String> clothSizes = db.ClothSizes.Select(cs => cs.Size).Distinct().ToList();
+            clothSizes.Sort();
+            CheckBoxListSizes.DataSource = clothSizes;
             CheckBoxListSizes.DataBind();
         }
 
         private void BindData(SelectedHotelsEntities db)
         {
-            IList<Cloth> clothes = (from p in db.Products
+            IEnumerable<Cloth> query = (from p in db.Products
                                                    where !p.IsDeleted
                                                    select p).OfType<Cloth>().ToList();
             List<string> selectedSizes = new List<string>();
-            IEnumerable<Cloth> query;
-            if (CheckBoxListSizes.Items[0].Selected)
-            {
-                query = from h in clothes
-                        select h;
-            }
-            else
+            if (!CheckBoxListSizes.Items[0].Selected)
             {
                 foreach (ListItem item in CheckBoxListSizes.Items)
                 {
@@ -77,17 +63,17 @@ namespace Cowrie.Modules.ProductList
                         selectedSizes.Add(item.Value);
                     }
                 }
-                query = from h in clothes
-                        where selectedSizes.Any(s => s == h.Size)
-                        select h;
+                query = from c in query
+                        where c.ClothSizes.Any(cs => selectedSizes.Any(s => s == cs.Size))
+                        select c;
             }
             if (DropDownListSortCriterias.SelectedValue == "Name")
             {
-                ListViewContent.DataSource = query.OrderBy(h => h.Name).ToList();
+                ListViewContent.DataSource = query.OrderBy(c => c.Name).ToList();
             }
             else
             {
-                ListViewContent.DataSource = query.OrderBy(h => h.UnitCost).ToList();
+                ListViewContent.DataSource = query.OrderBy(c => c.UnitCost).ToList();
             }
             ListViewContent.DataBind();
 
