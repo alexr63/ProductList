@@ -11,6 +11,21 @@
     min-width: 240px;
     width: 250px;
 }
+
+.category-selectors {
+    clear: left;
+	float: left;
+	padding: 20px 0px 0px 20px;
+	margin: 0 0 0 0;
+	display: inline;
+    -moz-min-width: 860px;
+    -ms-min-width: 860px;
+    -o-min-width: 860px;
+    -webkit-min-width: 860px;
+    min-width: 860px;
+    width: 870px;
+}
+
 .sizes {
     clear: left;
 	float: left;

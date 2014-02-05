@@ -31,6 +31,24 @@ namespace Cowrie.Modules.ProductList {
         protected global::Telerik.Web.UI.RadFormDecorator QsfFromDecorator;
         
         /// <summary>
+        /// DropDownListCategories control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList DropDownListCategories;
+        
+        /// <summary>
+        /// DropDownListMerchantCategories control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList DropDownListMerchantCategories;
+        
+        /// <summary>
         /// ButtonSearch1 control.
         /// </summary>
         /// <remarks>

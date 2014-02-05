@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web.UI.WebControls;
 using DotNetNuke.Entities.Modules;
@@ -17,6 +18,11 @@ namespace Cowrie.Modules.ProductList
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (Settings["category"] == null)
+            {
+                return;
+            }
+
             var childTabs = TabController.GetTabsByParent(TabId, PortalId);
             if (childTabs.Count() > 0)
             {
@@ -29,6 +35,12 @@ namespace Cowrie.Modules.ProductList
                 {
                     using (SelectedHotelsEntities db = new SelectedHotelsEntities())
                     {
+                        int categoryId = Convert.ToInt32(Settings["category"]);
+                        DropDownListCategories.DataSource = db.Categories.Where(c => c.ParentId == categoryId).OrderBy(c => c.Name).ToList();
+                        DropDownListCategories.DataBind();
+                        DropDownListMerchantCategories.DataSource =
+                            db.MerchantCategories.OrderBy(mc => mc.Name).ToList();
+                        DropDownListMerchantCategories.DataBind();
                         BindSizes(db);
                         BindData(db);
                     }
@@ -42,10 +54,25 @@ namespace Cowrie.Modules.ProductList
 
         private void BindSizes(SelectedHotelsEntities db)
         {
-            List<String> clothSizes = db.ClothSizes.Select(cs => cs.Size).Distinct().ToList();
+            var query = db.ClothSizes as IQueryable<ClothSize>;
+            if (DropDownListCategories.SelectedValue != String.Empty)
+            {
+                int categoryId = int.Parse(DropDownListCategories.SelectedValue);
+                query = query.Where(cs => cs.Cloth.Categories.Any(c => c.Id == categoryId));
+            }
+
+            var query2 = db.ClothSizes as IQueryable<ClothSize>;
+            if (DropDownListMerchantCategories.SelectedValue != String.Empty)
+            {
+                int categoryId = int.Parse(DropDownListMerchantCategories.SelectedValue);
+                query2 = query2.Where(cs => cs.Cloth.MerchantCategoryId == categoryId);
+            }
+            List<String> clothSizes = query.Intersect(query2).Select(cs => cs.Size).Distinct().ToList();
             clothSizes.Sort();
             CheckBoxListSizes.DataSource = clothSizes;
             CheckBoxListSizes.DataBind();
+            CheckBoxListSizes.Items.Insert(0, new ListItem("All Sizes", String.Empty));
+            CheckBoxListSizes.SelectedIndex = 0;
         }
 
         private void BindData(SelectedHotelsEntities db)
@@ -53,6 +80,17 @@ namespace Cowrie.Modules.ProductList
             IEnumerable<Cloth> query = (from p in db.Products
                                                    where !p.IsDeleted
                                                    select p).OfType<Cloth>().ToList();
+            if (DropDownListCategories.SelectedValue != String.Empty)
+            {
+                int categoryId = int.Parse(DropDownListCategories.SelectedValue);
+                query = query.Where(c => c.Categories.Any(cat => cat.Id == categoryId));
+            }
+
+            if (DropDownListMerchantCategories.SelectedValue != String.Empty)
+            {
+                int categoryId = int.Parse(DropDownListMerchantCategories.SelectedValue);
+                query = query.Where(c => c.MerchantCategoryId == categoryId);
+            }
             List<string> selectedSizes = new List<string>();
             if (!CheckBoxListSizes.Items[0].Selected)
             {
@@ -67,6 +105,7 @@ namespace Cowrie.Modules.ProductList
                         where c.ClothSizes.Any(cs => selectedSizes.Any(s => s == cs.Size))
                         select c;
             }
+
             if (DropDownListSortCriterias.SelectedValue == "Name")
             {
                 ListViewContent.DataSource = query.OrderBy(c => c.Name).ToList();
@@ -121,6 +160,24 @@ namespace Cowrie.Modules.ProductList
         {
             using (SelectedHotelsEntities db = new SelectedHotelsEntities())
             {
+                BindData(db);
+            }
+        }
+
+        protected void DropDownListCategories_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            using (SelectedHotelsEntities db = new SelectedHotelsEntities())
+            {
+                BindSizes(db);
+                BindData(db);
+            }
+        }
+
+        protected void DropDownListMerchantCategories_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            using (SelectedHotelsEntities db = new SelectedHotelsEntities())
+            {
+                BindSizes(db);
                 BindData(db);
             }
         }

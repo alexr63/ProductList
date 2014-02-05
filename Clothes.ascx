@@ -4,11 +4,20 @@
 <%@ Register TagPrefix="telerik" Namespace="Telerik.Web.UI" Assembly="Telerik.Web.UI" %>
 <telerik:radskinmanager id="QsfSkinManager" runat="server" showchooser="false" />
 <telerik:radformdecorator id="QsfFromDecorator" runat="server" decoratedcontrols="All" enableroundedcorners="false" />
+<div class="category-selectors">
+    Category
+    <asp:DropDownList ID="DropDownListCategories" runat="server" DataValueField="Id" DataTextField="Name" AppendDataBoundItems="True" AutoPostBack="True" OnSelectedIndexChanged="DropDownListCategories_SelectedIndexChanged" Width="250px">
+        <asp:ListItem Value="">All Categories</asp:ListItem>
+    </asp:DropDownList>
+    Merchant Category
+    <asp:DropDownList ID="DropDownListMerchantCategories" runat="server" DataValueField="Id" DataTextField="Name" Width="250px" AppendDataBoundItems="True" AutoPostBack="True" OnSelectedIndexChanged="DropDownListMerchantCategories_SelectedIndexChanged">
+        <asp:ListItem Value="">All Merchant Categories</asp:ListItem>
+    </asp:DropDownList>
+</div>
 <div class="sizes">
     <h3>Sizes</h3>
     <asp:Button ID="ButtonSearch1" runat="server" Text="Search" OnClick="ButtonSearch_Click" />
-    <asp:CheckBoxList ID="CheckBoxListSizes" runat="server" AppendDataBoundItems="True">
-        <asp:ListItem Value="" Text="All" Selected="True"></asp:ListItem>
+    <asp:CheckBoxList ID="CheckBoxListSizes" runat="server" AppendDataBoundItems="False">
     </asp:CheckBoxList>
     <asp:Button ID="ButtonSearch2" runat="server" Text="Search" OnClick="ButtonSearch_Click" />
 </div>
