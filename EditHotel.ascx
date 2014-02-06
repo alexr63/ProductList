@@ -160,12 +160,14 @@
         </td>
     </tr>
     <tr>
-        <td class="SubHead" valign="top" width="150">Currency Code
+        <td class="SubHead" valign="top" width="150">Currency Code *
         </td>
         <td class="NormalTextBox">
             <asp:TextBox ID="TextBoxCurrencyCode" runat="server" CssClass="NormalTextBox"
                 Width="325" MaxLength="3"></asp:TextBox>
-            <asp:CustomValidator ID="CustomValidatorCurrencyCode" runat="server" ErrorMessage="Please enter Currency Code in valid format" ControlToValidate="TextBoxCurrencyCode" Display="Dynamic" OnServerValidate="CustomValidatorCurrencyCode_ServerValidate">*</asp:CustomValidator>
+            <asp:RequiredFieldValidator ID="RequiredFieldValidatorCurrencyCode" runat="server" CssClass="NormalRed"
+                Display="Dynamic" ErrorMessage="Currency Code is required" ControlToValidate="TextBoxCurrencyCode">*</asp:RequiredFieldValidator>
+            <asp:CustomValidator ID="CustomValidatorCurrencyCode" runat="server" ErrorMessage="Please enter Currency Code in valid format" ControlToValidate="TextBoxCurrencyCode" Display="Dynamic" OnServerValidate="CustomValidatorCurrencyCode_ServerValidate" CssClass="NormalRed">*</asp:CustomValidator>
         </td>
     </tr>
     <tr>
