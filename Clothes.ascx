@@ -5,9 +5,9 @@
 <telerik:radskinmanager id="QsfSkinManager" runat="server" showchooser="false" />
 <telerik:radformdecorator id="QsfFromDecorator" runat="server" decoratedcontrols="All" enableroundedcorners="false" />
 <div class="category-selectors">
-    Category
-    <asp:DropDownList ID="DropDownListCategories" runat="server" DataValueField="Id" DataTextField="Name" AppendDataBoundItems="True" AutoPostBack="True" OnSelectedIndexChanged="DropDownListCategories_SelectedIndexChanged" Width="250px">
-        <asp:ListItem Value="">All Categories</asp:ListItem>
+    Brand
+    <asp:DropDownList ID="DropDownListBrands" runat="server" DataValueField="Id" DataTextField="Name" AppendDataBoundItems="True" AutoPostBack="True" OnSelectedIndexChanged="DropDownListBrands_SelectedIndexChanged" Width="250px">
+        <asp:ListItem Value="">All Brands</asp:ListItem>
     </asp:DropDownList>
     Merchant Category
     <asp:DropDownList ID="DropDownListMerchantCategories" runat="server" DataValueField="Id" DataTextField="Name" Width="250px" AppendDataBoundItems="True" AutoPostBack="True" OnSelectedIndexChanged="DropDownListMerchantCategories_SelectedIndexChanged">

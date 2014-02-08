@@ -35,9 +35,8 @@ namespace Cowrie.Modules.ProductList
                 {
                     using (SelectedHotelsEntities db = new SelectedHotelsEntities())
                     {
-                        int categoryId = Convert.ToInt32(Settings["category"]);
-                        DropDownListCategories.DataSource = db.Categories.Where(c => c.ParentId == categoryId).OrderBy(c => c.Name).ToList();
-                        DropDownListCategories.DataBind();
+                        DropDownListBrands.DataSource = db.Brands.OrderBy(b => b.Name).ToList();
+                        DropDownListBrands.DataBind();
                         DropDownListMerchantCategories.DataSource =
                             db.MerchantCategories.OrderBy(mc => mc.Name).ToList();
                         DropDownListMerchantCategories.DataBind();
@@ -55,10 +54,10 @@ namespace Cowrie.Modules.ProductList
         private void BindSizes(SelectedHotelsEntities db)
         {
             var query = db.ClothSizes as IQueryable<ClothSize>;
-            if (DropDownListCategories.SelectedValue != String.Empty)
+            if (DropDownListBrands.SelectedValue != String.Empty)
             {
-                int categoryId = int.Parse(DropDownListCategories.SelectedValue);
-                query = query.Where(cs => cs.Cloth.Categories.Any(c => c.Id == categoryId));
+                int brandId = int.Parse(DropDownListBrands.SelectedValue);
+                query = query.Where(cs => cs.Cloth.BrandId == brandId);
             }
 
             var query2 = db.ClothSizes as IQueryable<ClothSize>;
@@ -80,10 +79,10 @@ namespace Cowrie.Modules.ProductList
             IEnumerable<Cloth> query = (from p in db.Products
                                                    where !p.IsDeleted
                                                    select p).OfType<Cloth>().ToList();
-            if (DropDownListCategories.SelectedValue != String.Empty)
+            if (DropDownListBrands.SelectedValue != String.Empty)
             {
-                int categoryId = int.Parse(DropDownListCategories.SelectedValue);
-                query = query.Where(c => c.Categories.Any(cat => cat.Id == categoryId));
+                int brandId = int.Parse(DropDownListBrands.SelectedValue);
+                query = query.Where(c => c.BrandId == brandId);
             }
 
             if (DropDownListMerchantCategories.SelectedValue != String.Empty)
@@ -164,7 +163,7 @@ namespace Cowrie.Modules.ProductList
             }
         }
 
-        protected void DropDownListCategories_SelectedIndexChanged(object sender, EventArgs e)
+        protected void DropDownListBrands_SelectedIndexChanged(object sender, EventArgs e)
         {
             using (SelectedHotelsEntities db = new SelectedHotelsEntities())
             {
