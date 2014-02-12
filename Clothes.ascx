@@ -9,9 +9,37 @@
     <asp:DropDownList ID="DropDownListBrands" runat="server" DataValueField="Id" DataTextField="Name" AppendDataBoundItems="True" AutoPostBack="True" OnSelectedIndexChanged="DropDownListBrands_SelectedIndexChanged" Width="250px">
         <asp:ListItem Value="">All Brands</asp:ListItem>
     </asp:DropDownList>
+    <br />
+    <br />
     Merchant Category
     <asp:DropDownList ID="DropDownListMerchantCategories" runat="server" DataValueField="Id" DataTextField="Name" Width="250px" AppendDataBoundItems="True" AutoPostBack="True" OnSelectedIndexChanged="DropDownListMerchantCategories_SelectedIndexChanged">
         <asp:ListItem Value="">All Merchant Categories</asp:ListItem>
+    </asp:DropDownList>
+    <br />
+    <br />
+    Style
+    <asp:DropDownList ID="DropDownListStyles" runat="server" DataValueField="Id" DataTextField="Name" Width="250px" AppendDataBoundItems="True" AutoPostBack="True" OnSelectedIndexChanged="DropDownListStyles_SelectedIndexChanged">
+        <asp:ListItem Value="">All Styles</asp:ListItem>
+    </asp:DropDownList>
+    <br />
+    <br />
+    Gender
+    <asp:DropDownList ID="DropDownListGenders" runat="server" Width="250px" AutoPostBack="True" OnSelectedIndexChanged="DropDownListGenders_SelectedIndexChanged">
+        <asp:ListItem Value="">All Genders</asp:ListItem>
+        <asp:ListItem Value="male">Male</asp:ListItem>
+        <asp:ListItem Value="female">Female</asp:ListItem>
+    </asp:DropDownList>
+    <br />
+    <br />
+    Colour
+    <asp:DropDownList ID="DropDownListColours" runat="server" Width="250px" AutoPostBack="True" AppendDataBoundItems="True" OnSelectedIndexChanged="DropDownListColours_SelectedIndexChanged">
+        <asp:ListItem Value="">All Colours</asp:ListItem>
+    </asp:DropDownList>
+    <br />
+    <br />
+    Department
+    <asp:DropDownList ID="DropDownListDepartments" runat="server" DataValueField="Id" DataTextField="Name" Width="250px" AppendDataBoundItems="True" AutoPostBack="True" OnSelectedIndexChanged="DropDownListDepartments_SelectedIndexChanged">
+        <asp:ListItem Value="">All Departments</asp:ListItem>
     </asp:DropDownList>
 </div>
 <div class="sizes">

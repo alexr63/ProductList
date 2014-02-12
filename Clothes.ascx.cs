@@ -40,6 +40,16 @@ namespace Cowrie.Modules.ProductList
                         DropDownListMerchantCategories.DataSource =
                             db.MerchantCategories.OrderBy(mc => mc.Name).ToList();
                         DropDownListMerchantCategories.DataBind();
+                        DropDownListStyles.DataSource = db.Styles.OrderBy(s => s.Name).ToList();
+                        DropDownListStyles.DataBind();
+                        var colours = db.Products.Where(p => !p.IsDeleted).OfType<Cloth>()
+                            .Select(c => c.Colour)
+                            .Distinct()
+                            .OrderBy(c => c);
+                        DropDownListColours.DataSource = colours.ToList();
+                        DropDownListColours.DataBind();
+                        DropDownListDepartments.DataSource = db.Departments.OrderBy(s => s.Name).ToList();
+                        DropDownListDepartments.DataBind();
                         BindSizes(db);
                         BindData(db);
                     }
@@ -53,22 +63,42 @@ namespace Cowrie.Modules.ProductList
 
         private void BindSizes(SelectedHotelsEntities db)
         {
-            var query = db.ClothSizes as IQueryable<ClothSize>;
+            var query = db.Products.Where(p => !p.IsDeleted).OfType<Cloth>() as IQueryable<Cloth>;
             if (DropDownListBrands.SelectedValue != String.Empty)
             {
                 int brandId = int.Parse(DropDownListBrands.SelectedValue);
-                query = query.Where(cs => cs.Cloth.BrandId == brandId);
+                query = query.Where(c => c.BrandId == brandId);
             }
-
-            var query2 = db.ClothSizes as IQueryable<ClothSize>;
             if (DropDownListMerchantCategories.SelectedValue != String.Empty)
             {
                 int categoryId = int.Parse(DropDownListMerchantCategories.SelectedValue);
-                query2 = query2.Where(cs => cs.Cloth.MerchantCategoryId == categoryId);
+                query = query.Where(c => c.MerchantCategoryId == categoryId);
             }
-            List<String> clothSizes = query.Intersect(query2).Select(cs => cs.Size).Distinct().ToList();
-            clothSizes.Sort();
-            CheckBoxListSizes.DataSource = clothSizes;
+            if (DropDownListStyles.SelectedValue != String.Empty)
+            {
+                int styleId = int.Parse(DropDownListStyles.SelectedValue);
+                query = query.Where(c => c.Styles.Any(s => s.Id == styleId));
+            }
+            if (DropDownListGenders.SelectedValue != String.Empty)
+            {
+                query = query.Where(c => c.Gender == DropDownListGenders.SelectedValue);
+            }
+            if (DropDownListColours.SelectedValue != String.Empty)
+            {
+                query = query.Where(c => c.Colour == DropDownListColours.SelectedValue);
+            }
+            if (DropDownListDepartments.SelectedValue != String.Empty)
+            {
+                int departmentId = int.Parse(DropDownListDepartments.SelectedValue);
+                query = query.Where(c => c.Departments.Any(d => d.Id == departmentId));
+            }
+            var clothSizes =
+                db.ClothSizes.Where(cs => query.Any(c => c.Id == cs.ClothId))
+                    .Select(c => c.Size)
+                    .Distinct()
+                    .OrderBy(cs => cs);
+
+            CheckBoxListSizes.DataSource = clothSizes.ToList();
             CheckBoxListSizes.DataBind();
             CheckBoxListSizes.Items.Insert(0, new ListItem("All Sizes", String.Empty));
             CheckBoxListSizes.SelectedIndex = 0;
@@ -76,20 +106,36 @@ namespace Cowrie.Modules.ProductList
 
         private void BindData(SelectedHotelsEntities db)
         {
-            IEnumerable<Cloth> query = (from p in db.Products
-                                                   where !p.IsDeleted
-                                                   select p).OfType<Cloth>().ToList();
+            var query = db.Products.Where(p => !p.IsDeleted).OfType<Cloth>();
             if (DropDownListBrands.SelectedValue != String.Empty)
             {
                 int brandId = int.Parse(DropDownListBrands.SelectedValue);
                 query = query.Where(c => c.BrandId == brandId);
             }
-
             if (DropDownListMerchantCategories.SelectedValue != String.Empty)
             {
                 int categoryId = int.Parse(DropDownListMerchantCategories.SelectedValue);
                 query = query.Where(c => c.MerchantCategoryId == categoryId);
             }
+            if (DropDownListStyles.SelectedValue != String.Empty)
+            {
+                int styleId = int.Parse(DropDownListStyles.SelectedValue);
+                query = query.Where(c => c.Styles.Any(s => s.Id == styleId));
+            }
+            if (DropDownListGenders.SelectedValue != String.Empty)
+            {
+                query = query.Where(c => c.Gender == DropDownListGenders.SelectedValue);
+            }
+            if (DropDownListColours.SelectedValue != String.Empty)
+            {
+                query = query.Where(c => c.Colour == DropDownListColours.SelectedValue);
+            }
+            if (DropDownListDepartments.SelectedValue != String.Empty)
+            {
+                int departmentId = int.Parse(DropDownListDepartments.SelectedValue);
+                query = query.Where(c => c.Departments.Any(d => d.Id == departmentId));
+            }
+
             List<string> selectedSizes = new List<string>();
             if (!CheckBoxListSizes.Items[0].Selected)
             {
@@ -173,6 +219,38 @@ namespace Cowrie.Modules.ProductList
         }
 
         protected void DropDownListMerchantCategories_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            using (SelectedHotelsEntities db = new SelectedHotelsEntities())
+            {
+                BindSizes(db);
+                BindData(db);
+            }
+        }
+        protected void DropDownListStyles_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            using (SelectedHotelsEntities db = new SelectedHotelsEntities())
+            {
+                BindSizes(db);
+                BindData(db);
+            }
+        }
+        protected void DropDownListGenders_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            using (SelectedHotelsEntities db = new SelectedHotelsEntities())
+            {
+                BindSizes(db);
+                BindData(db);
+            }
+        }
+        protected void DropDownListColours_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            using (SelectedHotelsEntities db = new SelectedHotelsEntities())
+            {
+                BindSizes(db);
+                BindData(db);
+            }
+        }
+        protected void DropDownListDepartments_SelectedIndexChanged(object sender, EventArgs e)
         {
             using (SelectedHotelsEntities db = new SelectedHotelsEntities())
             {
