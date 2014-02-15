@@ -2,7 +2,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
 using System.Web.UI.WebControls;
 using DotNetNuke.Entities.Modules;
@@ -21,28 +20,20 @@ namespace Cowrie.Modules.ProductList
 
         protected void Page_Init(object sender, EventArgs e)
         {
-            AddActionHandler(new ActionEventHandler(MyActions_Click));
         }
-        private void MyActions_Click(object sender, DotNetNuke.Entities.Modules.Actions.ActionEventArgs e)
+        private void ModuleAction_Click(object sender, ActionEventArgs e)
         {
-            DotNetNuke.UI.Skins.Skin.AddModuleMessage(this, e.Action.CommandName, ModuleMessage.ModuleMessageType.BlueInfo);
-
-            switch (e.Action.CommandName.ToUpper())
+            switch (e.Action.CommandName)
             {
-                case "REDIRECT":
-                    if (e.Action.CommandArgument.ToUpper() != "CANCEL")
-                    {
-                        Response.Redirect(e.Action.Url);
-                    }
-                    else
-                    {
-                        DotNetNuke.UI.Skins.Skin.AddModuleMessage(this, "Canceled the Redirect", ModuleMessage.ModuleMessageType.YellowWarning);
-                    }
+                case "CreateBrandsSubtabs":
+                    DotNetNuke.UI.Skins.Skin.AddModuleMessage(this, "Brands Subtabs Created", ModuleMessage.ModuleMessageType.GreenSuccess);
                     break;
             }
         }
         protected void Page_Load(object sender, EventArgs e)
         {
+            AddActionHandler(ModuleAction_Click);
+
             if (Settings["category"] == null)
             {
                 return;
@@ -207,19 +198,19 @@ namespace Cowrie.Modules.ProductList
         }
 
         #region IActionable Members
+
         public ModuleActionCollection ModuleActions
         {
             get
             {
-                ModuleActionCollection actions = new ModuleActionCollection();
-                ModuleAction urlEventAction = new ModuleAction(ModuleContext.GetNextActionID());
-                urlEventAction.Title = "Action Event Example";
-                urlEventAction.CommandName = "redirect";
-                urlEventAction.CommandArgument = "cancel";
-                urlEventAction.Url = "http://dotnetnuke.com";
-                urlEventAction.UseActionEvent = true;
-                urlEventAction.Secure = DotNetNuke.Security.SecurityAccessLevel.Admin;
-                actions.Add(urlEventAction);
+                ModuleActionCollection actions = new ModuleActionCollection
+                {
+                    {
+                        GetNextActionID(), "Create Brands Subtabs", "CreateBrandsSubtabs", String.Empty,
+                        String.Empty,
+                        String.Empty, true, SecurityAccessLevel.Admin, true, false
+                    }
+                };
                 return actions;
             }
         }
