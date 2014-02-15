@@ -13,33 +13,6 @@ namespace Cowrie.Modules.ProductList {
     public partial class Clothes {
         
         /// <summary>
-        /// QsfSkinManager control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::Telerik.Web.UI.RadSkinManager QsfSkinManager;
-        
-        /// <summary>
-        /// QsfFromDecorator control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::Telerik.Web.UI.RadFormDecorator QsfFromDecorator;
-        
-        /// <summary>
-        /// DropDownListBrands control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList DropDownListBrands;
-        
-        /// <summary>
         /// DropDownListMerchantCategories control.
         /// </summary>
         /// <remarks>
@@ -58,24 +31,6 @@ namespace Cowrie.Modules.ProductList {
         protected global::System.Web.UI.WebControls.DropDownList DropDownListStyles;
         
         /// <summary>
-        /// DropDownListGenders control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList DropDownListGenders;
-        
-        /// <summary>
-        /// DropDownListColours control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList DropDownListColours;
-        
-        /// <summary>
         /// DropDownListDepartments control.
         /// </summary>
         /// <remarks>
@@ -83,6 +38,33 @@ namespace Cowrie.Modules.ProductList {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList DropDownListDepartments;
+        
+        /// <summary>
+        /// CheckBoxListGenders control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBoxList CheckBoxListGenders;
+        
+        /// <summary>
+        /// CheckBoxListColours control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBoxList CheckBoxListColours;
+        
+        /// <summary>
+        /// CheckBoxListBrands control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBoxList CheckBoxListBrands;
         
         /// <summary>
         /// ButtonSearch1 control.

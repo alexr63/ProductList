@@ -6,16 +6,41 @@ using System.Data.Entity;
 using System.Linq;
 using System.Web.UI.WebControls;
 using DotNetNuke.Entities.Modules;
+using DotNetNuke.Entities.Modules.Actions;
 using DotNetNuke.Entities.Tabs;
+using DotNetNuke.Security;
 using DotNetNuke.Services.Exceptions;
+using DotNetNuke.UI.Skins.Controls;
 using SelectedHotelsModel;
 
 namespace Cowrie.Modules.ProductList
 {
-    public partial class Clothes : PortalModuleBase
+    public partial class Clothes : PortalModuleBase, IActionable
     {
         public int DetailsTabId { get; set; }
 
+        protected void Page_Init(object sender, EventArgs e)
+        {
+            AddActionHandler(new ActionEventHandler(MyActions_Click));
+        }
+        private void MyActions_Click(object sender, DotNetNuke.Entities.Modules.Actions.ActionEventArgs e)
+        {
+            DotNetNuke.UI.Skins.Skin.AddModuleMessage(this, e.Action.CommandName, ModuleMessage.ModuleMessageType.BlueInfo);
+
+            switch (e.Action.CommandName.ToUpper())
+            {
+                case "REDIRECT":
+                    if (e.Action.CommandArgument.ToUpper() != "CANCEL")
+                    {
+                        Response.Redirect(e.Action.Url);
+                    }
+                    else
+                    {
+                        DotNetNuke.UI.Skins.Skin.AddModuleMessage(this, "Canceled the Redirect", ModuleMessage.ModuleMessageType.YellowWarning);
+                    }
+                    break;
+            }
+        }
         protected void Page_Load(object sender, EventArgs e)
         {
             if (Settings["category"] == null)
@@ -35,8 +60,9 @@ namespace Cowrie.Modules.ProductList
                 {
                     using (SelectedHotelsEntities db = new SelectedHotelsEntities())
                     {
-                        DropDownListBrands.DataSource = db.Brands.OrderBy(b => b.Name).ToList();
-                        DropDownListBrands.DataBind();
+                        var brands = db.Brands.OrderByDescending(b => b.Clothes.Count).Take(10).OrderBy(b => b.Name).ToList();
+                        CheckBoxListBrands.DataSource = brands;
+                        CheckBoxListBrands.DataBind();
                         DropDownListMerchantCategories.DataSource =
                             db.MerchantCategories.OrderBy(mc => mc.Name).ToList();
                         DropDownListMerchantCategories.DataBind();
@@ -46,8 +72,8 @@ namespace Cowrie.Modules.ProductList
                             .Select(c => c.Colour)
                             .Distinct()
                             .OrderBy(c => c);
-                        DropDownListColours.DataSource = colours.ToList();
-                        DropDownListColours.DataBind();
+                        CheckBoxListColours.DataSource = colours.ToList();
+                        CheckBoxListColours.DataBind();
                         DropDownListDepartments.DataSource = db.Departments.OrderBy(s => s.Name).ToList();
                         DropDownListDepartments.DataBind();
                         BindSizes(db);
@@ -64,10 +90,12 @@ namespace Cowrie.Modules.ProductList
         private void BindSizes(SelectedHotelsEntities db)
         {
             var query = db.Products.Where(p => !p.IsDeleted).OfType<Cloth>() as IQueryable<Cloth>;
-            if (DropDownListBrands.SelectedValue != String.Empty)
+            IEnumerable<int> allCheckedBrands = from ListItem item in CheckBoxListBrands.Items
+                                                    where item.Selected
+                                                    select int.Parse(item.Value);
+            if (allCheckedBrands.Any())
             {
-                int brandId = int.Parse(DropDownListBrands.SelectedValue);
-                query = query.Where(c => c.BrandId == brandId);
+                query = query.Where(c => allCheckedBrands.Any(cb => c.BrandId == cb));
             }
             if (DropDownListMerchantCategories.SelectedValue != String.Empty)
             {
@@ -79,13 +107,19 @@ namespace Cowrie.Modules.ProductList
                 int styleId = int.Parse(DropDownListStyles.SelectedValue);
                 query = query.Where(c => c.Styles.Any(s => s.Id == styleId));
             }
-            if (DropDownListGenders.SelectedValue != String.Empty)
+            IEnumerable<String> allCheckedGenders = from ListItem item in CheckBoxListGenders.Items
+                where item.Selected
+                select item.Value;
+            if (allCheckedGenders.Any())
             {
-                query = query.Where(c => c.Gender == DropDownListGenders.SelectedValue);
+                query = query.Where(c => allCheckedGenders.Any(cg => c.Gender == cg));
             }
-            if (DropDownListColours.SelectedValue != String.Empty)
+            IEnumerable<String> allCheckedColours = from ListItem item in CheckBoxListColours.Items
+                                                    where item.Selected
+                                                    select item.Value;
+            if (allCheckedColours.Any())
             {
-                query = query.Where(c => c.Colour == DropDownListColours.SelectedValue);
+                query = query.Where(c => allCheckedColours.Any(cc => c.Colour == cc));
             }
             if (DropDownListDepartments.SelectedValue != String.Empty)
             {
@@ -107,10 +141,12 @@ namespace Cowrie.Modules.ProductList
         private void BindData(SelectedHotelsEntities db)
         {
             var query = db.Products.Where(p => !p.IsDeleted).OfType<Cloth>();
-            if (DropDownListBrands.SelectedValue != String.Empty)
+            IEnumerable<int> allCheckedBrands = from ListItem item in CheckBoxListBrands.Items
+                                                where item.Selected
+                                                select int.Parse(item.Value);
+            if (allCheckedBrands.Any())
             {
-                int brandId = int.Parse(DropDownListBrands.SelectedValue);
-                query = query.Where(c => c.BrandId == brandId);
+                query = query.Where(c => allCheckedBrands.Any(cb => c.BrandId == cb));
             }
             if (DropDownListMerchantCategories.SelectedValue != String.Empty)
             {
@@ -122,13 +158,19 @@ namespace Cowrie.Modules.ProductList
                 int styleId = int.Parse(DropDownListStyles.SelectedValue);
                 query = query.Where(c => c.Styles.Any(s => s.Id == styleId));
             }
-            if (DropDownListGenders.SelectedValue != String.Empty)
+            IEnumerable<String> allCheckedGenders = from ListItem item in CheckBoxListGenders.Items
+                                                    where item.Selected
+                                                    select item.Value;
+            if (allCheckedGenders.Any())
             {
-                query = query.Where(c => c.Gender == DropDownListGenders.SelectedValue);
+                query = query.Where(c => allCheckedGenders.Any(cg => c.Gender == cg));
             }
-            if (DropDownListColours.SelectedValue != String.Empty)
+            IEnumerable<String> allCheckedColours = from ListItem item in CheckBoxListColours.Items
+                                                    where item.Selected
+                                                    select item.Value;
+            if (allCheckedColours.Any())
             {
-                query = query.Where(c => c.Colour == DropDownListColours.SelectedValue);
+                query = query.Where(c => allCheckedColours.Any(cc => c.Colour == cc));
             }
             if (DropDownListDepartments.SelectedValue != String.Empty)
             {
@@ -165,6 +207,22 @@ namespace Cowrie.Modules.ProductList
         }
 
         #region IActionable Members
+        public ModuleActionCollection ModuleActions
+        {
+            get
+            {
+                ModuleActionCollection actions = new ModuleActionCollection();
+                ModuleAction urlEventAction = new ModuleAction(ModuleContext.GetNextActionID());
+                urlEventAction.Title = "Action Event Example";
+                urlEventAction.CommandName = "redirect";
+                urlEventAction.CommandArgument = "cancel";
+                urlEventAction.Url = "http://dotnetnuke.com";
+                urlEventAction.UseActionEvent = true;
+                urlEventAction.Secure = DotNetNuke.Security.SecurityAccessLevel.Admin;
+                actions.Add(urlEventAction);
+                return actions;
+            }
+        }
 
         #endregion
 
@@ -234,15 +292,7 @@ namespace Cowrie.Modules.ProductList
                 BindData(db);
             }
         }
-        protected void DropDownListGenders_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            using (SelectedHotelsEntities db = new SelectedHotelsEntities())
-            {
-                BindSizes(db);
-                BindData(db);
-            }
-        }
-        protected void DropDownListColours_SelectedIndexChanged(object sender, EventArgs e)
+        protected void CheckBoxListColours_SelectedIndexChanged(object sender, EventArgs e)
         {
             using (SelectedHotelsEntities db = new SelectedHotelsEntities())
             {
@@ -251,6 +301,23 @@ namespace Cowrie.Modules.ProductList
             }
         }
         protected void DropDownListDepartments_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            using (SelectedHotelsEntities db = new SelectedHotelsEntities())
+            {
+                BindSizes(db);
+                BindData(db);
+            }
+        }
+
+        protected void CheckBoxListGenders_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            using (SelectedHotelsEntities db = new SelectedHotelsEntities())
+            {
+                BindSizes(db);
+                BindData(db);
+            }
+        }
+        protected void CheckBoxListBrands_SelectedIndexChanged(object sender, EventArgs e)
         {
             using (SelectedHotelsEntities db = new SelectedHotelsEntities())
             {

@@ -2,15 +2,7 @@
     inherits="Cowrie.Modules.ProductList.Clothes" %>
 <%@ Import Namespace="Common" %>
 <%@ Register TagPrefix="telerik" Namespace="Telerik.Web.UI" Assembly="Telerik.Web.UI" %>
-<telerik:radskinmanager id="QsfSkinManager" runat="server" showchooser="false" />
-<telerik:radformdecorator id="QsfFromDecorator" runat="server" decoratedcontrols="All" enableroundedcorners="false" />
 <div class="category-selectors">
-    Brand
-    <asp:DropDownList ID="DropDownListBrands" runat="server" DataValueField="Id" DataTextField="Name" AppendDataBoundItems="True" AutoPostBack="True" OnSelectedIndexChanged="DropDownListBrands_SelectedIndexChanged" Width="250px">
-        <asp:ListItem Value="">All Brands</asp:ListItem>
-    </asp:DropDownList>
-    <br />
-    <br />
     Merchant Category
     <asp:DropDownList ID="DropDownListMerchantCategories" runat="server" DataValueField="Id" DataTextField="Name" Width="250px" AppendDataBoundItems="True" AutoPostBack="True" OnSelectedIndexChanged="DropDownListMerchantCategories_SelectedIndexChanged">
         <asp:ListItem Value="">All Merchant Categories</asp:ListItem>
@@ -23,26 +15,24 @@
     </asp:DropDownList>
     <br />
     <br />
-    Gender
-    <asp:DropDownList ID="DropDownListGenders" runat="server" Width="250px" AutoPostBack="True" OnSelectedIndexChanged="DropDownListGenders_SelectedIndexChanged">
-        <asp:ListItem Value="">All Genders</asp:ListItem>
-        <asp:ListItem Value="male">Male</asp:ListItem>
-        <asp:ListItem Value="female">Female</asp:ListItem>
-    </asp:DropDownList>
-    <br />
-    <br />
-    Colour
-    <asp:DropDownList ID="DropDownListColours" runat="server" Width="250px" AutoPostBack="True" AppendDataBoundItems="True" OnSelectedIndexChanged="DropDownListColours_SelectedIndexChanged">
-        <asp:ListItem Value="">All Colours</asp:ListItem>
-    </asp:DropDownList>
-    <br />
-    <br />
     Department
     <asp:DropDownList ID="DropDownListDepartments" runat="server" DataValueField="Id" DataTextField="Name" Width="250px" AppendDataBoundItems="True" AutoPostBack="True" OnSelectedIndexChanged="DropDownListDepartments_SelectedIndexChanged">
         <asp:ListItem Value="">All Departments</asp:ListItem>
     </asp:DropDownList>
 </div>
 <div class="sizes">
+    <h2>Filter by</h2>
+    <h3>Gender</h3>
+    <asp:CheckBoxList ID="CheckBoxListGenders" runat="server" AutoPostBack="True" OnSelectedIndexChanged="CheckBoxListGenders_SelectedIndexChanged">
+        <asp:ListItem Value="male">Male</asp:ListItem>
+        <asp:ListItem Value="female">Female</asp:ListItem>
+    </asp:CheckBoxList>
+    <h3>Colour</h3>
+    <asp:CheckBoxList ID="CheckBoxListColours" runat="server" AutoPostBack="True" OnSelectedIndexChanged="CheckBoxListColours_SelectedIndexChanged" RepeatColumns="2">
+    </asp:CheckBoxList>
+    <h3>Brand</h3>
+    <asp:CheckBoxList ID="CheckBoxListBrands" runat="server" AutoPostBack="True" OnSelectedIndexChanged="CheckBoxListBrands_SelectedIndexChanged" DataTextField="Name" DataValueField="Id">
+    </asp:CheckBoxList>
     <h3>Sizes</h3>
     <asp:Button ID="ButtonSearch1" runat="server" Text="Search" OnClick="ButtonSearch_Click" />
     <asp:CheckBoxList ID="CheckBoxListSizes" runat="server" AppendDataBoundItems="False">
