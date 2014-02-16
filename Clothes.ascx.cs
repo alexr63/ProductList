@@ -6,8 +6,11 @@ using System.Linq;
 using System.Web.UI.WebControls;
 using DotNetNuke.Entities.Modules;
 using DotNetNuke.Entities.Modules.Actions;
+using DotNetNuke.Entities.Modules.Definitions;
+using DotNetNuke.Entities.Portals;
 using DotNetNuke.Entities.Tabs;
 using DotNetNuke.Security;
+using DotNetNuke.Security.Permissions;
 using DotNetNuke.Services.Exceptions;
 using DotNetNuke.UI.Skins.Controls;
 using SelectedHotelsModel;
@@ -26,6 +29,106 @@ namespace Cowrie.Modules.ProductList
             switch (e.Action.CommandName)
             {
                 case "CreateBrandsSubtabs":
+                    //Create Tab
+                    TabController tabController = new TabController();
+
+                    TabInfo tab = new TabInfo();
+                    tab.PortalID = PortalId;
+                    tab.TabName = "Subtab";
+                    tab.Title = "Subtab";
+
+                    //works for include in menu option. if true, will be shown in menus, else will not be shown, we have to redirect internally
+                    tab.IsVisible = true;
+                    tab.DisableLink = false;
+
+                    //if this tab has any parents provide parent tab id, so that it will be shown in parent tab menus sub menu list, else is NULL         //and will be in main menu list
+                    tab.ParentId = TabId;
+                    tab.IsDeleted = false;
+                    tab.Url = "";
+                    tab.IsSuperTab = false;//if true, it has no parents, else false
+                    tab.SkinSrc = "[G]Skins/Artfolio001/page.ascx";//provide skin src, else will take default skin
+                    int tabId = tabController.AddTab(tab, true);//true to load defalut modules
+
+                    //Set Tab Permission
+                    TabPermissionController objTPC = new TabPermissionController();
+
+                    TabPermissionInfo tpi = new TabPermissionInfo();
+                    tpi.TabID = tabId;
+                    tpi.PermissionID = 3;//for view
+                    tpi.PermissionKey = "VIEW";
+                    tpi.PermissionName = "View Tab";
+                    tpi.AllowAccess = true;
+                    tpi.RoleID = 0; //Role ID of administrator         
+                    objTPC.AddTabPermission(tpi);
+
+                    TabPermissionInfo tpi1 = new TabPermissionInfo();
+                    tpi1.TabID = tabId;
+                    tpi1.PermissionID = 4;//for edit
+                    tpi1.PermissionKey = "EDIT";
+                    tpi1.PermissionName = "Edit Tab";
+                    tpi1.AllowAccess = true;
+                    tpi1.RoleID = 0; //Role ID of administrator       
+                    objTPC.AddTabPermission(tpi1);
+
+                    TabPermissionInfo tpi4 = new TabPermissionInfo();
+                    tpi4.TabID = tabId;
+                    tpi4.PermissionID = 3;
+                    tpi4.PermissionKey = "VIEW";
+                    tpi4.PermissionName = "View Tab";
+                    tpi4.AllowAccess = true;
+                    tpi4.RoleID = 1; //Role ID of Registered users     
+                    tpi4.RoleName = "Registered Users";
+                    tpi4.PermissionCode = "SYSTEM_TAB";
+                    objTPC.AddTabPermission(tpi4);
+
+                    //Add Module
+                    DesktopModuleController objDMC = new DesktopModuleController();
+                    DesktopModuleInfo desktopModuleInfo = objDMC.GetDesktopModuleByName("ProductList");
+
+                    ModuleDefinitionInfo moduleDefinitionInfo = new ModuleDefinitionInfo();
+                    ModuleInfo moduleInfo = new ModuleInfo();
+                    moduleInfo.PortalID = PortalId;
+                    moduleInfo.TabID = tabId;
+                    moduleInfo.ModuleOrder = 1;
+                    moduleInfo.ModuleTitle = "Product List";
+                    moduleInfo.PaneName = "Product List";
+                    moduleInfo.ModuleDefID = 160;
+                    moduleInfo.CacheTime = moduleDefinitionInfo.DefaultCacheTime;//Default Cache Time is 0
+                    moduleInfo.InheritViewPermissions = true;//Inherit View Permissions from Tab
+                    moduleInfo.AllTabs = false;
+
+                    ModuleController moduleController = new ModuleController();
+                    int moduleId = moduleController.AddModule(moduleInfo);
+
+                    //Set Module Permission
+                    ModulePermissionController objMPC = new ModulePermissionController();
+
+                    ModulePermissionInfo mpi1 = new ModulePermissionInfo();
+                    mpi1.ModuleID = moduleId;
+                    mpi1.PermissionID = 1;//View Permission
+                    mpi1.AllowAccess = true;
+                    mpi1.RoleID = 0;//Role ID of Administrator
+                    objMPC.AddModulePermission(mpi1);
+
+                    ModulePermissionInfo mpi2 = new ModulePermissionInfo();
+                    mpi2.ModuleID = moduleId;
+                    mpi2.PermissionID = 2;//Edit Permission
+                    mpi2.AllowAccess = true;
+                    mpi2.RoleID = 0;//Role ID of Administrator
+                    objMPC.AddModulePermission(mpi2);
+
+                    ModulePermissionInfo mpi5 = new ModulePermissionInfo();
+                    mpi5.ModuleID = moduleId;
+                    mpi5.PermissionID = 1;//View Permission
+                    mpi5.AllowAccess = true;
+                    mpi5.RoleID = 1;//Role ID of Registered User
+                    objMPC.AddModulePermission(mpi5);
+
+                    //Clear Cache
+                    DotNetNuke.Common.Utilities.DataCache.ClearModuleCache(tab.TabID);
+                    DotNetNuke.Common.Utilities.DataCache.ClearTabsCache(PortalId);
+                    DotNetNuke.Common.Utilities.DataCache.ClearPortalCache(PortalId, false);
+
                     DotNetNuke.UI.Skins.Skin.AddModuleMessage(this, "Brands Subtabs Created", ModuleMessage.ModuleMessageType.GreenSuccess);
                     break;
             }
