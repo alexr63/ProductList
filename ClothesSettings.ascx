@@ -25,4 +25,16 @@
             </telerik:RadTreeView>
         </td>
     </tr>
+    <tr>
+        <td class="SubHead" width="150" valign="top">
+            <dnn:Label ID="LabelDepartment" runat="server" ControlName="DropDownListDepartments" Suffix=":"
+                Text="Department">
+            </dnn:Label>
+        </td>
+        <td valign="bottom">
+            <asp:DropDownList ID="DropDownListDepartments" runat="server" DataValueField="Id" DataTextField="Name" Width="250px" AppendDataBoundItems="True">
+                <asp:ListItem Value="">All Departments</asp:ListItem>
+            </asp:DropDownList>
+        </td>
+    </tr>
 </table>

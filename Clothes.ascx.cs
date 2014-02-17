@@ -47,6 +47,7 @@ namespace Cowrie.Modules.ProductList
                     tab.Url = "";
                     tab.IsSuperTab = false;//if true, it has no parents, else false
                     tab.SkinSrc = "[G]Skins/Artfolio001/page.ascx";//provide skin src, else will take default skin
+                    tab.ContainerSrc = "[G]Containers/Artfolio001/Block.ascx";
                     int tabId = tabController.AddTab(tab, true);//true to load defalut modules
 
                     //Set Tab Permission
@@ -99,6 +100,9 @@ namespace Cowrie.Modules.ProductList
 
                     ModuleController moduleController = new ModuleController();
                     int moduleId = moduleController.AddModule(moduleInfo);
+
+                    //Set Module Settings
+                    moduleInfo.ModuleSettings.Add("category", 4125);
 
                     //Set Module Permission
                     ModulePermissionController objMPC = new ModulePermissionController();

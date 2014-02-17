@@ -26,6 +26,9 @@ namespace Cowrie.Modules.ProductList
                 {
                     using (SelectedHotelsEntities db = new SelectedHotelsEntities())
                     {
+                        DropDownListDepartments.DataSource = db.Departments.OrderBy(s => s.Name).ToList();
+                        DropDownListDepartments.DataBind();
+
                         object setting = Settings["category"];
                         int? categoryId = null;
                         if (setting != null)
@@ -35,6 +38,13 @@ namespace Cowrie.Modules.ProductList
                             LabelCurrentCategory.Text = category.Name;
                         }
                         PopulateTree(RadTreeViewCategories, db, null, categoryId);
+
+                        setting = Settings["department"];
+                        if (setting != null)
+                        {
+                            int departmentId = Convert.ToInt32(setting);
+                            DropDownListDepartments.SelectedValue = departmentId.ToString();
+                        }
                     }
                 }
             }
@@ -53,6 +63,14 @@ namespace Cowrie.Modules.ProductList
             {
                 ModuleController controller = new ModuleController();
                 controller.UpdateModuleSetting(ModuleId, "category", RadTreeViewCategories.SelectedValue);
+                if (DropDownListDepartments.SelectedValue != String.Empty)
+                {
+                    controller.UpdateModuleSetting(ModuleId, "department", DropDownListDepartments.SelectedValue);
+                }
+                else
+                {
+                    controller.DeleteModuleSetting(ModuleId, "department");
+                }
             }
             catch (Exception ex)
             {
