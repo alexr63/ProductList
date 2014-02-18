@@ -13,42 +13,6 @@ namespace Cowrie.Modules.ProductList {
     public partial class ClothesSettings {
         
         /// <summary>
-        /// DnnLabelCurrentCategory control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DotNetNuke.UI.UserControls.LabelControl DnnLabelCurrentCategory;
-        
-        /// <summary>
-        /// LabelCurrentCategory control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label LabelCurrentCategory;
-        
-        /// <summary>
-        /// LabelCategory control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DotNetNuke.UI.UserControls.LabelControl LabelCategory;
-        
-        /// <summary>
-        /// RadTreeViewCategories control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::Telerik.Web.UI.RadTreeView RadTreeViewCategories;
-        
-        /// <summary>
         /// LabelDepartment control.
         /// </summary>
         /// <remarks>

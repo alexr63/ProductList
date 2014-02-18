@@ -13,12 +13,6 @@
     <asp:DropDownList ID="DropDownListStyles" runat="server" DataValueField="Id" DataTextField="Name" Width="250px" AppendDataBoundItems="True" AutoPostBack="True" OnSelectedIndexChanged="DropDownListStyles_SelectedIndexChanged">
         <asp:ListItem Value="">All Styles</asp:ListItem>
     </asp:DropDownList>
-    <br />
-    <br />
-    Department
-    <asp:DropDownList ID="DropDownListDepartments" runat="server" DataValueField="Id" DataTextField="Name" Width="250px" AppendDataBoundItems="True" AutoPostBack="True" OnSelectedIndexChanged="DropDownListDepartments_SelectedIndexChanged">
-        <asp:ListItem Value="">All Departments</asp:ListItem>
-    </asp:DropDownList>
 </div>
 <div class="sizes">
     <h2>Filter by</h2>

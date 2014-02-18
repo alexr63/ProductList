@@ -19,6 +19,7 @@ namespace Cowrie.Modules.ProductList
 {
     public partial class Clothes : PortalModuleBase, IActionable
     {
+        private int categoryId = 4125;
         public int DetailsTabId { get; set; }
 
         protected void Page_Init(object sender, EventArgs e)
@@ -28,123 +29,131 @@ namespace Cowrie.Modules.ProductList
         {
             switch (e.Action.CommandName)
             {
-                case "CreateBrandsSubtabs":
-                    //Create Tab
-                    TabController tabController = new TabController();
-
-                    TabInfo tab = new TabInfo();
-                    tab.PortalID = PortalId;
-                    tab.TabName = "Subtab";
-                    tab.Title = "Subtab";
-
-                    //works for include in menu option. if true, will be shown in menus, else will not be shown, we have to redirect internally
-                    tab.IsVisible = true;
-                    tab.DisableLink = false;
-
-                    //if this tab has any parents provide parent tab id, so that it will be shown in parent tab menus sub menu list, else is NULL         //and will be in main menu list
-                    tab.ParentId = TabId;
-                    tab.IsDeleted = false;
-                    tab.Url = "";
-                    tab.IsSuperTab = false;//if true, it has no parents, else false
-                    tab.SkinSrc = "[G]Skins/Artfolio001/page.ascx";//provide skin src, else will take default skin
-                    tab.ContainerSrc = "[G]Containers/Artfolio001/Block.ascx";
-                    int tabId = tabController.AddTab(tab, true);//true to load defalut modules
-
-                    //Set Tab Permission
-                    TabPermissionController objTPC = new TabPermissionController();
-
-                    TabPermissionInfo tpi = new TabPermissionInfo();
-                    tpi.TabID = tabId;
-                    tpi.PermissionID = 3;//for view
-                    tpi.PermissionKey = "VIEW";
-                    tpi.PermissionName = "View Tab";
-                    tpi.AllowAccess = true;
-                    tpi.RoleID = 0; //Role ID of administrator         
-                    objTPC.AddTabPermission(tpi);
-
-                    TabPermissionInfo tpi1 = new TabPermissionInfo();
-                    tpi1.TabID = tabId;
-                    tpi1.PermissionID = 4;//for edit
-                    tpi1.PermissionKey = "EDIT";
-                    tpi1.PermissionName = "Edit Tab";
-                    tpi1.AllowAccess = true;
-                    tpi1.RoleID = 0; //Role ID of administrator       
-                    objTPC.AddTabPermission(tpi1);
-
-                    TabPermissionInfo tpi4 = new TabPermissionInfo();
-                    tpi4.TabID = tabId;
-                    tpi4.PermissionID = 3;
-                    tpi4.PermissionKey = "VIEW";
-                    tpi4.PermissionName = "View Tab";
-                    tpi4.AllowAccess = true;
-                    tpi4.RoleID = 1; //Role ID of Registered users     
-                    tpi4.RoleName = "Registered Users";
-                    tpi4.PermissionCode = "SYSTEM_TAB";
-                    objTPC.AddTabPermission(tpi4);
-
-                    //Add Module
-                    DesktopModuleController objDMC = new DesktopModuleController();
-                    DesktopModuleInfo desktopModuleInfo = objDMC.GetDesktopModuleByName("ProductList");
-
-                    ModuleDefinitionInfo moduleDefinitionInfo = new ModuleDefinitionInfo();
-                    ModuleInfo moduleInfo = new ModuleInfo();
-                    moduleInfo.PortalID = PortalId;
-                    moduleInfo.TabID = tabId;
-                    moduleInfo.ModuleOrder = 1;
-                    moduleInfo.ModuleTitle = "Product List";
-                    moduleInfo.PaneName = "Product List";
-                    moduleInfo.ModuleDefID = 160;
-                    moduleInfo.CacheTime = moduleDefinitionInfo.DefaultCacheTime;//Default Cache Time is 0
-                    moduleInfo.InheritViewPermissions = true;//Inherit View Permissions from Tab
-                    moduleInfo.AllTabs = false;
-
-                    ModuleController moduleController = new ModuleController();
-                    int moduleId = moduleController.AddModule(moduleInfo);
-
-                    //Set Module Settings
-                    moduleInfo.ModuleSettings.Add("category", 4125);
-
-                    //Set Module Permission
-                    ModulePermissionController objMPC = new ModulePermissionController();
-
-                    ModulePermissionInfo mpi1 = new ModulePermissionInfo();
-                    mpi1.ModuleID = moduleId;
-                    mpi1.PermissionID = 1;//View Permission
-                    mpi1.AllowAccess = true;
-                    mpi1.RoleID = 0;//Role ID of Administrator
-                    objMPC.AddModulePermission(mpi1);
-
-                    ModulePermissionInfo mpi2 = new ModulePermissionInfo();
-                    mpi2.ModuleID = moduleId;
-                    mpi2.PermissionID = 2;//Edit Permission
-                    mpi2.AllowAccess = true;
-                    mpi2.RoleID = 0;//Role ID of Administrator
-                    objMPC.AddModulePermission(mpi2);
-
-                    ModulePermissionInfo mpi5 = new ModulePermissionInfo();
-                    mpi5.ModuleID = moduleId;
-                    mpi5.PermissionID = 1;//View Permission
-                    mpi5.AllowAccess = true;
-                    mpi5.RoleID = 1;//Role ID of Registered User
-                    objMPC.AddModulePermission(mpi5);
+                case "CreateDepartmentsSubtabs":
+                    using (SelectedHotelsEntities db = new SelectedHotelsEntities())
+                    {
+                        foreach (Department department in db.Departments)
+                        {
+                            if (department.Name.StartsWith("All"))
+                            {
+                                var tab = CreateSubTab(department.Name, department.Id);
+                                //Clear Cache
+                                DotNetNuke.Common.Utilities.DataCache.ClearModuleCache(tab.TabID);
+                            }
+                        }
+                    }
 
                     //Clear Cache
-                    DotNetNuke.Common.Utilities.DataCache.ClearModuleCache(tab.TabID);
                     DotNetNuke.Common.Utilities.DataCache.ClearTabsCache(PortalId);
                     DotNetNuke.Common.Utilities.DataCache.ClearPortalCache(PortalId, false);
 
-                    DotNetNuke.UI.Skins.Skin.AddModuleMessage(this, "Brands Subtabs Created", ModuleMessage.ModuleMessageType.GreenSuccess);
+                    DotNetNuke.UI.Skins.Skin.AddModuleMessage(this, "Departments Subtabs Created", ModuleMessage.ModuleMessageType.GreenSuccess);
                     break;
             }
         }
+
+        private TabInfo CreateSubTab(string tabName, int departmentId)
+        {
+            //Create Tab
+            TabController tabController = new TabController();
+
+            TabInfo tab = new TabInfo();
+            tab.PortalID = PortalId;
+            tab.TabName = tabName;
+            tab.Title = tabName;
+
+            //works for include in menu option. if true, will be shown in menus, else will not be shown, we have to redirect internally
+            tab.IsVisible = true;
+            tab.DisableLink = false;
+
+            //if this tab has any parents provide parent tab id, so that it will be shown in parent tab menus sub menu list, else is NULL         //and will be in main menu list
+            tab.ParentId = TabId;
+            tab.IsDeleted = false;
+            tab.Url = "";
+            tab.IsSuperTab = false; //if true, it has no parents, else false
+            tab.SkinSrc = "[G]Skins/Artfolio001/page.ascx"; //provide skin src, else will take default skin
+            tab.ContainerSrc = "[G]Containers/Artfolio001/Block.ascx";
+            int tabId = tabController.AddTab(tab, true); //true to load defalut modules
+
+            //Set Tab Permission
+            TabPermissionController objTPC = new TabPermissionController();
+
+            TabPermissionInfo tpi = new TabPermissionInfo();
+            tpi.TabID = tabId;
+            tpi.PermissionID = 3; //for view
+            tpi.PermissionKey = "VIEW";
+            tpi.PermissionName = "View Tab";
+            tpi.AllowAccess = true;
+            tpi.RoleID = 0; //Role ID of administrator         
+            objTPC.AddTabPermission(tpi);
+
+            TabPermissionInfo tpi1 = new TabPermissionInfo();
+            tpi1.TabID = tabId;
+            tpi1.PermissionID = 4; //for edit
+            tpi1.PermissionKey = "EDIT";
+            tpi1.PermissionName = "Edit Tab";
+            tpi1.AllowAccess = true;
+            tpi1.RoleID = 0; //Role ID of administrator       
+            objTPC.AddTabPermission(tpi1);
+
+            TabPermissionInfo tpi4 = new TabPermissionInfo();
+            tpi4.TabID = tabId;
+            tpi4.PermissionID = 3;
+            tpi4.PermissionKey = "VIEW";
+            tpi4.PermissionName = "View Tab";
+            tpi4.AllowAccess = true;
+            tpi4.RoleID = -1; //All users     
+            objTPC.AddTabPermission(tpi4);
+
+            //Add Module
+            DesktopModuleController objDMC = new DesktopModuleController();
+            DesktopModuleInfo desktopModuleInfo = objDMC.GetDesktopModuleByName("ProductList");
+
+            ModuleDefinitionInfo moduleDefinitionInfo = new ModuleDefinitionInfo();
+            ModuleInfo moduleInfo = new ModuleInfo();
+            moduleInfo.PortalID = PortalId;
+            moduleInfo.TabID = tabId;
+            moduleInfo.ModuleOrder = 1;
+            moduleInfo.ModuleTitle = "Product List";
+            moduleInfo.PaneName = "Product List";
+            moduleInfo.ModuleDefID = 160;
+            moduleInfo.CacheTime = moduleDefinitionInfo.DefaultCacheTime; //Default Cache Time is 0
+            moduleInfo.InheritViewPermissions = true; //Inherit View Permissions from Tab
+            moduleInfo.AllTabs = false;
+            moduleInfo.ModuleSettings["department"] = departmentId;
+
+            ModuleController moduleController = new ModuleController();
+            int moduleId = moduleController.AddModule(moduleInfo);
+
+            //Set Module Permission
+            ModulePermissionController objMPC = new ModulePermissionController();
+
+            ModulePermissionInfo mpi1 = new ModulePermissionInfo();
+            mpi1.ModuleID = moduleId;
+            mpi1.PermissionID = 1; //View Permission
+            mpi1.AllowAccess = true;
+            mpi1.RoleID = 0; //Role ID of Administrator
+            objMPC.AddModulePermission(mpi1);
+
+            ModulePermissionInfo mpi2 = new ModulePermissionInfo();
+            mpi2.ModuleID = moduleId;
+            mpi2.PermissionID = 2; //Edit Permission
+            mpi2.AllowAccess = true;
+            mpi2.RoleID = 0; //Role ID of Administrator
+            objMPC.AddModulePermission(mpi2);
+
+            ModulePermissionInfo mpi5 = new ModulePermissionInfo();
+            mpi5.ModuleID = moduleId;
+            mpi5.PermissionID = 1; //View Permission
+            mpi5.AllowAccess = true;
+            mpi5.RoleID = 1; //Role ID of Registered User
+            objMPC.AddModulePermission(mpi5);
+            return tab;
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             AddActionHandler(ModuleAction_Click);
-
-            if (Settings["category"] == null)
-            {
-                return;
-            }
 
             var childTabs = TabController.GetTabsByParent(TabId, PortalId);
             if (childTabs.Count() > 0)
@@ -172,8 +181,6 @@ namespace Cowrie.Modules.ProductList
                             .OrderBy(c => c);
                         CheckBoxListColours.DataSource = colours.ToList();
                         CheckBoxListColours.DataBind();
-                        DropDownListDepartments.DataSource = db.Departments.OrderBy(s => s.Name).ToList();
-                        DropDownListDepartments.DataBind();
                         BindSizes(db);
                         BindData(db);
                     }
@@ -219,9 +226,9 @@ namespace Cowrie.Modules.ProductList
             {
                 query = query.Where(c => allCheckedColours.Any(cc => c.Colour == cc));
             }
-            if (DropDownListDepartments.SelectedValue != String.Empty)
+            if (Settings["department"] != null)
             {
-                int departmentId = int.Parse(DropDownListDepartments.SelectedValue);
+                int departmentId = Convert.ToInt32(Settings["department"]);
                 query = query.Where(c => c.Departments.Any(d => d.Id == departmentId));
             }
             var clothSizes =
@@ -270,9 +277,9 @@ namespace Cowrie.Modules.ProductList
             {
                 query = query.Where(c => allCheckedColours.Any(cc => c.Colour == cc));
             }
-            if (DropDownListDepartments.SelectedValue != String.Empty)
+            if (Settings["department"] != null)
             {
-                int departmentId = int.Parse(DropDownListDepartments.SelectedValue);
+                int departmentId = Convert.ToInt32(Settings["department"]);
                 query = query.Where(c => c.Departments.Any(d => d.Id == departmentId));
             }
 
@@ -313,7 +320,7 @@ namespace Cowrie.Modules.ProductList
                 ModuleActionCollection actions = new ModuleActionCollection
                 {
                     {
-                        GetNextActionID(), "Create Brands Subtabs", "CreateBrandsSubtabs", String.Empty,
+                        GetNextActionID(), "Create Departments Subtabs", "CreateDepartmentsSubtabs", String.Empty,
                         String.Empty,
                         String.Empty, true, SecurityAccessLevel.Admin, true, false
                     }
@@ -361,15 +368,6 @@ namespace Cowrie.Modules.ProductList
         {
             using (SelectedHotelsEntities db = new SelectedHotelsEntities())
             {
-                BindData(db);
-            }
-        }
-
-        protected void DropDownListBrands_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            using (SelectedHotelsEntities db = new SelectedHotelsEntities())
-            {
-                BindSizes(db);
                 BindData(db);
             }
         }
