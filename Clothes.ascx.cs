@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Web.UI.WebControls;
 using DotNetNuke.Entities.Modules;
 using DotNetNuke.Entities.Modules.Actions;
@@ -191,8 +192,9 @@ namespace Cowrie.Modules.ProductList
                             .OrderBy(c => c);
                         CheckBoxListColours.DataSource = colours.ToList();
                         CheckBoxListColours.DataBind();
-                        BindSizes(db);
-                        BindData(db);
+
+                        BindSizes(FilterClothes(clothes));
+                        BindData(FilterClothes(clothes));
                     }
                 }
             }
@@ -202,19 +204,10 @@ namespace Cowrie.Modules.ProductList
             }
         }
 
-        private void BindSizes(SelectedHotelsEntities db)
+        private void BindSizes(IQueryable<Cloth> clothes)
         {
-            int? departmentId = null;
-            if (Settings["department"] != null)
-            {
-                departmentId = Convert.ToInt32(Settings["department"]);
-            }
-            var clothes = FilterClothes(GetClothes(db, departmentId));
             var clothSizes =
-                db.ClothSizes.Where(cs => clothes.Any(c => c.Id == cs.ClothId))
-                    .Select(c => c.Size)
-                    .Distinct()
-                    .OrderBy(cs => cs);
+                clothes.SelectMany(c => c.ClothSizes).Select(cs => cs.Size).Distinct().OrderBy(cs => cs);
 
             CheckBoxListSizes.DataSource = clothSizes.ToList();
             CheckBoxListSizes.DataBind();
@@ -265,14 +258,8 @@ namespace Cowrie.Modules.ProductList
             return clothes;
         }
 
-        private void BindData(SelectedHotelsEntities db)
+        private void BindData(IQueryable<Cloth> clothes)
         {
-            int? departmentId = null;
-            if (Settings["department"] != null)
-            {
-                departmentId = Convert.ToInt32(Settings["department"]);
-            }
-            var clothes = FilterClothes(GetClothes(db, departmentId));
             List<string> selectedSizes = new List<string>();
             if (!CheckBoxListSizes.Items[0].Selected)
             {
@@ -331,9 +318,21 @@ namespace Cowrie.Modules.ProductList
 
         protected void DropDownListSortCriterias_SelectedIndexChanged(object sender, EventArgs e)
         {
+            RefreshData();
+        }
+
+        private void RefreshData()
+        {
             using (SelectedHotelsEntities db = new SelectedHotelsEntities())
             {
-                BindData(db);
+                int? departmentId = null;
+                if (Settings["department"] != null)
+                {
+                    departmentId = Convert.ToInt32(Settings["department"]);
+                }
+                var clothes = GetClothes(db, departmentId);
+
+                BindData(FilterClothes(clothes));
             }
         }
 
@@ -347,59 +346,48 @@ namespace Cowrie.Modules.ProductList
             //set current page startindex, max rows and rebind to false
             DataPagerContent.SetPageProperties(e.StartRowIndex, e.MaximumRows, false);
 
-            //rebind List View
-            using (SelectedHotelsEntities db = new SelectedHotelsEntities())
-            {
-                BindData(db);
-            }
+            RefreshData();
         }
 
         protected void ButtonSearch_Click(object sender, EventArgs e)
         {
-            using (SelectedHotelsEntities db = new SelectedHotelsEntities())
-            {
-                BindData(db);
-            }
+            RefreshData();
         }
         protected void CheckBoxListStyles_SelectedIndexChanged(object sender, EventArgs e)
         {
-            using (SelectedHotelsEntities db = new SelectedHotelsEntities())
-            {
-                BindSizes(db);
-                BindData(db);
-            }
+            RefreshSizesAndData();
         }
         protected void CheckBoxListColours_SelectedIndexChanged(object sender, EventArgs e)
         {
-            using (SelectedHotelsEntities db = new SelectedHotelsEntities())
-            {
-                BindSizes(db);
-                BindData(db);
-            }
+            RefreshSizesAndData();
         }
         protected void DropDownListDepartments_SelectedIndexChanged(object sender, EventArgs e)
         {
-            using (SelectedHotelsEntities db = new SelectedHotelsEntities())
-            {
-                BindSizes(db);
-                BindData(db);
-            }
+            RefreshSizesAndData();
         }
 
         protected void CheckBoxListGenders_SelectedIndexChanged(object sender, EventArgs e)
         {
-            using (SelectedHotelsEntities db = new SelectedHotelsEntities())
-            {
-                BindSizes(db);
-                BindData(db);
-            }
+            RefreshSizesAndData();
         }
         protected void CheckBoxListBrands_SelectedIndexChanged(object sender, EventArgs e)
         {
+            RefreshSizesAndData();
+        }
+
+        private void RefreshSizesAndData()
+        {
             using (SelectedHotelsEntities db = new SelectedHotelsEntities())
             {
-                BindSizes(db);
-                BindData(db);
+                int? departmentId = null;
+                if (Settings["department"] != null)
+                {
+                    departmentId = Convert.ToInt32(Settings["department"]);
+                }
+                var clothes = GetClothes(db, departmentId);
+
+                BindSizes(FilterClothes(clothes));
+                BindData(FilterClothes(clothes));
             }
         }
     }
