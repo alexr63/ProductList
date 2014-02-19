@@ -1,6 +1,7 @@
 ﻿// Copyright (c) 2012 Cowrie
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.UI.WebControls;
@@ -155,10 +156,12 @@ namespace Cowrie.Modules.ProductList
         {
             AddActionHandler(ModuleAction_Click);
 
-            var childTabs = TabController.GetTabsByParent(TabId, PortalId);
-            if (childTabs.Count() > 0)
+            ModuleController moduleController = new ModuleController();
+            ArrayList hotelListModules = moduleController.GetModulesByDefinition(PortalId, "Cloth Details");
+            if (hotelListModules.Count > 0)
             {
-                DetailsTabId = childTabs[0].TabID;
+                ModuleInfo module = hotelListModules.OfType<ModuleInfo>().First();
+                DetailsTabId = module.TabID;
             }
 
             try
@@ -167,15 +170,22 @@ namespace Cowrie.Modules.ProductList
                 {
                     using (SelectedHotelsEntities db = new SelectedHotelsEntities())
                     {
-                        var brands = db.Brands.OrderByDescending(b => b.Clothes.Count).Take(10).OrderBy(b => b.Name).ToList();
+                        int? departmentId = null;
+                        if (Settings["department"] != null)
+                        {
+                            departmentId = Convert.ToInt32(Settings["department"]);
+                        }
+                        var clothes = GetClothes(db, departmentId);
+
+                        var brands = db.Brands.Where(b => b.Clothes.Intersect(clothes).Any()).OrderByDescending(b => b.Clothes.Count).Take(10).OrderBy(b => b.Name).ToList();
                         CheckBoxListBrands.DataSource = brands;
                         CheckBoxListBrands.DataBind();
-                        DropDownListMerchantCategories.DataSource =
-                            db.MerchantCategories.OrderBy(mc => mc.Name).ToList();
-                        DropDownListMerchantCategories.DataBind();
-                        DropDownListStyles.DataSource = db.Styles.OrderBy(s => s.Name).ToList();
-                        DropDownListStyles.DataBind();
-                        var colours = db.Products.Where(p => !p.IsDeleted).OfType<Cloth>()
+
+                        var styles = db.Styles.Where(s => s.Clothes.Intersect(clothes).Any()).OrderByDescending(b => b.Clothes.Count).Take(10).OrderBy(s => s.Name).ToList();
+                        CheckBoxListStyles.DataSource = styles;
+                        CheckBoxListStyles.DataBind();
+
+                        var colours = clothes
                             .Select(c => c.Colour)
                             .Distinct()
                             .OrderBy(c => c);
@@ -194,45 +204,14 @@ namespace Cowrie.Modules.ProductList
 
         private void BindSizes(SelectedHotelsEntities db)
         {
-            var query = db.Products.Where(p => !p.IsDeleted).OfType<Cloth>() as IQueryable<Cloth>;
-            IEnumerable<int> allCheckedBrands = from ListItem item in CheckBoxListBrands.Items
-                                                    where item.Selected
-                                                    select int.Parse(item.Value);
-            if (allCheckedBrands.Any())
-            {
-                query = query.Where(c => allCheckedBrands.Any(cb => c.BrandId == cb));
-            }
-            if (DropDownListMerchantCategories.SelectedValue != String.Empty)
-            {
-                int categoryId = int.Parse(DropDownListMerchantCategories.SelectedValue);
-                query = query.Where(c => c.MerchantCategoryId == categoryId);
-            }
-            if (DropDownListStyles.SelectedValue != String.Empty)
-            {
-                int styleId = int.Parse(DropDownListStyles.SelectedValue);
-                query = query.Where(c => c.Styles.Any(s => s.Id == styleId));
-            }
-            IEnumerable<String> allCheckedGenders = from ListItem item in CheckBoxListGenders.Items
-                where item.Selected
-                select item.Value;
-            if (allCheckedGenders.Any())
-            {
-                query = query.Where(c => allCheckedGenders.Any(cg => c.Gender == cg));
-            }
-            IEnumerable<String> allCheckedColours = from ListItem item in CheckBoxListColours.Items
-                                                    where item.Selected
-                                                    select item.Value;
-            if (allCheckedColours.Any())
-            {
-                query = query.Where(c => allCheckedColours.Any(cc => c.Colour == cc));
-            }
+            int? departmentId = null;
             if (Settings["department"] != null)
             {
-                int departmentId = Convert.ToInt32(Settings["department"]);
-                query = query.Where(c => c.Departments.Any(d => d.Id == departmentId));
+                departmentId = Convert.ToInt32(Settings["department"]);
             }
+            var clothes = FilterClothes(GetClothes(db, departmentId));
             var clothSizes =
-                db.ClothSizes.Where(cs => query.Any(c => c.Id == cs.ClothId))
+                db.ClothSizes.Where(cs => clothes.Any(c => c.Id == cs.ClothId))
                     .Select(c => c.Size)
                     .Distinct()
                     .OrderBy(cs => cs);
@@ -243,46 +222,57 @@ namespace Cowrie.Modules.ProductList
             CheckBoxListSizes.SelectedIndex = 0;
         }
 
-        private void BindData(SelectedHotelsEntities db)
+        private IQueryable<Cloth> GetClothes(SelectedHotelsEntities db, int? departmentId)
         {
-            var query = db.Products.Where(p => !p.IsDeleted).OfType<Cloth>();
+            var clothes = db.Products.Where(p => !p.IsDeleted).OfType<Cloth>() as IQueryable<Cloth>;
+            if (departmentId.HasValue)
+            {
+                clothes = clothes.Where(c => c.Departments.Any(d => d.Id == departmentId));
+            }
+            return clothes;
+        }
+
+        private IQueryable<Cloth> FilterClothes(IQueryable<Cloth> clothes)
+        {
             IEnumerable<int> allCheckedBrands = from ListItem item in CheckBoxListBrands.Items
-                                                where item.Selected
-                                                select int.Parse(item.Value);
+                where item.Selected
+                select int.Parse(item.Value);
             if (allCheckedBrands.Any())
             {
-                query = query.Where(c => allCheckedBrands.Any(cb => c.BrandId == cb));
+                clothes = clothes.Where(c => allCheckedBrands.Any(cb => c.BrandId == cb));
             }
-            if (DropDownListMerchantCategories.SelectedValue != String.Empty)
+            IEnumerable<int> allCheckedStyles = from ListItem item in CheckBoxListStyles.Items
+                where item.Selected
+                select int.Parse(item.Value);
+            if (allCheckedStyles.Any())
             {
-                int categoryId = int.Parse(DropDownListMerchantCategories.SelectedValue);
-                query = query.Where(c => c.MerchantCategoryId == categoryId);
-            }
-            if (DropDownListStyles.SelectedValue != String.Empty)
-            {
-                int styleId = int.Parse(DropDownListStyles.SelectedValue);
-                query = query.Where(c => c.Styles.Any(s => s.Id == styleId));
+                clothes = clothes.Where(c => allCheckedStyles.Any(cs => c.Styles.Any(s => s.Id == cs)));
             }
             IEnumerable<String> allCheckedGenders = from ListItem item in CheckBoxListGenders.Items
-                                                    where item.Selected
-                                                    select item.Value;
+                where item.Selected
+                select item.Value;
             if (allCheckedGenders.Any())
             {
-                query = query.Where(c => allCheckedGenders.Any(cg => c.Gender == cg));
+                clothes = clothes.Where(c => allCheckedGenders.Any(cg => c.Gender == cg));
             }
             IEnumerable<String> allCheckedColours = from ListItem item in CheckBoxListColours.Items
-                                                    where item.Selected
-                                                    select item.Value;
+                where item.Selected
+                select item.Value;
             if (allCheckedColours.Any())
             {
-                query = query.Where(c => allCheckedColours.Any(cc => c.Colour == cc));
+                clothes = clothes.Where(c => allCheckedColours.Any(cc => c.Colour == cc));
             }
+            return clothes;
+        }
+
+        private void BindData(SelectedHotelsEntities db)
+        {
+            int? departmentId = null;
             if (Settings["department"] != null)
             {
-                int departmentId = Convert.ToInt32(Settings["department"]);
-                query = query.Where(c => c.Departments.Any(d => d.Id == departmentId));
+                departmentId = Convert.ToInt32(Settings["department"]);
             }
-
+            var clothes = FilterClothes(GetClothes(db, departmentId));
             List<string> selectedSizes = new List<string>();
             if (!CheckBoxListSizes.Items[0].Selected)
             {
@@ -293,22 +283,22 @@ namespace Cowrie.Modules.ProductList
                         selectedSizes.Add(item.Value);
                     }
                 }
-                query = from c in query
+                clothes = from c in clothes
                         where c.ClothSizes.Any(cs => selectedSizes.Any(s => s == cs.Size))
                         select c;
             }
 
             if (DropDownListSortCriterias.SelectedValue == "Name")
             {
-                ListViewContent.DataSource = query.OrderBy(c => c.Name).ToList();
+                ListViewContent.DataSource = clothes.OrderBy(c => c.Name).ToList();
             }
             else
             {
-                ListViewContent.DataSource = query.OrderBy(c => c.UnitCost).ToList();
+                ListViewContent.DataSource = clothes.OrderBy(c => c.UnitCost).ToList();
             }
             ListViewContent.DataBind();
 
-            LabelCount.Text = query.Count().ToString();
+            LabelCount.Text = clothes.Count().ToString();
         }
 
         #region IActionable Members
@@ -371,16 +361,7 @@ namespace Cowrie.Modules.ProductList
                 BindData(db);
             }
         }
-
-        protected void DropDownListMerchantCategories_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            using (SelectedHotelsEntities db = new SelectedHotelsEntities())
-            {
-                BindSizes(db);
-                BindData(db);
-            }
-        }
-        protected void DropDownListStyles_SelectedIndexChanged(object sender, EventArgs e)
+        protected void CheckBoxListStyles_SelectedIndexChanged(object sender, EventArgs e)
         {
             using (SelectedHotelsEntities db = new SelectedHotelsEntities())
             {

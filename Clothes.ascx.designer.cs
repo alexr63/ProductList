@@ -13,24 +13,6 @@ namespace Cowrie.Modules.ProductList {
     public partial class Clothes {
         
         /// <summary>
-        /// DropDownListMerchantCategories control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList DropDownListMerchantCategories;
-        
-        /// <summary>
-        /// DropDownListStyles control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList DropDownListStyles;
-        
-        /// <summary>
         /// CheckBoxListGenders control.
         /// </summary>
         /// <remarks>
@@ -56,6 +38,15 @@ namespace Cowrie.Modules.ProductList {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CheckBoxList CheckBoxListBrands;
+        
+        /// <summary>
+        /// CheckBoxListStyles control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBoxList CheckBoxListStyles;
         
         /// <summary>
         /// ButtonSearch1 control.

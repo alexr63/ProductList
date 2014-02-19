@@ -2,18 +2,6 @@
     inherits="Cowrie.Modules.ProductList.Clothes" %>
 <%@ Import Namespace="Common" %>
 <%@ Register TagPrefix="telerik" Namespace="Telerik.Web.UI" Assembly="Telerik.Web.UI" %>
-<div class="category-selectors">
-    Merchant Category
-    <asp:DropDownList ID="DropDownListMerchantCategories" runat="server" DataValueField="Id" DataTextField="Name" Width="250px" AppendDataBoundItems="True" AutoPostBack="True" OnSelectedIndexChanged="DropDownListMerchantCategories_SelectedIndexChanged">
-        <asp:ListItem Value="">All Merchant Categories</asp:ListItem>
-    </asp:DropDownList>
-    <br />
-    <br />
-    Style
-    <asp:DropDownList ID="DropDownListStyles" runat="server" DataValueField="Id" DataTextField="Name" Width="250px" AppendDataBoundItems="True" AutoPostBack="True" OnSelectedIndexChanged="DropDownListStyles_SelectedIndexChanged">
-        <asp:ListItem Value="">All Styles</asp:ListItem>
-    </asp:DropDownList>
-</div>
 <div class="sizes">
     <h2>Filter by</h2>
     <h3>Gender</h3>
@@ -26,6 +14,9 @@
     </asp:CheckBoxList>
     <h3>Brand</h3>
     <asp:CheckBoxList ID="CheckBoxListBrands" runat="server" AutoPostBack="True" OnSelectedIndexChanged="CheckBoxListBrands_SelectedIndexChanged" DataTextField="Name" DataValueField="Id">
+    </asp:CheckBoxList>
+    <h3>Style</h3>
+    <asp:CheckBoxList ID="CheckBoxListStyles" runat="server" AutoPostBack="True" OnSelectedIndexChanged="CheckBoxListStyles_SelectedIndexChanged" DataTextField="Name" DataValueField="Id">
     </asp:CheckBoxList>
     <h3>Sizes</h3>
     <asp:Button ID="ButtonSearch1" runat="server" Text="Search" OnClick="ButtonSearch_Click" />
