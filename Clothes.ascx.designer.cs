@@ -49,13 +49,13 @@ namespace Cowrie.Modules.ProductList {
         protected global::System.Web.UI.WebControls.CheckBoxList CheckBoxListStyles;
         
         /// <summary>
-        /// ButtonSearch1 control.
+        /// PanelSizes control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button ButtonSearch1;
+        protected global::System.Web.UI.WebControls.Panel PanelSizes;
         
         /// <summary>
         /// CheckBoxListSizes control.
@@ -65,15 +65,6 @@ namespace Cowrie.Modules.ProductList {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CheckBoxList CheckBoxListSizes;
-        
-        /// <summary>
-        /// ButtonSearch2 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button ButtonSearch2;
         
         /// <summary>
         /// LabelLocation control.

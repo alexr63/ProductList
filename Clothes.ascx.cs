@@ -208,11 +208,15 @@ namespace Cowrie.Modules.ProductList
         {
             var clothSizes =
                 clothes.SelectMany(c => c.ClothSizes).Select(cs => cs.Size).Distinct().OrderBy(cs => cs);
-
-            CheckBoxListSizes.DataSource = clothSizes.ToList();
-            CheckBoxListSizes.DataBind();
-            CheckBoxListSizes.Items.Insert(0, new ListItem("All Sizes", String.Empty));
-            CheckBoxListSizes.SelectedIndex = 0;
+            if (clothSizes.Count() > 1)
+            {
+                CheckBoxListSizes.DataSource = clothSizes.ToList();
+                CheckBoxListSizes.DataBind();
+            }
+            else
+            {
+                PanelSizes.Visible = false;
+            }
         }
 
         private IQueryable<Cloth> GetClothes(SelectedHotelsEntities db, int? departmentId)
@@ -261,18 +265,18 @@ namespace Cowrie.Modules.ProductList
         private void BindData(IQueryable<Cloth> clothes)
         {
             List<string> selectedSizes = new List<string>();
-            if (!CheckBoxListSizes.Items[0].Selected)
+            foreach (ListItem item in CheckBoxListSizes.Items)
             {
-                foreach (ListItem item in CheckBoxListSizes.Items)
+                if (item.Selected)
                 {
-                    if (item.Selected)
-                    {
-                        selectedSizes.Add(item.Value);
-                    }
+                    selectedSizes.Add(item.Value);
                 }
+            }
+            if (selectedSizes.Any())
+            {
                 clothes = from c in clothes
-                        where c.ClothSizes.Any(cs => selectedSizes.Any(s => s == cs.Size))
-                        select c;
+                    where c.ClothSizes.Any(cs => selectedSizes.Any(s => s == cs.Size))
+                    select c;
             }
 
             if (DropDownListSortCriterias.SelectedValue == "Name")
@@ -389,6 +393,11 @@ namespace Cowrie.Modules.ProductList
                 BindSizes(FilterClothes(clothes));
                 BindData(FilterClothes(clothes));
             }
+        }
+
+        protected void CheckBoxListSizes_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            RefreshData();
         }
     }
 }

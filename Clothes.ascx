@@ -18,11 +18,11 @@
     <h3>Style</h3>
     <asp:CheckBoxList ID="CheckBoxListStyles" runat="server" AutoPostBack="True" OnSelectedIndexChanged="CheckBoxListStyles_SelectedIndexChanged" DataTextField="Name" DataValueField="Id">
     </asp:CheckBoxList>
-    <h3>Sizes</h3>
-    <asp:Button ID="ButtonSearch1" runat="server" Text="Search" OnClick="ButtonSearch_Click" />
-    <asp:CheckBoxList ID="CheckBoxListSizes" runat="server" AppendDataBoundItems="False">
-    </asp:CheckBoxList>
-    <asp:Button ID="ButtonSearch2" runat="server" Text="Search" OnClick="ButtonSearch_Click" />
+    <asp:Panel ID="PanelSizes" runat="server">
+        <h3>Sizes</h3>
+        <asp:CheckBoxList ID="CheckBoxListSizes" runat="server" AutoPostBack="True" OnSelectedIndexChanged="CheckBoxListSizes_SelectedIndexChanged">
+        </asp:CheckBoxList>
+    </asp:Panel>
 </div>
 <div class="products" style="width: 660px;">
     <h1><asp:Label ID="LabelLocation" runat="server" /></h1>
