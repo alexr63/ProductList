@@ -165,6 +165,8 @@ namespace Cowrie.Modules.ProductList
                 DetailsTabId = module.TabID;
             }
 
+            Session["ListTabId"] = TabId;
+
             try
             {
                 if (!IsPostBack)
