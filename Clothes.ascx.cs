@@ -195,6 +195,12 @@ namespace Cowrie.Modules.ProductList
                         CheckBoxListColours.DataSource = colours.ToList();
                         CheckBoxListColours.DataBind();
 
+                        if (Session["ReturnFromDetails"] != null)
+                        {
+                            Session["ReturnFromDetails"] = null;
+                            LoadPersistentSettings();
+                        }
+
                         BindSizes(FilterClothes(clothes));
                         BindData(FilterClothes(clothes));
                     }
@@ -203,6 +209,93 @@ namespace Cowrie.Modules.ProductList
             catch (Exception ex)
             {
                 Exceptions.ProcessModuleLoadException(this, ex);
+            }
+        }
+
+        private void LoadPersistentSettings()
+        {
+            if (Session["genders"] != null)
+            {
+                RenderFromSession(CheckBoxListGenders, "genders");
+            }
+            if (Session["colours"] != null)
+            {
+                RenderFromSession(CheckBoxListColours, "colours");
+            }
+            if (Session["brands"] != null)
+            {
+                RenderFromSession(CheckBoxListBrands, "brands");
+            }
+            if (Session["styles"] != null)
+            {
+                RenderFromSession(CheckBoxListStyles, "styles");
+            }
+            if (Session["sortCriteria"] != null)
+            {
+                DropDownListSortCriterias.SelectedValue = Session["sortCriteria"].ToString();
+            }
+            int startRowIndex = 0;
+            if (Session["startRowIndex"] != null)
+            {
+                startRowIndex = Convert.ToInt32(Session["startRowIndex"]);
+                DataPagerContent.SetPageProperties(startRowIndex, 10, false);
+            }
+            if (Session["pageSize"] != null)
+            {
+                int pageSize = Convert.ToInt32(Session["pageSize"]);
+                DropDownListPageSizes.SelectedValue = pageSize.ToString();
+                DataPagerContent.SetPageProperties(startRowIndex, pageSize, false);
+            }
+        }
+
+        private void RenderFromSession(CheckBoxList checkBoxList, string name)
+        {
+            foreach (var value in Session[name].ToString().Split(';'))
+            {
+                checkBoxList.Items.FindByValue(value).Selected = true;
+            }
+        }
+
+        private void SavePersistentSetting()
+        {
+            if (CheckBoxListGenders.Visible)
+            {
+                UpdateSession(CheckBoxListGenders, "genders");
+            }
+            if (CheckBoxListColours.Visible)
+            {
+                UpdateSession(CheckBoxListColours, "colours");
+            }
+            if (CheckBoxListBrands.Visible)
+            {
+                UpdateSession(CheckBoxListBrands, "brands");
+            }
+            if (CheckBoxListStyles.Visible)
+            {
+                UpdateSession(CheckBoxListStyles, "styles");
+            }
+            Session["sortCriteria"] = DropDownListSortCriterias.SelectedValue;
+            Session["startRowIndex"] = DataPagerContent.StartRowIndex;
+            Session["pageSize"] = Convert.ToInt32(DropDownListPageSizes.SelectedValue);
+        }
+
+        private void UpdateSession(CheckBoxList checkBoxList, string name)
+        {
+            List<string> values = new List<string>();
+            foreach (ListItem item in checkBoxList.Items)
+            {
+                if (item.Selected)
+                {
+                    values.Add(item.Value);
+                }
+            }
+            if (values.Any())
+            {
+                Session[name] = String.Join(";", values);
+            }
+            else
+            {
+                Session.Remove(name);
             }
         }
 
@@ -324,6 +417,8 @@ namespace Cowrie.Modules.ProductList
 
         protected void DropDownListSortCriterias_SelectedIndexChanged(object sender, EventArgs e)
         {
+            Session["sortCriteria"] = DropDownListSortCriterias.SelectedValue;
+
             RefreshData();
         }
 
@@ -344,40 +439,40 @@ namespace Cowrie.Modules.ProductList
 
         protected void DropDownListPageSizes_SelectedIndexChanged(object sender, EventArgs e)
         {
-            DataPagerContent.PageSize = Convert.ToInt32(DropDownListPageSizes.SelectedValue);
+            int pageSize = Convert.ToInt32(DropDownListPageSizes.SelectedValue);
+            Session["pageSize"] = pageSize;
+
+            DataPagerContent.PageSize = pageSize;
         }
 
         protected void ListViewContent_PagePropertiesChanging(object sender, PagePropertiesChangingEventArgs e)
         {
+            Session["startRowIndex"] = e.StartRowIndex;
+
             //set current page startindex, max rows and rebind to false
             DataPagerContent.SetPageProperties(e.StartRowIndex, e.MaximumRows, false);
 
             RefreshData();
         }
 
-        protected void ButtonSearch_Click(object sender, EventArgs e)
-        {
-            RefreshData();
-        }
         protected void CheckBoxListStyles_SelectedIndexChanged(object sender, EventArgs e)
         {
+            SavePersistentSetting();
             RefreshSizesAndData();
         }
         protected void CheckBoxListColours_SelectedIndexChanged(object sender, EventArgs e)
         {
+            SavePersistentSetting();
             RefreshSizesAndData();
         }
-        protected void DropDownListDepartments_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            RefreshSizesAndData();
-        }
-
         protected void CheckBoxListGenders_SelectedIndexChanged(object sender, EventArgs e)
         {
+            SavePersistentSetting();
             RefreshSizesAndData();
         }
         protected void CheckBoxListBrands_SelectedIndexChanged(object sender, EventArgs e)
         {
+            SavePersistentSetting();
             RefreshSizesAndData();
         }
 

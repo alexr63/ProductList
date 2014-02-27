@@ -57,6 +57,7 @@ namespace Cowrie.Modules.ProductList
                         int selectedLocationId = locationId;
                         if (Session["ReturnFromDetails"] != null)
                         {
+                            Session["ReturnFromDetails"] = null;
                             LoadPersistentSettings(ref selectedLocationId);
                         }
                         else
