@@ -4,12 +4,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Web.UI.WebControls;
 using DotNetNuke.Entities.Modules;
 using DotNetNuke.Entities.Modules.Actions;
 using DotNetNuke.Entities.Modules.Definitions;
-using DotNetNuke.Entities.Portals;
 using DotNetNuke.Entities.Tabs;
 using DotNetNuke.Security;
 using DotNetNuke.Security.Permissions;
@@ -180,20 +178,40 @@ namespace Cowrie.Modules.ProductList
                         }
                         var clothes = GetClothes(db, departmentId);
 
-                        var brands = db.Brands.Where(b => b.Clothes.Intersect(clothes).Any()).OrderByDescending(b => b.Clothes.Count).Take(10).OrderBy(b => b.Name).ToList();
-                        CheckBoxListBrands.DataSource = brands;
-                        CheckBoxListBrands.DataBind();
-
-                        var styles = db.Styles.Where(s => s.Clothes.Intersect(clothes).Any()).OrderByDescending(b => b.Clothes.Count).Take(10).OrderBy(s => s.Name).ToList();
-                        CheckBoxListStyles.DataSource = styles;
-                        CheckBoxListStyles.DataBind();
+                        var genders = clothes
+                            .Select(c => c.Gender)
+                            .Distinct();
+                        if (genders.Count() > 1)
+                        {
+                            PanelGenders.Visible = true;
+                        }
 
                         var colours = clothes
                             .Select(c => c.Colour)
                             .Distinct()
                             .OrderBy(c => c);
-                        CheckBoxListColours.DataSource = colours.ToList();
-                        CheckBoxListColours.DataBind();
+                        if (colours.Count() > 1)
+                        {
+                            PanelColours.Visible = true;
+                            CheckBoxListColours.DataSource = colours.ToList();
+                            CheckBoxListColours.DataBind();
+                        }
+
+                        var brands = db.Brands.Where(b => b.Clothes.Intersect(clothes).Any()).OrderByDescending(b => b.Clothes.Count).Take(10).OrderBy(b => b.Name).ToList();
+                        if (brands.Count() > 1)
+                        {
+                            PanelBrands.Visible = true;
+                            CheckBoxListBrands.DataSource = brands;
+                            CheckBoxListBrands.DataBind();
+                        }
+
+                        var styles = db.Styles.Where(s => s.Clothes.Intersect(clothes).Any()).OrderByDescending(b => b.Clothes.Count).Take(10).OrderBy(s => s.Name).ToList();
+                        if (styles.Count > 1)
+                        {
+                            PanelStyles.Visible = true;
+                            CheckBoxListStyles.DataSource = styles;
+                            CheckBoxListStyles.DataBind();
+                        }
 
                         if (Session["ReturnFromDetails"] != null)
                         {

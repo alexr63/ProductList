@@ -13,6 +13,15 @@ namespace Cowrie.Modules.ProductList {
     public partial class Clothes {
         
         /// <summary>
+        /// PanelGenders control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel PanelGenders;
+        
+        /// <summary>
         /// CheckBoxListGenders control.
         /// </summary>
         /// <remarks>
@@ -20,6 +29,15 @@ namespace Cowrie.Modules.ProductList {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CheckBoxList CheckBoxListGenders;
+        
+        /// <summary>
+        /// PanelColours control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel PanelColours;
         
         /// <summary>
         /// CheckBoxListColours control.
@@ -31,6 +49,15 @@ namespace Cowrie.Modules.ProductList {
         protected global::System.Web.UI.WebControls.CheckBoxList CheckBoxListColours;
         
         /// <summary>
+        /// PanelBrands control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel PanelBrands;
+        
+        /// <summary>
         /// CheckBoxListBrands control.
         /// </summary>
         /// <remarks>
@@ -38,6 +65,15 @@ namespace Cowrie.Modules.ProductList {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CheckBoxList CheckBoxListBrands;
+        
+        /// <summary>
+        /// PanelStyles control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel PanelStyles;
         
         /// <summary>
         /// CheckBoxListStyles control.
