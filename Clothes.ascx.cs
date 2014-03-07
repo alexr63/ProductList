@@ -189,7 +189,7 @@ namespace Cowrie.Modules.ProductList
                         var colours = clothes
                             .Select(c => c.Colour)
                             .Distinct()
-                            .OrderBy(c => c);
+                            .OrderBy(c => c.Name);
                         if (colours.Count() > 1)
                         {
                             PanelColours.Visible = true;
@@ -319,8 +319,7 @@ namespace Cowrie.Modules.ProductList
 
         private void BindSizes(IQueryable<Cloth> clothes)
         {
-            var clothSizes =
-                clothes.SelectMany(c => c.ClothSizes).Select(cs => cs.Size).Distinct().OrderBy(cs => cs);
+            var clothSizes = clothes.SelectMany(c => c.Sizes).Distinct().OrderBy(cs => cs.Name);
             if (clothSizes.Count() > 1)
             {
                 CheckBoxListSizes.DataSource = clothSizes.ToList();
@@ -358,19 +357,19 @@ namespace Cowrie.Modules.ProductList
             {
                 clothes = clothes.Where(c => allCheckedStyles.Any(cs => c.Styles.Any(s => s.Id == cs)));
             }
-            IEnumerable<String> allCheckedGenders = from ListItem item in CheckBoxListGenders.Items
+            IEnumerable<int> allCheckedGenders = from ListItem item in CheckBoxListGenders.Items
                 where item.Selected
-                select item.Value;
+                select int.Parse(item.Value);
             if (allCheckedGenders.Any())
             {
-                clothes = clothes.Where(c => allCheckedGenders.Any(cg => c.Gender == cg));
+                clothes = clothes.Where(c => allCheckedGenders.Any(cg => c.GenderId == cg));
             }
-            IEnumerable<String> allCheckedColours = from ListItem item in CheckBoxListColours.Items
+            IEnumerable<int> allCheckedColours = from ListItem item in CheckBoxListColours.Items
                 where item.Selected
-                select item.Value;
+                select int.Parse(item.Value);
             if (allCheckedColours.Any())
             {
-                clothes = clothes.Where(c => allCheckedColours.Any(cc => c.Colour == cc));
+                clothes = clothes.Where(c => allCheckedColours.Any(cc => c.ColourId == cc));
             }
             return clothes;
         }
@@ -388,7 +387,7 @@ namespace Cowrie.Modules.ProductList
             if (selectedSizes.Any())
             {
                 clothes = from c in clothes
-                    where c.ClothSizes.Any(cs => selectedSizes.Any(s => s == cs.Size))
+                    where c.Sizes.Any(cs => selectedSizes.Any(s => s == cs.Name))
                     select c;
             }
 

@@ -16,7 +16,7 @@
     <asp:Panel ID="PanelColours" runat="server" Visible="False">
         <h3>Colour</h3>
         <div class="filter">
-            <asp:CheckBoxList ID="CheckBoxListColours" runat="server" AutoPostBack="True" OnSelectedIndexChanged="CheckBoxListColours_SelectedIndexChanged">
+            <asp:CheckBoxList ID="CheckBoxListColours" runat="server" AutoPostBack="True" OnSelectedIndexChanged="CheckBoxListColours_SelectedIndexChanged" DataTextField="Name" DataValueField="Id">
             </asp:CheckBoxList>
         </div>
     </asp:Panel>
