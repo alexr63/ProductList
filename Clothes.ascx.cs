@@ -219,8 +219,9 @@ namespace Cowrie.Modules.ProductList
                             LoadPersistentSettings();
                         }
 
-                        BindSizes(FilterClothes(clothes));
-                        BindData(FilterClothes(clothes));
+                        var filteredClothes = FilterClothes(clothes);
+                        BindSizes(db, filteredClothes);
+                        BindData(filteredClothes);
                     }
                 }
             }
@@ -317,12 +318,12 @@ namespace Cowrie.Modules.ProductList
             }
         }
 
-        private void BindSizes(IQueryable<Cloth> clothes)
+        private void BindSizes(SelectedHotelsEntities db, IQueryable<Cloth> clothes)
         {
-            var clothSizes = clothes.SelectMany(c => c.Sizes).Distinct().OrderBy(cs => cs.Name);
-            if (clothSizes.Count() > 1)
+            var sizes = db.Sizes.Where(s => s.Clothes.Intersect(clothes).Any()).OrderBy(s => s.Name).ToList();
+            if (sizes.Count() > 1)
             {
-                CheckBoxListSizes.DataSource = clothSizes.ToList();
+                CheckBoxListSizes.DataSource = sizes.ToList();
                 CheckBoxListSizes.DataBind();
             }
             else
@@ -376,18 +377,18 @@ namespace Cowrie.Modules.ProductList
 
         private void BindData(IQueryable<Cloth> clothes)
         {
-            List<string> selectedSizes = new List<string>();
+            List<int> selectedSizes = new List<int>();
             foreach (ListItem item in CheckBoxListSizes.Items)
             {
                 if (item.Selected)
                 {
-                    selectedSizes.Add(item.Value);
+                    selectedSizes.Add(int.Parse(item.Value));
                 }
             }
             if (selectedSizes.Any())
             {
                 clothes = from c in clothes
-                    where c.Sizes.Any(cs => selectedSizes.Any(s => s == cs.Name))
+                    where c.Sizes.Any(cs => selectedSizes.Any(s => s == cs.Id))
                     select c;
             }
 
@@ -503,9 +504,9 @@ namespace Cowrie.Modules.ProductList
                     departmentId = Convert.ToInt32(Settings["department"]);
                 }
                 var clothes = GetClothes(db, departmentId);
-
-                BindSizes(FilterClothes(clothes));
-                BindData(FilterClothes(clothes));
+                var filteredClothes = FilterClothes(clothes);
+                BindSizes(db, filteredClothes);
+                BindData(filteredClothes);
             }
         }
 

@@ -37,7 +37,7 @@
     <asp:Panel ID="PanelSizes" runat="server">
         <h3>Sizes</h3>
         <div class="filter">
-            <asp:CheckBoxList ID="CheckBoxListSizes" runat="server" AutoPostBack="True" OnSelectedIndexChanged="CheckBoxListSizes_SelectedIndexChanged">
+            <asp:CheckBoxList ID="CheckBoxListSizes" runat="server" AutoPostBack="True" OnSelectedIndexChanged="CheckBoxListSizes_SelectedIndexChanged" DataTextField="Name" DataValueField="Id">
             </asp:CheckBoxList>
         </div>
     </asp:Panel>
