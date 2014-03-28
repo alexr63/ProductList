@@ -175,6 +175,7 @@ namespace Cowrie.Modules.ProductList
                         if (Settings["department"] != null)
                         {
                             departmentId = Convert.ToInt32(Settings["department"]);
+                            LabelDepartment.Text = db.Departments.Find(departmentId).Name;
                         }
                         var clothes = GetClothes(db, departmentId);
 
@@ -392,13 +393,23 @@ namespace Cowrie.Modules.ProductList
                     select c;
             }
 
-            if (DropDownListSortCriterias.SelectedValue == "Name")
+            switch (DropDownListSortCriterias.SelectedValue)
             {
-                ListViewContent.DataSource = clothes.OrderBy(c => c.Name).ToList();
-            }
-            else
-            {
+                case "Position":
+                    ListViewContent.DataSource = clothes.OrderByDescending(c => c.CustomerRating).ToList();
+                    break;
+                case "Name: A to Z":
+                    ListViewContent.DataSource = clothes.OrderBy(c => c.Name).ToList();
+                    break;
+                case "Name: Z to A":
+                    ListViewContent.DataSource = clothes.OrderByDescending(c => c.Name).ToList();
+                    break;
+                case "Price: Low to High":
                 ListViewContent.DataSource = clothes.OrderBy(c => c.UnitCost).ToList();
+                    break;
+                case "Price: High to Low":
+                    ListViewContent.DataSource = clothes.OrderByDescending(c => c.UnitCost).ToList();
+                    break;
             }
             ListViewContent.DataBind();
 

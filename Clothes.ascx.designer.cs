@@ -103,13 +103,13 @@ namespace Cowrie.Modules.ProductList {
         protected global::System.Web.UI.WebControls.CheckBoxList CheckBoxListSizes;
         
         /// <summary>
-        /// LabelLocation control.
+        /// LabelDepartment control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label LabelLocation;
+        protected global::System.Web.UI.WebControls.Label LabelDepartment;
         
         /// <summary>
         /// LabelCount control.

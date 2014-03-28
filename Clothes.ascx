@@ -8,8 +8,8 @@
         <h3>Gender</h3>
         <div class="filter">
             <asp:CheckBoxList ID="CheckBoxListGenders" runat="server" AutoPostBack="True" OnSelectedIndexChanged="CheckBoxListGenders_SelectedIndexChanged">
-                <asp:ListItem Value="male">Male</asp:ListItem>
-                <asp:ListItem Value="female">Female</asp:ListItem>
+                <asp:ListItem Value="1">Male</asp:ListItem>
+                <asp:ListItem Value="2">Female</asp:ListItem>
             </asp:CheckBoxList>
         </div>
     </asp:Panel>
@@ -44,7 +44,7 @@
 </div>
 <div class="products" style="width: 660px;">
     <h1>
-        <asp:Label ID="LabelLocation" runat="server" /></h1>
+        <asp:Label ID="LabelDepartment" runat="server" /></h1>
     <table style="width: 100%">
         <tr>
             <td>
@@ -53,19 +53,22 @@
             </td>
             <td>Sort by
                 <asp:DropDownList ID="DropDownListSortCriterias" runat="server" AutoPostBack="True" OnSelectedIndexChanged="DropDownListSortCriterias_SelectedIndexChanged">
-                    <asp:ListItem Selected="True">Name</asp:ListItem>
-                    <asp:ListItem>Price</asp:ListItem>
+                    <asp:ListItem Selected="True">Position</asp:ListItem>
+                    <asp:ListItem>Name: A to Z</asp:ListItem>
+                    <asp:ListItem>Name: Z to A</asp:ListItem>
+                    <asp:ListItem>Price: Low to High</asp:ListItem>
+                    <asp:ListItem>Price: High to Low</asp:ListItem>
                 </asp:DropDownList>
             </td>
             <td>View
                 <asp:DropDownList ID="DropDownListPageSizes" runat="server" AutoPostBack="True" OnSelectedIndexChanged="DropDownListPageSizes_SelectedIndexChanged">
-                    <asp:ListItem Selected="True">10</asp:ListItem>
-                    <asp:ListItem>20</asp:ListItem>
-                    <asp:ListItem>50</asp:ListItem>
+                    <asp:ListItem Selected="True">9</asp:ListItem>
+                    <asp:ListItem>18</asp:ListItem>
+                    <asp:ListItem>36</asp:ListItem>
                 </asp:DropDownList>
             </td>
             <td>
-                <asp:DataPager ID="DataPagerContent" runat="server" PagedControlID="ListViewContent">
+                <asp:DataPager ID="DataPagerContent" runat="server" PagedControlID="ListViewContent" PageSize="9">
                     <Fields>
                         <asp:NextPreviousPagerField ShowFirstPageButton="True" ShowNextPageButton="False" ShowPreviousPageButton="False" />
                         <asp:NumericPagerField />
@@ -77,7 +80,6 @@
     </table>
     <asp:ListView ID="ListViewContent" runat="server" OnPagePropertiesChanging="ListViewContent_PagePropertiesChanging">
         <LayoutTemplate>
-            <h3>Product Listing</h3>
             <div style="width: 100%">
                 <asp:PlaceHolder runat="server" ID="itemPlaceholder"></asp:PlaceHolder>
             </div>
@@ -87,7 +89,7 @@
             <div style="margin: 5px; float: left; width: 210px; border-top-style: dotted; border-top-width: 1px; border-top-color: #C0C0C0; min-height: 280px">
                 <table>
                     <tr>
-                        <td style="vertical-align: middle">
+                        <td style="vertical-align: middle" colspan="2">
                             <asp:HyperLink ID="HyperLinkName" runat="server" Text='<%# Eval("Name") %>' NavigateUrl='<%# DotNetNuke.Common.Globals.NavigateURL(DetailsTabId, "", "Id=" + Eval("Id")) %>' />
                         </td>
                     </tr>
@@ -95,14 +97,17 @@
                         <td style="vertical-align: middle">
                             <%# Eval("UnitCost") != null ? String.Format("{0}{1:#0.00}", Utils.GetCurrencySymbol(Eval("CurrencyCode").ToString()), Eval("UnitCost")) : String.Empty %>
                         </td>
+                        <td style="vertical-align: middle">
+                            <telerik:RadRating ID="RadRatingStar" runat="server" Value='<%# Convert.ToDecimal(Eval("CustomerRating")) %>' ReadOnly="True" />
+                        </td>
                     </tr>
                     <tr>
-                        <td>
+                        <td colspan="2">
                             <asp:HyperLink ID="HyperLinkImage" runat="server" ImageUrl='<%# Eval("Image") %>' NavigateUrl='<%# DotNetNuke.Common.Globals.NavigateURL(DetailsTabId, "", "Id=" + Eval("Id")) %>' ImageWidth="100" />
                         </td>
                     </tr>
                     <tr>
-                        <td>
+                        <td colspan="2">
                             <asp:Literal ID="LiteralDescription" runat="server" Text='<%# Eval("Description") != null ? Server.HtmlDecode(Eval("Description").ToString().TruncateAtWord(120)) : String.Empty %>'></asp:Literal>
                         </td>
                     </tr>
