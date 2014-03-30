@@ -44,7 +44,7 @@
 </div>
 <div class="products" style="width: 660px;">
     <h1>
-        <asp:Label ID="LabelDepartment" runat="server" /></h1>
+        <asp:Label ID="LabelTitle" runat="server" Text="Clothes" /></h1>
     <table style="width: 100%">
         <tr>
             <td>

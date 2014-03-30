@@ -175,7 +175,7 @@ namespace Cowrie.Modules.ProductList
                         if (Settings["department"] != null)
                         {
                             departmentId = Convert.ToInt32(Settings["department"]);
-                            LabelDepartment.Text = db.Departments.Find(departmentId).Name;
+                            LabelTitle.Text = db.Departments.Find(departmentId).Name;
                         }
                         var clothes = GetClothes(db, departmentId);
 
