@@ -4,6 +4,13 @@
 <%@ Register TagPrefix="telerik" Namespace="Telerik.Web.UI" Assembly="Telerik.Web.UI" %>
 <div class="filters">
     <h2>Filter by</h2>
+    <asp:Panel ID="PanelCategories" runat="server" Visible="False">
+        <h3>Category</h3>
+        <div class="filter">
+            <asp:CheckBoxList ID="CheckBoxListCategories" runat="server" AutoPostBack="True" OnSelectedIndexChanged="CheckBoxListCategories_SelectedIndexChanged" DataTextField="Name" DataValueField="Id">
+            </asp:CheckBoxList>
+        </div>
+    </asp:Panel>
     <asp:Panel ID="PanelGenders" runat="server" Visible="False">
         <h3>Gender</h3>
         <div class="filter">

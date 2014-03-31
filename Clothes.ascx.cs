@@ -179,6 +179,17 @@ namespace Cowrie.Modules.ProductList
                         }
                         var clothes = GetClothes(db, departmentId);
 
+                        var categories = clothes
+                            .SelectMany(c => c.Categories)
+                            .Distinct()
+                            .OrderBy(c => c.Name);
+                        if (categories.Count() > 1)
+                        {
+                            PanelCategories.Visible = true;
+                            CheckBoxListCategories.DataSource = categories.ToList();
+                            CheckBoxListCategories.DataBind();
+                        }
+
                         var genders = clothes
                             .Select(c => c.Gender)
                             .Distinct();
@@ -278,19 +289,23 @@ namespace Cowrie.Modules.ProductList
 
         private void SavePersistentSetting()
         {
-            if (CheckBoxListGenders.Visible)
+            if (PanelCategories.Visible)
+            {
+                UpdateSession(CheckBoxListCategories, "categories");
+            }
+            if (PanelGenders.Visible)
             {
                 UpdateSession(CheckBoxListGenders, "genders");
             }
-            if (CheckBoxListColours.Visible)
+            if (PanelColours.Visible)
             {
                 UpdateSession(CheckBoxListColours, "colours");
             }
-            if (CheckBoxListBrands.Visible)
+            if (PanelBrands.Visible)
             {
                 UpdateSession(CheckBoxListBrands, "brands");
             }
-            if (CheckBoxListStyles.Visible)
+            if (PanelStyles.Visible)
             {
                 UpdateSession(CheckBoxListStyles, "styles");
             }
@@ -345,6 +360,13 @@ namespace Cowrie.Modules.ProductList
 
         private IQueryable<Cloth> FilterClothes(IQueryable<Cloth> clothes)
         {
+            IEnumerable<int> allCheckedCategories = from ListItem item in CheckBoxListCategories.Items
+                                                where item.Selected
+                                                select int.Parse(item.Value);
+            if (allCheckedCategories.Any())
+            {
+                clothes = clothes.Where(c => allCheckedCategories.Any(cb => c.Categories.Any(cat => cat.Id == cb)));
+            }
             IEnumerable<int> allCheckedBrands = from ListItem item in CheckBoxListBrands.Items
                 where item.Selected
                 select int.Parse(item.Value);
@@ -524,6 +546,12 @@ namespace Cowrie.Modules.ProductList
         protected void CheckBoxListSizes_SelectedIndexChanged(object sender, EventArgs e)
         {
             RefreshData();
+        }
+
+        protected void CheckBoxListCategories_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            SavePersistentSetting();
+            RefreshSizesAndData();
         }
     }
 }

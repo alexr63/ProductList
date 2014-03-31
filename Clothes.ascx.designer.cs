@@ -13,6 +13,24 @@ namespace Cowrie.Modules.ProductList {
     public partial class Clothes {
         
         /// <summary>
+        /// PanelCategories control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel PanelCategories;
+        
+        /// <summary>
+        /// CheckBoxListCategories control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBoxList CheckBoxListCategories;
+        
+        /// <summary>
         /// PanelGenders control.
         /// </summary>
         /// <remarks>
