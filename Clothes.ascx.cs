@@ -171,69 +171,13 @@ namespace Cowrie.Modules.ProductList
                 {
                     using (SelectedHotelsEntities db = new SelectedHotelsEntities())
                     {
-                        int? departmentId = null;
-                        if (Settings["department"] != null)
-                        {
-                            departmentId = Convert.ToInt32(Settings["department"]);
-                            LabelTitle.Text = db.Departments.Find(departmentId).Name;
-                        }
-                        var clothes = GetClothes(db, departmentId);
-
-                        var categories = clothes
-                            .SelectMany(c => c.Categories)
-                            .Distinct()
-                            .OrderBy(c => c.Name);
-                        if (categories.Count() > 1)
-                        {
-                            PanelCategories.Visible = true;
-                            CheckBoxListCategories.DataSource = categories.ToList();
-                            CheckBoxListCategories.DataBind();
-                        }
-
-                        var genders = clothes
-                            .Select(c => c.Gender)
-                            .Distinct();
-                        if (genders.Count() > 1)
-                        {
-                            PanelGenders.Visible = true;
-                        }
-
-                        var colours = clothes
-                            .Select(c => c.Colour)
-                            .Distinct()
-                            .OrderBy(c => c.Name);
-                        if (colours.Count() > 1)
-                        {
-                            PanelColours.Visible = true;
-                            CheckBoxListColours.DataSource = colours.ToList();
-                            CheckBoxListColours.DataBind();
-                        }
-
-                        var brands = db.Brands.Where(b => b.Clothes.Intersect(clothes).Any()).OrderByDescending(b => b.Clothes.Count).Take(10).OrderBy(b => b.Name).ToList();
-                        if (brands.Count() > 1)
-                        {
-                            PanelBrands.Visible = true;
-                            CheckBoxListBrands.DataSource = brands;
-                            CheckBoxListBrands.DataBind();
-                        }
-
-                        var styles = db.Styles.Where(s => s.Clothes.Intersect(clothes).Any()).OrderByDescending(b => b.Clothes.Count).Take(10).OrderBy(s => s.Name).ToList();
-                        if (styles.Count > 1)
-                        {
-                            PanelStyles.Visible = true;
-                            CheckBoxListStyles.DataSource = styles;
-                            CheckBoxListStyles.DataBind();
-                        }
-
                         if (Session["ReturnFromDetails"] != null)
                         {
                             Session["ReturnFromDetails"] = null;
                             LoadPersistentSettings();
                         }
 
-                        var filteredClothes = FilterClothes(clothes);
-                        BindSizes(db, filteredClothes);
-                        BindData(filteredClothes);
+                        RefreshSizesAndData(true);
                     }
                 }
             }
@@ -243,8 +187,92 @@ namespace Cowrie.Modules.ProductList
             }
         }
 
+        private void InitFilters(SelectedHotelsEntities db, IQueryable<Cloth> clothes)
+        {
+            var categories = clothes
+                .SelectMany(c => c.Categories)
+                .Distinct()
+                .OrderBy(c => c.Name);
+            if (categories.Count() > 1)
+            {
+                PanelCategories.Visible = true;
+                CheckBoxListCategories.DataSource = categories.ToList();
+                CheckBoxListCategories.DataBind();
+            }
+            else
+            {
+                PanelCategories.Visible = false;
+            }
+
+            var genders = clothes
+                .Select(c => c.Gender)
+                .Distinct();
+            if (genders.Count() > 1)
+            {
+                PanelGenders.Visible = true;
+            }
+            else
+            {
+                PanelGenders.Visible = false;
+            }
+
+            var colours = clothes
+                .Select(c => c.Colour)
+                .Distinct()
+                .OrderBy(c => c.Name);
+            if (colours.Count() > 1)
+            {
+                PanelColours.Visible = true;
+                CheckBoxListColours.DataSource = colours.ToList();
+                CheckBoxListColours.DataBind();
+            }
+            else
+            {
+                PanelColours.Visible = false;
+            }
+
+            var brands =
+                db.Brands.Where(b => b.Clothes.Intersect(clothes).Any())
+                    .OrderByDescending(b => b.Clothes.Count)
+                    .Take(10)
+                    .OrderBy(b => b.Name)
+                    .ToList();
+            if (brands.Count() > 1)
+            {
+                PanelBrands.Visible = true;
+                CheckBoxListBrands.DataSource = brands;
+                CheckBoxListBrands.DataBind();
+            }
+            else
+            {
+                PanelBrands.Visible = false;
+            }
+
+            var styles =
+                clothes.SelectMany(c => c.Styles)
+                    .Distinct()
+                    .OrderByDescending(s => s.Clothes.Count)
+                    .Take(10)
+                    .OrderBy(s => s.Name)
+                    .ToList();
+            if (styles.Count > 1)
+            {
+                PanelStyles.Visible = true;
+                CheckBoxListStyles.DataSource = styles;
+                CheckBoxListStyles.DataBind();
+            }
+            else
+            {
+                PanelStyles.Visible = false;
+            }
+        }
+
         private void LoadPersistentSettings()
         {
+            if (Session["search"] != null)
+            {
+                TextBoxSearch.Text = Session["search"].ToString();
+            }
             if (Session["genders"] != null)
             {
                 RenderFromSession(CheckBoxListGenders, "genders");
@@ -309,6 +337,14 @@ namespace Cowrie.Modules.ProductList
             {
                 UpdateSession(CheckBoxListStyles, "styles");
             }
+            if (TextBoxSearch.Text != String.Empty)
+            {
+                Session["search"] = TextBoxSearch.Text;
+            }
+            else
+            {
+                Session.Remove("search");
+            }
             Session["sortCriteria"] = DropDownListSortCriterias.SelectedValue;
             Session["startRowIndex"] = DataPagerContent.StartRowIndex;
             Session["pageSize"] = Convert.ToInt32(DropDownListPageSizes.SelectedValue);
@@ -336,7 +372,7 @@ namespace Cowrie.Modules.ProductList
 
         private void BindSizes(SelectedHotelsEntities db, IQueryable<Cloth> clothes)
         {
-            var sizes = db.Sizes.Where(s => s.Clothes.Intersect(clothes).Any()).OrderBy(s => s.Name).ToList();
+            var sizes = clothes.SelectMany(c => c.Sizes).Distinct().OrderBy(s => s.Name).ToList();
             if (sizes.Count() > 1)
             {
                 CheckBoxListSizes.DataSource = sizes.ToList();
@@ -354,6 +390,22 @@ namespace Cowrie.Modules.ProductList
             if (departmentId.HasValue)
             {
                 clothes = clothes.Where(c => c.Departments.Any(d => d.Id == departmentId));
+            }
+            if (TextBoxSearch.Text != String.Empty)
+            {
+                clothes =
+                    clothes.Where(
+                        c =>
+                        c.Name.ToLower().Contains(TextBoxSearch.Text.ToLower()) ||
+                        c.Description.ToLower().Contains(TextBoxSearch.Text.ToLower()));
+                LabelFilteredBy.Text = String.Format("Filtered by \"{0}\"", TextBoxSearch.Text);
+                LabelFilteredBy.Visible = true;
+                ButtonClear.Visible = true;
+            }
+            else
+            {
+                LabelFilteredBy.Visible = false;
+                ButtonClear.Visible = false;
             }
             return clothes;
         }
@@ -481,6 +533,7 @@ namespace Cowrie.Modules.ProductList
                 if (Settings["department"] != null)
                 {
                     departmentId = Convert.ToInt32(Settings["department"]);
+                    LabelTitle.Text = db.Departments.Find(departmentId).Name;
                 }
                 var clothes = GetClothes(db, departmentId);
 
@@ -527,7 +580,7 @@ namespace Cowrie.Modules.ProductList
             RefreshSizesAndData();
         }
 
-        private void RefreshSizesAndData()
+        private void RefreshSizesAndData(bool initFilters = false)
         {
             using (SelectedHotelsEntities db = new SelectedHotelsEntities())
             {
@@ -535,8 +588,13 @@ namespace Cowrie.Modules.ProductList
                 if (Settings["department"] != null)
                 {
                     departmentId = Convert.ToInt32(Settings["department"]);
+                    LabelTitle.Text = db.Departments.Find(departmentId).Name;
                 }
                 var clothes = GetClothes(db, departmentId);
+                if (initFilters)
+                {
+                    InitFilters(db, clothes);
+                }
                 var filteredClothes = FilterClothes(clothes);
                 BindSizes(db, filteredClothes);
                 BindData(filteredClothes);
@@ -552,6 +610,25 @@ namespace Cowrie.Modules.ProductList
         {
             SavePersistentSetting();
             RefreshSizesAndData();
+        }
+
+        protected void ButtonSubmit_Click(object sender, EventArgs e)
+        {
+            Session["search"] = TextBoxSearch.Text;
+
+            DataPagerContent.SetPageProperties(0, int.Parse(DropDownListPageSizes.SelectedValue), false);
+
+            RefreshSizesAndData(true);
+        }
+
+        protected void ButtonClear_Click(object sender, EventArgs e)
+        {
+            TextBoxSearch.Text = String.Empty;
+            Session.Remove("search");
+
+            DataPagerContent.SetPageProperties(0, int.Parse(DropDownListPageSizes.SelectedValue), false);
+
+            RefreshSizesAndData(true);
         }
     }
 }

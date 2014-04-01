@@ -52,6 +52,14 @@
 <div class="products" style="width: 660px;">
     <h1>
         <asp:Label ID="LabelTitle" runat="server" Text="Clothes" /></h1>
+    <div class="search">
+        Search:
+            <asp:TextBox ID="TextBoxSearch" runat="server" Width="100px"></asp:TextBox>
+        &nbsp;<asp:Button ID="ButtonSubmit" runat="server" Text="Go" OnClick="ButtonSubmit_Click" ValidationGroup="ClothesSearch" />&nbsp;<asp:Button ID="ButtonClear" runat="server" Text="Clear" OnClick="ButtonClear_Click" CausesValidation="False" Visible="False" />
+    </div>
+    <h2>
+        <asp:Label ID="LabelFilteredBy" runat="server" Visible="False" />
+    </h2>
     <table style="width: 100%">
         <tr>
             <td>
