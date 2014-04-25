@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Common;
 using SelectedHotelsModel;
 using Telerik.Web.UI;
 
@@ -178,20 +179,7 @@ namespace ProductList
 
         public static bool AnyHotelInLocation(SelectedHotelsEntities db, int locationId, int? hotelTypeId)
         {
-            return db.HotelLocations.Any(hl => hl.LocationId == locationId && (hotelTypeId == null || hl.HotelTypeId == hotelTypeId));
-        }
-
-        public static IEnumerable<Hotel> HotelsInLocation(SelectedHotelsEntities db, int locationId, int? hotelTypeId)
-        {
-            IList<Hotel> hotels = (from p in db.Products
-                                   where !p.IsDeleted
-                                   select p).OfType<Hotel>().ToList();
-            var query = from h in hotels
-                        where (h.LocationId == locationId || h.Location.ParentId == locationId ||
-                              (h.Location.ParentLocation != null && h.Location.ParentLocation.ParentId == locationId)) &&
-                              (hotelTypeId == null || h.HotelTypeId == hotelTypeId.Value)
-                        select h;
-            return query;
+            return db.HotelLocations.Any(hl => hl.LocationId == locationId && (hl.HotelTypeId == hotelTypeId));
         }
     }
 }

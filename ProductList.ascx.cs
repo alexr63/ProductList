@@ -128,13 +128,7 @@ namespace Cowrie.Modules.ProductList
             {
                 LabelSelectedLocation.Text = location.Name;
             }
-            IList<Hotel> hotels = (from p in db.Products
-                                   where !p.IsDeleted
-                                   select p).OfType<Hotel>().ToList();
-            var query = from h in hotels
-                        where h.LocationId == locationId || h.Location.ParentId == locationId ||
-                              (h.Location.ParentLocation != null && h.Location.ParentLocation.ParentId == locationId)
-                        select h;
+            var query = db.HotelsInLocation(locationId, 1);
             if (TextBoxSearch2.Text != String.Empty)
             {
                 query =

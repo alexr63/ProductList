@@ -200,7 +200,7 @@ namespace Cowrie.Modules.ProductList
             {
                 hotelTypeId = Convert.ToInt32(Settings["hoteltype"]);
             }
-            var hotels = Utils.HotelsInLocation(db, locationId, hotelTypeId);
+            var hotels = db.HotelsInLocation(locationId, hotelTypeId);
             if (TextBoxSearch.Text != String.Empty)
             {
                 hotels =
