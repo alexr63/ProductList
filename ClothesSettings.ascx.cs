@@ -28,12 +28,20 @@ namespace Cowrie.Modules.ProductList
                     {
                         DropDownListDepartments.DataSource = db.Departments.OrderBy(s => s.Name).ToList();
                         DropDownListDepartments.DataBind();
+                        DropDownListMerchantCategories.DataSource = db.MerchantCategories.ToList().OrderBy(s => s.FullName);
+                        DropDownListMerchantCategories.DataBind();
 
                         object setting = Settings["department"];
                         if (setting != null)
                         {
                             int departmentId = Convert.ToInt32(setting);
                             DropDownListDepartments.SelectedValue = departmentId.ToString();
+                        }
+                        setting = Settings["merchantcategory"];
+                        if (setting != null)
+                        {
+                            int merchantCategoryId = Convert.ToInt32(setting);
+                            DropDownListMerchantCategories.SelectedValue = merchantCategoryId.ToString();
                         }
                     }
                 }
@@ -59,6 +67,14 @@ namespace Cowrie.Modules.ProductList
                 else
                 {
                     controller.DeleteModuleSetting(ModuleId, "department");
+                }
+                if (DropDownListMerchantCategories.SelectedValue != String.Empty)
+                {
+                    controller.UpdateModuleSetting(ModuleId, "merchantcategory", DropDownListMerchantCategories.SelectedValue);
+                }
+                else
+                {
+                    controller.DeleteModuleSetting(ModuleId, "merchantcategory");
                 }
             }
             catch (Exception ex)

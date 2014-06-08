@@ -49,10 +49,38 @@ namespace Cowrie.Modules.ProductList
 
                     DotNetNuke.UI.Skins.Skin.AddModuleMessage(this, "Departments Subtabs Created", ModuleMessage.ModuleMessageType.GreenSuccess);
                     break;
+                case "CreateCategoriesTabs":
+                    using (SelectedHotelsEntities db = new SelectedHotelsEntities())
+                    {
+                        var parentCategoryNames =
+                            db.MerchantCategories.Select(mc => mc.ParentName).Distinct().OrderBy(mc => mc);
+                        foreach (var parentCategoryName in parentCategoryNames)
+                        {
+                            if (parentCategoryName == null)
+                                continue;
+                            var tab = CreateTab(parentCategoryName);
+                            //Clear Cache
+                            DotNetNuke.Common.Utilities.DataCache.ClearModuleCache(tab.TabID);
+                            var childCategories = db.MerchantCategories.Where(mc => mc.ParentName == parentCategoryName);
+                            foreach (MerchantCategory merchantCategory in childCategories)
+                            {
+                                var childTab = CreateSubTab(merchantCategory.Name, merchantCategory.Id, "merchantcategory", tab.TabID);
+                                //Clear Cache
+                                DotNetNuke.Common.Utilities.DataCache.ClearModuleCache(childTab.TabID);
+                            }
+                        }
+                    }
+
+                    //Clear Cache
+                    DotNetNuke.Common.Utilities.DataCache.ClearTabsCache(PortalId);
+                    DotNetNuke.Common.Utilities.DataCache.ClearPortalCache(PortalId, false);
+
+                    DotNetNuke.UI.Skins.Skin.AddModuleMessage(this, "Categories Tabs Created", ModuleMessage.ModuleMessageType.GreenSuccess);
+                    break;
             }
         }
 
-        private TabInfo CreateSubTab(string tabName, int departmentId)
+        private TabInfo CreateTab(string tabName, bool isSuperTab = true)
         {
             //Create Tab
             TabController tabController = new TabController();
@@ -66,8 +94,75 @@ namespace Cowrie.Modules.ProductList
             tab.IsVisible = true;
             tab.DisableLink = false;
 
-            //if this tab has any parents provide parent tab id, so that it will be shown in parent tab menus sub menu list, else is NULL         //and will be in main menu list
-            tab.ParentId = TabId;
+            //if this tab has any parents provide parent tab id, so that it will be shown in parent tab menus sub menu list, else is NULL
+            //and will be in main menu list
+            if (!isSuperTab)
+                tab.ParentId = TabId;
+            tab.IsDeleted = false;
+            tab.Url = "";
+            //if true, it has no parents, else false
+            tab.IsSuperTab = isSuperTab; 
+            tab.SkinSrc = "[G]Skins/Artfolio001/page.ascx"; //provide skin src, else will take default skin
+            tab.ContainerSrc = "[G]Containers/Artfolio001/Block.ascx";
+            int tabId = tabController.AddTab(tab, true); //true to load defalut modules
+
+            //Set Tab Permission
+            TabPermissionController objTPC = new TabPermissionController();
+
+            TabPermissionInfo tpi = new TabPermissionInfo();
+            tpi.TabID = tabId;
+            tpi.PermissionID = 3; //for view
+            tpi.PermissionKey = "VIEW";
+            tpi.PermissionName = "View Tab";
+            tpi.AllowAccess = true;
+            tpi.RoleID = 0; //Role ID of administrator         
+            objTPC.AddTabPermission(tpi);
+
+            TabPermissionInfo tpi1 = new TabPermissionInfo();
+            tpi1.TabID = tabId;
+            tpi1.PermissionID = 4; //for edit
+            tpi1.PermissionKey = "EDIT";
+            tpi1.PermissionName = "Edit Tab";
+            tpi1.AllowAccess = true;
+            tpi1.RoleID = 0; //Role ID of administrator       
+            objTPC.AddTabPermission(tpi1);
+
+            TabPermissionInfo tpi4 = new TabPermissionInfo();
+            tpi4.TabID = tabId;
+            tpi4.PermissionID = 3;
+            tpi4.PermissionKey = "VIEW";
+            tpi4.PermissionName = "View Tab";
+            tpi4.AllowAccess = true;
+            tpi4.RoleID = -1; //All users     
+            objTPC.AddTabPermission(tpi4);
+
+            return tab;
+        }
+
+        private TabInfo CreateSubTab(string tabName, int departmentId, string settingsName = "department", int? parentTabID = null)
+        {
+            //Create Tab
+            TabController tabController = new TabController();
+
+            TabInfo tab = new TabInfo();
+            tab.PortalID = PortalId;
+            tab.TabName = tabName;
+            tab.Title = tabName;
+
+            //works for include in menu option. if true, will be shown in menus, else will not be shown, we have to redirect internally
+            tab.IsVisible = true;
+            tab.DisableLink = false;
+
+            //if this tab has any parents provide parent tab id, so that it will be shown in parent tab menus sub menu list, else is NULL
+            //and will be in main menu list
+            if (parentTabID == null)
+            {
+                tab.ParentId = TabId;
+            }
+            else
+            {
+                tab.ParentId = parentTabID.Value;
+            }
             tab.IsDeleted = false;
             tab.Url = "";
             tab.IsSuperTab = false; //if true, it has no parents, else false
@@ -120,7 +215,7 @@ namespace Cowrie.Modules.ProductList
             moduleInfo.CacheTime = moduleDefinitionInfo.DefaultCacheTime; //Default Cache Time is 0
             moduleInfo.InheritViewPermissions = true; //Inherit View Permissions from Tab
             moduleInfo.AllTabs = false;
-            moduleInfo.ModuleSettings["department"] = departmentId;
+            moduleInfo.ModuleSettings[settingsName] = departmentId;
 
             ModuleController moduleController = new ModuleController();
             int moduleId = moduleController.AddModule(moduleInfo);
@@ -384,12 +479,16 @@ namespace Cowrie.Modules.ProductList
             }
         }
 
-        private IQueryable<Cloth> GetClothes(SelectedHotelsEntities db, int? departmentId)
+        private IQueryable<Cloth> GetClothes(SelectedHotelsEntities db, int? departmentId = null, int? merchantCategoryId = null)
         {
             var clothes = db.Products.Where(p => !p.IsDeleted).OfType<Cloth>() as IQueryable<Cloth>;
             if (departmentId.HasValue)
             {
                 clothes = clothes.Where(c => c.Departments.Any(d => d.Id == departmentId));
+            }
+            if (merchantCategoryId.HasValue)
+            {
+                clothes = clothes.Where(c => c.MerchantCategoryId == merchantCategoryId);
             }
             if (TextBoxSearch.Text != String.Empty)
             {
@@ -502,6 +601,11 @@ namespace Cowrie.Modules.ProductList
                         GetNextActionID(), "Create Departments Subtabs", "CreateDepartmentsSubtabs", String.Empty,
                         String.Empty,
                         String.Empty, true, SecurityAccessLevel.Admin, true, false
+                    },
+                    {
+                        GetNextActionID(), "Create Categories Tabs", "CreateCategoriesTabs", String.Empty,
+                        String.Empty,
+                        String.Empty, true, SecurityAccessLevel.Admin, true, false
                     }
                 };
                 return actions;
@@ -529,13 +633,19 @@ namespace Cowrie.Modules.ProductList
         {
             using (SelectedHotelsEntities db = new SelectedHotelsEntities())
             {
-                int? departmentId = null;
+                IQueryable<Cloth> clothes = GetClothes(db);
                 if (Settings["department"] != null)
                 {
-                    departmentId = Convert.ToInt32(Settings["department"]);
+                    int departmentId = Convert.ToInt32(Settings["department"]);
                     LabelTitle.Text = db.Departments.Find(departmentId).Name;
+                    clothes = GetClothes(db, departmentId);
                 }
-                var clothes = GetClothes(db, departmentId);
+                else if (Settings["merchantcategory"] != null)
+                {
+                    int merchantCategoryId = Convert.ToInt32(Settings["merchantcategory"]);
+                    LabelTitle.Text = db.MerchantCategories.Find(merchantCategoryId).FullName;
+                    clothes = GetClothes(db, null, merchantCategoryId);
+                }
 
                 BindData(FilterClothes(clothes));
             }
@@ -584,13 +694,19 @@ namespace Cowrie.Modules.ProductList
         {
             using (SelectedHotelsEntities db = new SelectedHotelsEntities())
             {
-                int? departmentId = null;
+                IQueryable<Cloth> clothes = GetClothes(db);
                 if (Settings["department"] != null)
                 {
-                    departmentId = Convert.ToInt32(Settings["department"]);
+                    int departmentId = Convert.ToInt32(Settings["department"]);
                     LabelTitle.Text = db.Departments.Find(departmentId).Name;
+                    clothes = GetClothes(db, departmentId);
                 }
-                var clothes = GetClothes(db, departmentId);
+                else if (Settings["merchantcategory"] != null)
+                {
+                    int merchantCategoryId = Convert.ToInt32(Settings["merchantcategory"]);
+                    LabelTitle.Text = db.MerchantCategories.Find(merchantCategoryId).FullName;
+                    clothes = GetClothes(db, null, merchantCategoryId);
+                }
                 if (initFilters)
                 {
                     InitFilters(db, clothes);

@@ -14,5 +14,10 @@
                 <asp:ListItem Value="">All Departments</asp:ListItem>
             </asp:DropDownList>
         </td>
+        <td valign="bottom">
+            <asp:DropDownList ID="DropDownListMerchantCategories" runat="server" DataValueField="Id" DataTextField="FullName" Width="250px" AppendDataBoundItems="True">
+                <asp:ListItem Value="">All Merchant Categories</asp:ListItem>
+            </asp:DropDownList>
+        </td>
     </tr>
 </table>
