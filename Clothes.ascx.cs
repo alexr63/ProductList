@@ -59,7 +59,7 @@ namespace Cowrie.Modules.ProductList
                             var tab = CreateTab(parentCategory.Name);
                             //Clear Cache
                             DotNetNuke.Common.Utilities.DataCache.ClearModuleCache(tab.TabID);
-                            var childCategories = db.MerchantCategories.Where(mc => mc.ParentId == parentCategory.Id);
+                            var childCategories = db.MerchantCategories.Where(mc => mc.ParentId == parentCategory.Id).OrderBy(mc => mc.Name);
                             foreach (MerchantCategory merchantCategory in childCategories)
                             {
                                 var childTab = CreateSubTab(merchantCategory.Name, merchantCategory.Id, "merchantcategory", tab.TabID);
