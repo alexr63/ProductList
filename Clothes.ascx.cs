@@ -52,16 +52,14 @@ namespace Cowrie.Modules.ProductList
                 case "CreateCategoriesTabs":
                     using (SelectedHotelsEntities db = new SelectedHotelsEntities())
                     {
-                        var parentCategoryNames =
-                            db.MerchantCategories.Select(mc => mc.ParentName).Distinct().OrderBy(mc => mc);
-                        foreach (var parentCategoryName in parentCategoryNames)
+                        var parentCategories =
+                            db.MerchantCategories.Where(mc => mc.ParentId == null).OrderBy(mc => mc.Name);
+                        foreach (var parentCategory in parentCategories)
                         {
-                            if (parentCategoryName == null)
-                                continue;
-                            var tab = CreateTab(parentCategoryName);
+                            var tab = CreateTab(parentCategory.Name);
                             //Clear Cache
                             DotNetNuke.Common.Utilities.DataCache.ClearModuleCache(tab.TabID);
-                            var childCategories = db.MerchantCategories.Where(mc => mc.ParentName == parentCategoryName);
+                            var childCategories = db.MerchantCategories.Where(mc => mc.ParentId == parentCategory.Id);
                             foreach (MerchantCategory merchantCategory in childCategories)
                             {
                                 var childTab = CreateSubTab(merchantCategory.Name, merchantCategory.Id, "merchantcategory", tab.TabID);
