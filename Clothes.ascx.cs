@@ -29,42 +29,43 @@ namespace Cowrie.Modules.ProductList
         {
             switch (e.Action.CommandName)
             {
-                case "CreateDepartmentsSubtabs":
-                    using (SelectedHotelsEntities db = new SelectedHotelsEntities())
-                    {
-                        foreach (Department department in db.Departments)
-                        {
-                            if (department.Name.StartsWith("All"))
-                            {
-                                var tab = CreateSubTab(department.Name, department.Id);
-                                //Clear Cache
-                                DotNetNuke.Common.Utilities.DataCache.ClearModuleCache(tab.TabID);
-                            }
-                        }
-                    }
-
-                    //Clear Cache
-                    DotNetNuke.Common.Utilities.DataCache.ClearTabsCache(PortalId);
-                    DotNetNuke.Common.Utilities.DataCache.ClearPortalCache(PortalId, false);
-
-                    DotNetNuke.UI.Skins.Skin.AddModuleMessage(this, "Departments Subtabs Created", ModuleMessage.ModuleMessageType.GreenSuccess);
-                    break;
-                case "CreateCategoriesTabs":
+                case "UpdateCategoriesTabs":
                     using (SelectedHotelsEntities db = new SelectedHotelsEntities())
                     {
                         var parentCategories =
                             db.MerchantCategories.Where(mc => mc.ParentId == null).OrderBy(mc => mc.Name);
+                        TabController tabController = new TabController();
                         foreach (var parentCategory in parentCategories)
                         {
-                            var tab = CreateTab(parentCategory.Name);
-                            //Clear Cache
-                            DotNetNuke.Common.Utilities.DataCache.ClearModuleCache(tab.TabID);
-                            var childCategories = db.MerchantCategories.Where(mc => mc.ParentId == parentCategory.Id).OrderBy(mc => mc.Name);
-                            foreach (MerchantCategory merchantCategory in childCategories)
+                            TabInfo tab = tabController.GetTabByName(parentCategory.Name, PortalId, -1);
+                            if (tab == null)
                             {
-                                var childTab = CreateSubTab(merchantCategory.Name, merchantCategory.Id, "merchantcategory", tab.TabID);
+                                tab = CreateTab(parentCategory.Name);
                                 //Clear Cache
-                                DotNetNuke.Common.Utilities.DataCache.ClearModuleCache(childTab.TabID);
+                                DotNetNuke.Common.Utilities.DataCache.ClearModuleCache(tab.TabID);
+                                var childCategories =
+                                    db.MerchantCategories.Where(mc => mc.ParentId == parentCategory.Id)
+                                        .OrderBy(mc => mc.Name);
+                                foreach (MerchantCategory merchantCategory in childCategories)
+                                {
+                                    TabInfo childTab = tabController.GetTabByName(merchantCategory.Name, PortalId, tab.TabID);
+                                    if (childTab == null)
+                                    {
+                                        childTab = CreateSubTab(merchantCategory.Name, merchantCategory.Id,
+                                            "merchantcategory", tab.TabID);
+                                        //Clear Cache
+                                        DotNetNuke.Common.Utilities.DataCache.ClearModuleCache(childTab.TabID);
+                                    }
+                                }
+                            }
+                        }
+
+                        var portalTabs = tabController.GetTabsByPortal(PortalId);
+                        foreach (KeyValuePair<int, TabInfo> pair in portalTabs)
+                        {
+                            if (!parentCategories.Any(pc => pc.Name == pair.Value.TabName && pair.Value.IsSuperTab))
+                            {
+                                DeleteTab(pair.Value.TabName);
                             }
                         }
                     }
@@ -73,11 +74,23 @@ namespace Cowrie.Modules.ProductList
                     DotNetNuke.Common.Utilities.DataCache.ClearTabsCache(PortalId);
                     DotNetNuke.Common.Utilities.DataCache.ClearPortalCache(PortalId, false);
 
-                    DotNetNuke.UI.Skins.Skin.AddModuleMessage(this, "Categories Tabs Created", ModuleMessage.ModuleMessageType.GreenSuccess);
+                    DotNetNuke.UI.Skins.Skin.AddModuleMessage(this, "Categories Tabs Updated", ModuleMessage.ModuleMessageType.GreenSuccess);
                     break;
             }
         }
 
+        private void DeleteTab(string tabName, bool isSuperTab = true)
+        {
+            TabController tabController = new TabController();
+            TabInfo tab = tabController.GetTabByName(tabName, PortalId);
+            tabController.DeleteTab(tab.TabID, PortalId, true);
+        }
+        private void DeleteSubTab(string tabName, int parentId)
+        {
+            TabController tabController = new TabController();
+            TabInfo tab = tabController.GetTabByName(tabName, PortalId, parentId);
+            tabController.DeleteTab(tab.TabID, PortalId);
+        }
         private TabInfo CreateTab(string tabName, bool isSuperTab = true)
         {
             //Create Tab
@@ -596,12 +609,7 @@ namespace Cowrie.Modules.ProductList
                 ModuleActionCollection actions = new ModuleActionCollection
                 {
                     {
-                        GetNextActionID(), "Create Departments Subtabs", "CreateDepartmentsSubtabs", String.Empty,
-                        String.Empty,
-                        String.Empty, true, SecurityAccessLevel.Admin, true, false
-                    },
-                    {
-                        GetNextActionID(), "Create Categories Tabs", "CreateCategoriesTabs", String.Empty,
+                        GetNextActionID(), "Update Categories Tabs", "UpdateCategoriesTabs", String.Empty,
                         String.Empty,
                         String.Empty, true, SecurityAccessLevel.Admin, true, false
                     }
