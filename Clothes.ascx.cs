@@ -63,7 +63,7 @@ namespace Cowrie.Modules.ProductList
                         var portalTabs = tabController.GetTabsByPortal(PortalId);
                         foreach (KeyValuePair<int, TabInfo> pair in portalTabs)
                         {
-                            if (!parentCategories.Any(pc => pc.Name == pair.Value.TabName && pair.Value.IsSuperTab))
+                            if (!parentCategories.Any(pc => pc.Name == pair.Value.TabName && !pair.Value.TabPath.StartsWith("//Admin") && !pair.Value.TabPath.StartsWith("//Host")))
                             {
                                 DeleteTab(pair.Value.TabName);
                             }
