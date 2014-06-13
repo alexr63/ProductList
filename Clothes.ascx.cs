@@ -83,7 +83,8 @@ namespace Cowrie.Modules.ProductList
         {
             TabController tabController = new TabController();
             TabInfo tab = tabController.GetTabByName(tabName, PortalId);
-            tabController.DeleteTab(tab.TabID, PortalId, true);
+            if (tab != null)
+                tabController.DeleteTab(tab.TabID, PortalId, true);
         }
         private void DeleteSubTab(string tabName, int parentId)
         {
