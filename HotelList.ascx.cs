@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.UI.WebControls;
+using Common;
 using DotNetNuke.Entities.Modules;
 using DotNetNuke.Entities.Modules.Actions;
 using DotNetNuke.Entities.Tabs;
@@ -13,6 +14,7 @@ using DotNetNuke.Services.Localization;
 using ProductList;
 using SelectedHotelsModel;
 using Telerik.Web.UI;
+using Utils = ProductList.Utils;
 
 namespace Cowrie.Modules.ProductList
 {
@@ -42,10 +44,10 @@ namespace Cowrie.Modules.ProductList
             {
                 if (!IsPostBack)
                 {
-                    DataBind();
-
                     using (SelectedHotelsEntities db = new SelectedHotelsEntities())
                     {
+                        db.Database.Log = logInfo => MyLogger.Log(logInfo, PortalSettings);
+
                         int locationId = 1069;
                         try
                         {
@@ -112,7 +114,7 @@ namespace Cowrie.Modules.ProductList
                             {
                                 hotelTypeId = Convert.ToInt32(Settings["hoteltype"]);
                             }
-                            Utils.PopulateLocationTree(RadTreeViewLocations, db, locationId, selectedLocationId, true,
+                            Utils.PopulateLocationTree(RadTreeViewLocations, db, locationId, selectedLocationId, false,
                                 hotelTypeId);
                         }
                         else

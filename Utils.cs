@@ -179,7 +179,7 @@ namespace ProductList
 
         public static bool AnyHotelInLocation(SelectedHotelsEntities db, int locationId, int? hotelTypeId)
         {
-            return db.HotelsInLocation(locationId, hotelTypeId).Any();
+            return db.HotelLocations.Any(hl => hl.LocationId == locationId && ((hotelTypeId == null) || (hl.HotelTypeId == hotelTypeId)));
         }
     }
 }
