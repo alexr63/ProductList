@@ -20,6 +20,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExportClothes", "..\..\..\.
 		{58ED5699-0CE6-4868-9876-F99D40899857} = {58ED5699-0CE6-4868-9876-F99D40899857}
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FillHotelGeoLocations", "..\..\..\..\..\Projects\Cowrie\FillHotelGeoLocations\FillHotelGeoLocations.csproj", "{9C4A6B0C-A823-4C2C-BEB9-533DDC1F40A2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -123,6 +125,19 @@ Global
 		{612F0D96-94AF-4ED6-B3ED-E06388FE8D46}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{612F0D96-94AF-4ED6-B3ED-E06388FE8D46}.Release|x64.ActiveCfg = Release|Any CPU
 		{612F0D96-94AF-4ED6-B3ED-E06388FE8D46}.Release|x86.ActiveCfg = Release|Any CPU
+		{9C4A6B0C-A823-4C2C-BEB9-533DDC1F40A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C4A6B0C-A823-4C2C-BEB9-533DDC1F40A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C4A6B0C-A823-4C2C-BEB9-533DDC1F40A2}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{9C4A6B0C-A823-4C2C-BEB9-533DDC1F40A2}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{9C4A6B0C-A823-4C2C-BEB9-533DDC1F40A2}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{9C4A6B0C-A823-4C2C-BEB9-533DDC1F40A2}.Debug|x64.Build.0 = Debug|Any CPU
+		{9C4A6B0C-A823-4C2C-BEB9-533DDC1F40A2}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{9C4A6B0C-A823-4C2C-BEB9-533DDC1F40A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C4A6B0C-A823-4C2C-BEB9-533DDC1F40A2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C4A6B0C-A823-4C2C-BEB9-533DDC1F40A2}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{9C4A6B0C-A823-4C2C-BEB9-533DDC1F40A2}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{9C4A6B0C-A823-4C2C-BEB9-533DDC1F40A2}.Release|x64.ActiveCfg = Release|Any CPU
+		{9C4A6B0C-A823-4C2C-BEB9-533DDC1F40A2}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

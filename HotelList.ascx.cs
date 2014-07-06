@@ -46,7 +46,9 @@ namespace Cowrie.Modules.ProductList
                 {
                     using (SelectedHotelsEntities db = new SelectedHotelsEntities())
                     {
+#if DEBUG
                         db.Database.Log = logInfo => MyLogger.Log(logInfo, PortalSettings);
+#endif
 
                         int locationId = 1069;
                         try
@@ -114,8 +116,9 @@ namespace Cowrie.Modules.ProductList
                             {
                                 hotelTypeId = Convert.ToInt32(Settings["hoteltype"]);
                             }
-                            Utils.PopulateLocationTree(RadTreeViewLocations, db, locationId, selectedLocationId, false,
-                                hotelTypeId);
+                            //Utils.PopulateLocationTree(RadTreeViewLocations, db, locationId, selectedLocationId, false, hotelTypeId);
+                            const int englandGeoNameId = 6269131;
+                            Utils.PopulateGeoLocationTree(RadTreeViewLocations, db, englandGeoNameId, englandGeoNameId, false, hotelTypeId);
                         }
                         else
                         {
@@ -197,12 +200,16 @@ namespace Cowrie.Modules.ProductList
             {
                 locationId = Convert.ToInt32(Session["locationId"]);
             }
+#if DEBUG
+            locationId = 6269131;
+#endif
             int? hotelTypeId = null;
             if (Settings["hoteltype"] != null)
             {
                 hotelTypeId = Convert.ToInt32(Settings["hoteltype"]);
             }
-            var hotels = db.HotelsInLocation(locationId, hotelTypeId);
+            //var hotels = db.HotelsInLocation(locationId, hotelTypeId);
+            var hotels = db.HotelsInGeoLocation(locationId, hotelTypeId);
             if (TextBoxSearch.Text != String.Empty)
             {
                 hotels =

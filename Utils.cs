@@ -82,6 +82,60 @@ namespace ProductList
             }
         }
 
+        public static int? PopulateGeoLocationTree(RadTreeView radTreeView, SelectedHotelsEntities db, int locationId, int? selectedLocationId = null, bool createSubLocationNodes = false, int? hotelTypeId = null)
+        {
+            radTreeView.Nodes.Clear();
+            GeoName topLocation = db.GeoNames.Find(locationId);
+            RadTreeNode node = new RadTreeNode();
+            node.Value = topLocation.Id.ToString();
+            node.Text = topLocation.Name;
+            node.ToolTip = topLocation.Name;
+            if (db.Hierarchies.Any(h => h.ParentId == locationId)) // todo and any hotels in sublocations (not the location itelf)
+            { 
+                node.ExpandMode = TreeNodeExpandMode.ServerSideCallBack;
+            }
+            if (selectedLocationId != null && topLocation.Id == selectedLocationId)
+            {
+                node.Selected = true;
+            }
+            radTreeView.Nodes.Add(node);
+            if (createSubLocationNodes)
+            {
+                CreateSubGeoLocationNodes(db, topLocation, node, selectedLocationId, hotelTypeId);
+                node.Expanded = true;
+            }
+            return locationId;
+        }
+
+        public static void CreateSubGeoLocationNodes(SelectedHotelsEntities db, GeoName location, RadTreeNode objNode, int? selectedLocationId, int? hotelTypeId = null)
+        {
+            if (db.Hierarchies.Any(h => h.ParentId == location.Id)) // && AnyHotelInLocation(db, location.Id, hotelTypeId))
+            {
+                var subLocations = from h in db.Hierarchies
+                                   from gn in db.GeoNames.Where(gn => gn.Id == h.ChildId)
+                                   where h.ParentId == location.Id
+                                   select gn;
+                foreach (var subLocation in subLocations)
+                {
+                    // if (!AnyHotelInLocation(db, subLocation.Id, hotelTypeId)) continue;
+
+                    RadTreeNode node = new RadTreeNode();
+                    node.Value = subLocation.Id.ToString();
+                    node.Text = subLocation.Name;
+                    node.ToolTip = subLocation.Name;
+                    if (db.Hierarchies.Any(h => h.ParentId == subLocation.Id)) // todo and any hotels in sublocations (not the location itelf)
+                    {
+                        node.ExpandMode = TreeNodeExpandMode.ServerSideCallBack;
+                    }
+                    objNode.Nodes.Add(node);
+                    if (selectedLocationId != null && subLocation.Id == selectedLocationId)
+                    {
+                        node.Selected = true;
+                    }
+                }
+            }
+        }
+
         public static int? PopulateLocationTree(RadTreeView radTreeView, SelectedHotelsEntities db, int? locationId = null, int? selectedLocationId = null, bool createSubLocationNodes = false, int? hotelTypeId = null)
         {
             radTreeView.Nodes.Clear();
