@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Spatial;
 using System.Linq;
 using System.Web.UI.WebControls;
 using Common;
@@ -13,6 +14,7 @@ using DotNetNuke.Services.Exceptions;
 using DotNetNuke.Services.Localization;
 using ProductList;
 using SelectedHotelsModel;
+using Subgurim.Controles;
 using Telerik.Web.UI;
 using Utils = ProductList.Utils;
 
@@ -125,16 +127,40 @@ namespace Cowrie.Modules.ProductList
                             PanelCategories.Visible = false;
                             PanelProducts.Width = Unit.Pixel(870);
                         }
-                        BindData(db);
+                        BindData(db, 54.0, -5.0, 10.0);
 
                         SavePersistentSetting();
                     }
+
+                    ResetMap();
                 }
             }
             catch (Exception ex)
             {
                 Exceptions.ProcessModuleLoadException(this, ex);
             }
+        }
+
+        private void ResetMap()
+        {
+            GMap1.reset();
+            GMap1.addControl(new GControl(GControl.preBuilt.GOverviewMapControl));
+            GMap1.addControl(new GControl(GControl.preBuilt.LargeMapControl));
+
+            GMap1.addGMapUI(new GMapUI());
+
+            KeyDragZoom keyDragZoom = new KeyDragZoom();
+            keyDragZoom.key = KeyDragZoom.HotKeyEnum.ctrl;
+            keyDragZoom.boxStyle = "{border: '4px solid #FFFF00'}";
+            keyDragZoom.paneStyle = "{backgroundColor: 'black', opacity: 0.2, cursor: 'crosshair'}";
+
+            GMap1.addKeyDragZoom(keyDragZoom);
+
+            //GMap1.resetMarkerClusterer();
+            GMap1.resetMarkers();
+            GMap1.resetMarkerManager();
+
+            GMap1.setCenter(new GLatLng(54.0, -5.0), 5); // UK
         }
 
         private void LoadPersistentSettings(ref int selectedLocationId)
@@ -193,15 +219,36 @@ namespace Cowrie.Modules.ProductList
             Session["pageSize"] = Convert.ToInt32(DropDownListPageSizes.SelectedValue);
         }
 
-        private void BindData(SelectedHotelsEntities db)
+        protected void ButtonLocate_Click(object sender, EventArgs e)
         {
+            ResetMap();
+            GMap1.resetOverViewMap();
+            GMap1.resetInfoWindows();
+
+            using (SelectedHotelsEntities db = new SelectedHotelsEntities())
+            {
+                double lat = 51.53333; // Barking
+                double lon = 0.08333; //
+                double distance = 10.0;
+                BindData(db, lat, lon, distance);
+            }
+        }
+
+        private void BindData(SelectedHotelsEntities db, double lat, double lon, double distance)
+        {
+            var location = DbGeography.FromText(String.Format("POINT({0} {1})", lon, lat));
+            var hotels = from hotel in db.Products.Where(p => !p.IsDeleted).OfType<Hotel>()
+                where !hotel.IsDeleted && hotel.Location != null &&
+                hotel.Location.Distance(location) *.00062 <= 50
+                select hotel;
+
             int locationId = Convert.ToInt32(Settings["location"]);
             if (PanelCategories.Visible && Session["locationId"] != null)
             {
                 locationId = Convert.ToInt32(Session["locationId"]);
             }
 #if DEBUG
-            locationId = 6269131;
+            //locationId = 6269131;
 #endif
             int? hotelTypeId = null;
             if (Settings["hoteltype"] != null)
@@ -209,7 +256,7 @@ namespace Cowrie.Modules.ProductList
                 hotelTypeId = Convert.ToInt32(Settings["hoteltype"]);
             }
             //var hotels = db.HotelsInLocation(locationId, hotelTypeId);
-            var hotels = db.HotelsInGeoLocation(locationId, hotelTypeId);
+            //var hotels = db.HotelsInGeoLocation(locationId, hotelTypeId);
             if (TextBoxSearch.Text != String.Empty)
             {
                 hotels =
@@ -290,7 +337,7 @@ namespace Cowrie.Modules.ProductList
 
             using (SelectedHotelsEntities db = new SelectedHotelsEntities())
             {
-                BindData(db);
+                BindData(db, 54.0, -5.0, 10.0);
             }
         }
 
@@ -300,7 +347,7 @@ namespace Cowrie.Modules.ProductList
 
             using (SelectedHotelsEntities db = new SelectedHotelsEntities())
             {
-                BindData(db);
+                BindData(db, 54.0, -5.0, 10.0);
             }
         }
 
@@ -323,7 +370,7 @@ namespace Cowrie.Modules.ProductList
 
             using (SelectedHotelsEntities db = new SelectedHotelsEntities())
             {
-                BindData(db);
+                BindData(db, 54.0, -5.0, 10.0);
             }
         }
 
@@ -353,7 +400,7 @@ namespace Cowrie.Modules.ProductList
 
             using (SelectedHotelsEntities db = new SelectedHotelsEntities())
             {
-                BindData(db);
+                BindData(db, 54.0, -5.0, 10.0);
             }
         }
 
@@ -367,7 +414,7 @@ namespace Cowrie.Modules.ProductList
 
             using (SelectedHotelsEntities db = new SelectedHotelsEntities())
             {
-                BindData(db);
+                BindData(db, 54.0, -5.0, 10.0);
             }
         }
 
@@ -381,6 +428,10 @@ namespace Cowrie.Modules.ProductList
             {
                 Response.Redirect(DotNetNuke.Common.Globals.NavigateURL(DetailsTabId, "", "Id=" + e.CommandArgument.ToString()));
             }
+        }
+        protected string GMap1_ZoomEnd(object s, GAjaxServerEventZoomArgs e)
+        {
+            return String.Empty;
         }
     }
 }
