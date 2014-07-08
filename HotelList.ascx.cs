@@ -22,6 +22,9 @@ namespace Cowrie.Modules.ProductList
 {
     public partial class HotelList : PortalModuleBase, IActionable
     {
+        protected double X_Map = 54.0;   // Latitude
+        protected double Y_Map = -5.0;   // Longitude
+
         public int DetailsTabId { get; set; }
         public int EditTabId { get; set; }
 
@@ -132,7 +135,11 @@ namespace Cowrie.Modules.ProductList
                         SavePersistentSetting();
                     }
 
+                    Session["HiddenFieldX"] = X_Map.ToString();
+                    Session["HiddenFieldY"] = Y_Map.ToString();
+                    GLatLng _point = new GLatLng(X_Map, Y_Map);
                     ResetMap();
+                    CreateMarker(_point);
                 }
             }
             catch (Exception ex)
@@ -160,7 +167,44 @@ namespace Cowrie.Modules.ProductList
             GMap1.resetMarkers();
             GMap1.resetMarkerManager();
 
-            GMap1.setCenter(new GLatLng(54.0, -5.0), 5); // UK
+            GLatLng _point = new GLatLng(X_Map, Y_Map);
+            GMap1.setCenter(_point, 5); // UK
+        }
+        protected GMarker CreateMarker(GLatLng FromPoint)
+        {
+            GMarker _Marker = new GMarker(FromPoint);
+            GMarkerOptions _options = new GMarkerOptions();
+            _options.draggable = true;
+            _Marker.options = _options;
+
+            GMap1.Add(_Marker);
+
+            GMap1.addListener(new GListener(_Marker.ID, GListener.Event.dragend,
+                 string.Format(@"
+               function(overlay, point)
+               {{
+                  var ev = new serverEvent('myDragEnd', {0});
+                  ev.addArg({0}.getZoom());
+                  ev.addArg({1}.position.lng());
+                  ev.addArg({1}.position.lat());
+                  ev.send();
+               }}
+               ", GMap1.GMap_Id, _Marker.ID)));
+
+            GMap1.addListener(new GListener(GMap1.GMap_Id, GListener.Event.click,
+                 string.Format(@"
+               function(overlay, marker)
+               {{
+                  {1}.setPosition({0}.getCenter());
+                  var ev = new serverEvent('myDragEnd', {0});
+                  ev.addArg({0}.getZoom());
+                  ev.addArg({1}.position.lng());
+                  ev.addArg({1}.position.lat());
+                  ev.send();
+               }}
+               ", GMap1.GMap_Id, _Marker.ID)));
+
+            return _Marker;
         }
 
         private void LoadPersistentSettings(ref int selectedLocationId)
@@ -239,7 +283,7 @@ namespace Cowrie.Modules.ProductList
             var location = DbGeography.FromText(String.Format("POINT({0} {1})", lon, lat));
             var hotels = from hotel in db.Products.Where(p => !p.IsDeleted).OfType<Hotel>()
                 where !hotel.IsDeleted && hotel.Location != null &&
-                hotel.Location.Distance(location) *.00062 <= 50
+                hotel.Location.Distance(location) * .00062 <= distance
                 select hotel;
 
             int locationId = Convert.ToInt32(Settings["location"]);
@@ -294,8 +338,8 @@ namespace Cowrie.Modules.ProductList
             }
             ListViewContent.DataBind();
 
-            var selectedLocation = db.Locations.SingleOrDefault(l => l.Id == locationId);
-            LabelSelectedLocation.Text = selectedLocation.Name;
+            //var selectedLocation = db.Locations.SingleOrDefault(l => l.Id == locationId);
+            //LabelSelectedLocation.Text = selectedLocation.Name;
 
             LabelCount.Text = hotels.Count().ToString();
         }
@@ -429,9 +473,43 @@ namespace Cowrie.Modules.ProductList
                 Response.Redirect(DotNetNuke.Common.Globals.NavigateURL(DetailsTabId, "", "Id=" + e.CommandArgument.ToString()));
             }
         }
-        protected string GMap1_ZoomEnd(object s, GAjaxServerEventZoomArgs e)
+        protected string GMap1_ServerEvent(object s, GAjaxServerEventOtherArgs e)
         {
-            return String.Empty;
+            switch (e.eventName)
+            {
+                case "myDragEnd":
+                    string zoomLevel = e.eventArgs[0];
+
+                    Session["HiddenFieldX"] = e.eventArgs[2];    // Coordinates swapped on client request
+                    Session["HiddenFieldY"] = e.eventArgs[1];    //
+
+                    GLatLng _point = new GLatLng(Convert.ToDouble(e.eventArgs[2], new System.Globalization.CultureInfo("en-US", false)),
+                        Convert.ToDouble(e.eventArgs[1], new System.Globalization.CultureInfo("en-US", false)));
+
+                    return GetInverseGeoCode(_point);
+            }
+
+            return string.Empty;
+        }
+        protected string GMap1_MarkerClick(object s, GAjaxServerEventArgs e)
+        {
+            return GetInverseGeoCode(e.point);
+        }
+        protected string GetInverseGeoCode(GLatLng FromPoint)
+        {
+            string streetNumber;
+            string streetName;
+            string locality;
+            string postalCode;
+            string _addr = Geocoder.NearestAddressGoogle(FromPoint.ToString(), out streetNumber, out streetName, out locality, out postalCode);
+            if (_addr != String.Empty)
+            {
+                GInfoWindow window = new GInfoWindow(FromPoint, _addr, true);
+
+                return window.ToString(GMap1.GMap_Id);
+            }
+            else
+                return string.Empty;
         }
     }
 }

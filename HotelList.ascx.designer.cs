@@ -49,6 +49,24 @@ namespace Cowrie.Modules.ProductList {
         protected global::Subgurim.Controles.GMap GMap1;
         
         /// <summary>
+        /// HiddenFieldX control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField HiddenFieldX;
+        
+        /// <summary>
+        /// HiddenFieldY control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField HiddenFieldY;
+        
+        /// <summary>
         /// ButtonLocate control.
         /// </summary>
         /// <remarks>

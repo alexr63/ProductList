@@ -7,8 +7,10 @@
 <telerik:radformdecorator id="QsfFromDecorator" runat="server" decoratedcontrols="All" enableroundedcorners="false" />
 <asp:Panel ID="PanelCategories" runat="server" CssClass="categories">
     <br />
-    <cc1:GMap ID="GMap1" runat="server" serverEventsType="AspNetPostBack" enableServerEvents="true"
-        Width="100%" Height="400px" OnZoomEnd="GMap1_ZoomEnd" />
+    <cc1:GMap ID="GMap1" runat="server" OnServerEvent="GMap1_ServerEvent" enableServerEvents="True"
+        Width="100%" Height="400px" OnMarkerClick="GMap1_MarkerClick" />
+    <asp:HiddenField ID="HiddenFieldX" runat="server" />
+    <asp:HiddenField ID="HiddenFieldY" runat="server" />
     <asp:Button ID="ButtonLocate" runat="server" Text="Search" OnClick="ButtonLocate_Click" />
 
     <telerik:radtreeview id="RadTreeViewLocations" runat="server" height="1800px" width="100%"
