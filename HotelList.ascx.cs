@@ -130,7 +130,7 @@ namespace Cowrie.Modules.ProductList
                             PanelCategories.Visible = false;
                             PanelProducts.Width = Unit.Pixel(870);
                         }
-                        BindData(db, 54.0, -5.0, 10.0);
+                        BindData(db, X_Map, Y_Map, 10.0);
 
                         SavePersistentSetting();
                     }
@@ -265,16 +265,10 @@ namespace Cowrie.Modules.ProductList
 
         protected void ButtonLocate_Click(object sender, EventArgs e)
         {
-            ResetMap();
-            GMap1.resetOverViewMap();
-            GMap1.resetInfoWindows();
-
             using (SelectedHotelsEntities db = new SelectedHotelsEntities())
             {
-                double lat = 51.53333; // Barking
-                double lon = 0.08333; //
                 double distance = 10.0;
-                BindData(db, lat, lon, distance);
+                BindData(db, Convert.ToDouble(Session["HiddenFieldX"]), Convert.ToDouble(Session["HiddenFieldY"]), distance);
             }
         }
 
