@@ -1,20 +1,23 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="HotelList.ascx.cs"
     Inherits="Cowrie.Modules.ProductList.HotelList" %>
+<%@ Register Assembly="DotNetNuke.WebControls" Namespace="DotNetNuke.UI.WebControls" TagPrefix="DNN" %>
 <%@ Import Namespace="Common" %>
 <%@ Register TagPrefix="telerik" Namespace="Telerik.Web.UI" Assembly="Telerik.Web.UI" %>
 <%@ Register Assembly="GMaps" Namespace="Subgurim.Controles" TagPrefix="cc1" %>
 <telerik:radskinmanager id="QsfSkinManager" runat="server" showchooser="false" />
 <telerik:radformdecorator id="QsfFromDecorator" runat="server" decoratedcontrols="All" enableroundedcorners="false" />
-<asp:Panel ID="PanelCategories" runat="server" CssClass="categories">
-    <br />
-    <cc1:GMap ID="GMap1" runat="server" OnServerEvent="GMap1_ServerEvent" enableServerEvents="True"
-        Width="100%" Height="400px" OnMarkerClick="GMap1_MarkerClick" />
-    <asp:HiddenField ID="HiddenFieldX" runat="server" />
-    <asp:HiddenField ID="HiddenFieldY" runat="server" />
-    <asp:Button ID="ButtonLocate" runat="server" Text="Search" OnClick="ButtonLocate_Click" />
-
+<cc1:GMap ID="locationGMap" runat="server"
+    onserverevent="locationGMap_ServerEvent" enableServerEvents="True"
+    GZoom="10" onmarkerclick="locationGMap_MarkerClick" />
+<br />
+<asp:HiddenField ID="HiddenFieldX" runat="server" />
+<asp:HiddenField ID="HiddenFieldY" runat="server" />
+<asp:Button ID="ButtonLocate" runat="server" Text="Search" OnClick="ButtonLocate_Click" />
+<asp:Panel ID="PanelLocations" runat="server">
+</asp:Panel>
+<asp:Panel ID="PanelCategories" runat="server" CssClass="categories" Visible="True">
     <telerik:radtreeview id="RadTreeViewLocations" runat="server" height="1800px" width="100%"
-        onnodeexpand="RadTreeViewLocations_NodeExpand" onnodeclick="RadTreeViewLocations_NodeClick">
+        onnodeexpand="RadTreeViewLocations_NodeExpand" onnodeclick="RadTreeViewLocations_NodeClick" Visible="False">
     </telerik:radtreeview>
 </asp:Panel>
 <asp:Panel ID="PanelProducts" runat="server" CssClass="products" Width="600px">
@@ -27,7 +30,7 @@
         &nbsp;<asp:Button ID="ButtonSubmit" runat="server" Text="Go" OnClick="ButtonSubmit_Click" ValidationGroup="HotelListSearch" />&nbsp;<asp:Button ID="ButtonClear" runat="server" Text="Clear" OnClick="ButtonClear_Click" CausesValidation="False" Visible="False" />
     </div>
     <h2>
-        <asp:Label ID="LabelSelectedLocation" runat="server" />&nbsp;<asp:Label ID="LabelFilteredBy" runat="server" Visible="False" />
+        Near&nbsp;<asp:Label ID="LabelSelectedLocation" runat="server" />&nbsp;<asp:Label ID="LabelFilteredBy" runat="server" Visible="False" />
     </h2>
     <table style="width: 100%">
         <tr width="280px">
@@ -88,7 +91,8 @@
                                 <asp:HyperLink ID="editLink" NavigateUrl='<%# EditUrl("ItemId", Eval("Id").ToString()) %>'
                                     Visible="<%# IsEditable %>" runat="server">
                                     <asp:Image ID="editLinkImage" AlternateText="Edit" Visible="<%# IsEditable %>" ImageUrl="~/images/edit.gif"
-                                        runat="Server" resourcekey="Edit" /></asp:HyperLink>
+                                        runat="Server" resourcekey="Edit" />
+                                </asp:HyperLink>
                             </td>
                             <td style="vertical-align: middle">
                                 <h1>

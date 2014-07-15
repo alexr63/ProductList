@@ -31,22 +31,13 @@ namespace Cowrie.Modules.ProductList {
         protected global::Telerik.Web.UI.RadFormDecorator QsfFromDecorator;
         
         /// <summary>
-        /// PanelCategories control.
+        /// locationGMap control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel PanelCategories;
-        
-        /// <summary>
-        /// GMap1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::Subgurim.Controles.GMap GMap1;
+        protected global::Subgurim.Controles.GMap locationGMap;
         
         /// <summary>
         /// HiddenFieldX control.
@@ -74,6 +65,24 @@ namespace Cowrie.Modules.ProductList {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button ButtonLocate;
+        
+        /// <summary>
+        /// PanelLocations control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel PanelLocations;
+        
+        /// <summary>
+        /// PanelCategories control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel PanelCategories;
         
         /// <summary>
         /// RadTreeViewLocations control.

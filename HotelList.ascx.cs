@@ -1,7 +1,6 @@
 ﻿// Copyright (c) 2012 Cowrie
 
 using System;
-using System.Collections.Generic;
 using System.Data.Entity.Spatial;
 using System.Linq;
 using System.Web.UI.WebControls;
@@ -11,7 +10,7 @@ using DotNetNuke.Entities.Modules.Actions;
 using DotNetNuke.Entities.Tabs;
 using DotNetNuke.Security;
 using DotNetNuke.Services.Exceptions;
-using DotNetNuke.Services.Localization;
+using DotNetNuke.UI.WebControls;
 using ProductList;
 using SelectedHotelsModel;
 using Subgurim.Controles;
@@ -54,7 +53,6 @@ namespace Cowrie.Modules.ProductList
 #if DEBUG
                         db.Database.Log = logInfo => MyLogger.Log(logInfo, PortalSettings);
 #endif
-
                         int locationId = 1069;
                         try
                         {
@@ -150,25 +148,26 @@ namespace Cowrie.Modules.ProductList
 
         private void ResetMap()
         {
-            GMap1.reset();
-            GMap1.addControl(new GControl(GControl.preBuilt.GOverviewMapControl));
-            GMap1.addControl(new GControl(GControl.preBuilt.LargeMapControl));
+            //locationGMap.reset();
+            //locationGMap.addControl(new GControl(GControl.preBuilt.GOverviewMapControl));
+            locationGMap.Add(new GControl(GControl.preBuilt.LargeMapControl));
+            locationGMap.Add(new GControl(GControl.preBuilt.MapTypeControl));
 
-            GMap1.addGMapUI(new GMapUI());
+            //locationGMap.addGMapUI(new GMapUI());
 
-            KeyDragZoom keyDragZoom = new KeyDragZoom();
-            keyDragZoom.key = KeyDragZoom.HotKeyEnum.ctrl;
-            keyDragZoom.boxStyle = "{border: '4px solid #FFFF00'}";
-            keyDragZoom.paneStyle = "{backgroundColor: 'black', opacity: 0.2, cursor: 'crosshair'}";
+            //KeyDragZoom keyDragZoom = new KeyDragZoom();
+            //keyDragZoom.key = KeyDragZoom.HotKeyEnum.ctrl;
+            //keyDragZoom.boxStyle = "{border: '4px solid #FFFF00'}";
+            //keyDragZoom.paneStyle = "{backgroundColor: 'black', opacity: 0.2, cursor: 'crosshair'}";
 
-            GMap1.addKeyDragZoom(keyDragZoom);
+            //locationGMap.addKeyDragZoom(keyDragZoom);
 
-            //GMap1.resetMarkerClusterer();
-            GMap1.resetMarkers();
-            GMap1.resetMarkerManager();
+            ////locationGMap.resetMarkerClusterer();
+            locationGMap.resetMarkers();
+            locationGMap.resetMarkerManager();
 
             GLatLng _point = new GLatLng(X_Map, Y_Map);
-            GMap1.setCenter(_point, 5); // UK
+            locationGMap.setCenter(_point, 5); // UK
         }
         protected GMarker CreateMarker(GLatLng FromPoint)
         {
@@ -177,9 +176,9 @@ namespace Cowrie.Modules.ProductList
             _options.draggable = true;
             _Marker.options = _options;
 
-            GMap1.Add(_Marker);
+            locationGMap.Add(_Marker);
 
-            GMap1.addListener(new GListener(_Marker.ID, GListener.Event.dragend,
+            locationGMap.addListener(new GListener(_Marker.ID, GListener.Event.dragend,
                  string.Format(@"
                function(overlay, point)
                {{
@@ -189,9 +188,9 @@ namespace Cowrie.Modules.ProductList
                   ev.addArg({1}.position.lat());
                   ev.send();
                }}
-               ", GMap1.GMap_Id, _Marker.ID)));
+               ", locationGMap.GMap_Id, _Marker.ID)));
 
-            GMap1.addListener(new GListener(GMap1.GMap_Id, GListener.Event.click,
+            locationGMap.addListener(new GListener(locationGMap.GMap_Id, GListener.Event.click,
                  string.Format(@"
                function(overlay, marker)
                {{
@@ -202,7 +201,7 @@ namespace Cowrie.Modules.ProductList
                   ev.addArg({1}.position.lat());
                   ev.send();
                }}
-               ", GMap1.GMap_Id, _Marker.ID)));
+               ", locationGMap.GMap_Id, _Marker.ID)));
 
             return _Marker;
         }
@@ -333,7 +332,10 @@ namespace Cowrie.Modules.ProductList
             ListViewContent.DataBind();
 
             //var selectedLocation = db.Locations.SingleOrDefault(l => l.Id == locationId);
-            //LabelSelectedLocation.Text = selectedLocation.Name;
+            if (Session["Location"] != null)
+            {
+                LabelSelectedLocation.Text = Session["Location"].ToString();
+            }
 
             LabelCount.Text = hotels.Count().ToString();
         }
@@ -467,7 +469,7 @@ namespace Cowrie.Modules.ProductList
                 Response.Redirect(DotNetNuke.Common.Globals.NavigateURL(DetailsTabId, "", "Id=" + e.CommandArgument.ToString()));
             }
         }
-        protected string GMap1_ServerEvent(object s, GAjaxServerEventOtherArgs e)
+        protected string locationGMap_ServerEvent(object s, GAjaxServerEventOtherArgs e)
         {
             switch (e.eventName)
             {
@@ -479,13 +481,17 @@ namespace Cowrie.Modules.ProductList
 
                     GLatLng _point = new GLatLng(Convert.ToDouble(e.eventArgs[2], new System.Globalization.CultureInfo("en-US", false)),
                         Convert.ToDouble(e.eventArgs[1], new System.Globalization.CultureInfo("en-US", false)));
+                    Session["Location"] = GetInverseGeoCode(_point);
 
-                    return GetInverseGeoCode(_point);
+                    ResetMap();
+                    CreateMarker(_point);
+
+                    return Session["Location"].ToString();
             }
 
             return string.Empty;
         }
-        protected string GMap1_MarkerClick(object s, GAjaxServerEventArgs e)
+        protected string locationGMap_MarkerClick(object s, GAjaxServerEventArgs e)
         {
             return GetInverseGeoCode(e.point);
         }
@@ -500,10 +506,42 @@ namespace Cowrie.Modules.ProductList
             {
                 GInfoWindow window = new GInfoWindow(FromPoint, _addr, true);
 
-                return window.ToString(GMap1.GMap_Id);
+                return window.ToString(locationGMap.GMap_Id);
             }
             else
                 return string.Empty;
         }
+        protected string locationGMap_Click(object s, GAjaxServerEventArgs e)
+        {
+            return string.Format("{0}.panTo({1})", e.who, e.point.ToString("new"));
+        }
+
+        //protected void DNNTextSuggestLocation_PopulateOnDemand(object source, DotNetNuke.UI.WebControls.DNNTextSuggestEventArgs e)
+        //{
+        //    using (SelectedHotelsEntities db = new SelectedHotelsEntities())
+        //    {
+        //        var query = from gn in db.GeoNames
+        //                    where gn.Name.StartsWith(e.Text)
+        //                    orderby gn.Name
+        //                    select gn;
+        //        foreach (var geoName in query.Take(DNNTextSuggestLocation.MaxSuggestRows))
+        //        {
+        //            e.Nodes.Add(new DNNNode(geoName.Name));
+        //        }
+        //    }
+        //}
+        //protected void DNNTextSuggestLocation_NodeClick(object source, DNNTextSuggestEventArgs e)
+        //{
+        //    DNNTextSuggestLocation.Text = e.Text;
+        //}
+        //protected void DNNTxtBannerGroup_PopulateOnDemand(object source, DNNTextSuggestEventArgs e)
+        //{
+        //    DNNNode objNode = new DNNNode("q1");
+        //    objNode.ID = e.Nodes.Count.ToString();
+        //    e.Nodes.Add(objNode);
+        //    objNode = new DNNNode("q2");
+        //    objNode.ID = e.Nodes.Count.ToString();
+        //    e.Nodes.Add(objNode);
+        //}
     }
 }
