@@ -1,8 +1,11 @@
 ﻿// Copyright (c) 2012 Cowrie
 
 using System;
+using System.Collections.Generic;
 using System.Data.Entity.Spatial;
+using System.Drawing;
 using System.Linq;
+using System.Text;
 using System.Web.UI.WebControls;
 using Common;
 using DotNetNuke.Entities.Modules;
@@ -13,6 +16,7 @@ using DotNetNuke.Services.Exceptions;
 using ProductList;
 using SelectedHotelsModel;
 using Subgurim.Controles;
+using Subgurim.Controles.GoogleChartIconMaker;
 using Telerik.Web.UI;
 using Utils = ProductList.Utils;
 
@@ -22,6 +26,7 @@ namespace Cowrie.Modules.ProductList
     {
         protected double X_Map = 54.0;   // Latitude
         protected double Y_Map = -5.0;   // Longitude
+        protected double distance = 10.0;
 
         public int DetailsTabId { get; set; }
         public int EditTabId { get; set; }
@@ -127,7 +132,13 @@ namespace Cowrie.Modules.ProductList
                             PanelCategories.Visible = false;
                             PanelProducts.Width = Unit.Pixel(870);
                         }
-                        BindData(db, X_Map, Y_Map, 10.0);
+                        PanelCategories.Visible = false;
+                        PanelProducts.Width = Unit.Pixel(870);
+
+                        var london = db.GeoNames.SingleOrDefault(gn => gn.Name == "London" && gn.CountryCode == "GB");
+                        X_Map = london.Latitude.Value;
+                        Y_Map = london.Longitude.Value;
+                        BindData(db, X_Map, Y_Map, distance);
 
                         SavePersistentSetting();
                     }
@@ -166,7 +177,12 @@ namespace Cowrie.Modules.ProductList
             locationGMap.resetMarkerManager();
 
             GLatLng _point = new GLatLng(Convert.ToDouble(Session["HiddenFieldX"].ToString()), Convert.ToDouble(Session["HiddenFieldY"].ToString()));
-            locationGMap.setCenter(_point, 5); // UK
+            double radius = double.Parse(DropDownListDistance.SelectedValue);
+            locationGMap.setCenter(_point, GetZoomLevel(radius) - 1); // UK
+        }
+        public int GetZoomLevel(double radius)
+        {
+            return (int)(14 - Math.Log(radius) / Math.Log(2));
         }
         protected GMarker CreateMarker(GLatLng FromPoint)
         {
@@ -265,7 +281,7 @@ namespace Cowrie.Modules.ProductList
         {
             using (SelectedHotelsEntities db = new SelectedHotelsEntities())
             {
-                double distance = 10.0;
+                distance = double.Parse(DropDownListDistance.SelectedValue);
                 BindData(db, Convert.ToDouble(Session["HiddenFieldX"]), Convert.ToDouble(Session["HiddenFieldY"]), distance);
             }
         }
@@ -309,25 +325,27 @@ namespace Cowrie.Modules.ProductList
                 LabelFilteredBy.Visible = false;
                 ButtonClear.Visible = false;
             }
+            List<Hotel> hotelList = null;
             Enums.SortCriteriaEnum sortCriteria = (Enums.SortCriteriaEnum)Enum.Parse(typeof(Enums.SortCriteriaEnum), DropDownListSortCriterias.SelectedValue);
             switch (sortCriteria)
             {
                 case Enums.SortCriteriaEnum.Name:
-                    ListViewContent.DataSource = hotels.OrderBy(h => h.Name).ToList();
+                    hotelList = hotels.OrderBy(h => h.Name).ToList();
                     break;
                 case Enums.SortCriteriaEnum.PriceAsc:
-                    ListViewContent.DataSource = hotels.OrderBy(h => h.UnitCost).ToList();
+                    hotelList = hotels.OrderBy(h => h.UnitCost).ToList();
                     break;
                 case Enums.SortCriteriaEnum.PriceDesc:
-                    ListViewContent.DataSource = hotels.OrderByDescending(h => h.UnitCost).ToList();
+                    hotelList = hotels.OrderByDescending(h => h.UnitCost).ToList();
                     break;
                 case Enums.SortCriteriaEnum.RatingAsc:
-                    ListViewContent.DataSource = hotels.OrderBy(h => h.Star).ToList();
+                    hotelList = hotels.OrderBy(h => h.Star).ToList();
                     break;
                 case Enums.SortCriteriaEnum.RatingDesc:
-                    ListViewContent.DataSource = hotels.OrderByDescending(h => h.Star).ToList();
+                    hotelList = hotels.OrderByDescending(h => h.Star).ToList();
                     break;
             }
+            ListViewContent.DataSource = hotelList;
             ListViewContent.DataBind();
 
             //var selectedLocation = db.Locations.SingleOrDefault(l => l.Id == locationId);
@@ -337,6 +355,22 @@ namespace Cowrie.Modules.ProductList
             }
 
             LabelCount.Text = hotels.Count().ToString();
+
+            int i = 1;
+            foreach (var hotel in hotelList)
+            {
+                GLatLng gLatLng = new GLatLng(hotel.Lat.Value, hotel.Lon.Value);
+                PinLetter pinLetter = new PinLetter(i.ToString(), Color.FromArgb(0xB4, 0x97, 0x59), Color.Black);
+                var markerOptions = new GMarkerOptions(new GIcon(pinLetter.ToString(), pinLetter.Shadow()), hotel.Name.Replace("'", "´"));
+                GMarker marker = new GMarker(gLatLng, markerOptions);
+                StringBuilder sb = new StringBuilder();
+                sb.Append(hotel.Name);
+                sb.AppendFormat("<br />Address:&nbsp;{0}", hotel.Address);
+                GInfoWindow window = new GInfoWindow(marker, sb.ToString(), false);
+                locationGMap.addInfoWindow(window);
+                i++;
+            }
+
         }
 
         #region IActionable Members

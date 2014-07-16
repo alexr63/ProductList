@@ -8,10 +8,17 @@
 <telerik:radformdecorator id="QsfFromDecorator" runat="server" decoratedcontrols="All" enableroundedcorners="false" />
 <cc1:GMap ID="locationGMap" runat="server"
     onserverevent="locationGMap_ServerEvent" enableServerEvents="True"
-    GZoom="10" onmarkerclick="locationGMap_MarkerClick" />
+    GZoom="10" Width="870px" />
 <br />
 <asp:HiddenField ID="HiddenFieldX" runat="server" />
 <asp:HiddenField ID="HiddenFieldY" runat="server" />
+Enter a distance&nbsp;
+        <asp:DropDownList ID="DropDownListDistance" runat="server" TabIndex="1" Width="50px">
+            <asp:ListItem Value="10" Text="10" Selected="True" />
+            <asp:ListItem Value="25" Text="25" />
+            <asp:ListItem Value="50" Text="50" />
+        </asp:DropDownList>
+&nbsp;miles&nbsp;
 <asp:Button ID="ButtonLocate" runat="server" Text="Search" OnClick="ButtonLocate_Click" />
 <asp:Panel ID="PanelLocations" runat="server">
 </asp:Panel>
@@ -29,8 +36,7 @@
             <asp:TextBox ID="TextBoxSearch" runat="server" Width="100px"></asp:TextBox>
         &nbsp;<asp:Button ID="ButtonSubmit" runat="server" Text="Go" OnClick="ButtonSubmit_Click" ValidationGroup="HotelListSearch" />&nbsp;<asp:Button ID="ButtonClear" runat="server" Text="Clear" OnClick="ButtonClear_Click" CausesValidation="False" Visible="False" />
     </div>
-    <h2>
-        Near&nbsp;<asp:Label ID="LabelSelectedLocation" runat="server" />&nbsp;<asp:Label ID="LabelFilteredBy" runat="server" Visible="False" />
+    <h2>Near&nbsp;<asp:Label ID="LabelSelectedLocation" runat="server" />&nbsp;<asp:Label ID="LabelFilteredBy" runat="server" Visible="False" />
     </h2>
     <table style="width: 100%">
         <tr width="280px">
@@ -84,6 +90,9 @@
 
         <ItemTemplate>
             <tr>
+                <td rowspan="2" style="vertical-align: middle">
+                    <h1><%# Container.DataItemIndex + 1 %></h1>
+                </td>
                 <td style="vertical-align: middle" colspan="2">
                     <table cellpadding="5px">
                         <tr>
