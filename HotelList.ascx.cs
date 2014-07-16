@@ -10,7 +10,6 @@ using DotNetNuke.Entities.Modules.Actions;
 using DotNetNuke.Entities.Tabs;
 using DotNetNuke.Security;
 using DotNetNuke.Services.Exceptions;
-using DotNetNuke.UI.WebControls;
 using ProductList;
 using SelectedHotelsModel;
 using Subgurim.Controles;
@@ -135,10 +134,10 @@ namespace Cowrie.Modules.ProductList
 
                     Session["HiddenFieldX"] = X_Map.ToString();
                     Session["HiddenFieldY"] = Y_Map.ToString();
-                    GLatLng _point = new GLatLng(X_Map, Y_Map);
-                    ResetMap();
-                    CreateMarker(_point);
                 }
+                GLatLng _point = new GLatLng(Convert.ToDouble(Session["HiddenFieldX"]), Convert.ToDouble(Session["HiddenFieldY"]));
+                ResetMap();
+                CreateMarker(_point);
             }
             catch (Exception ex)
             {
@@ -166,7 +165,7 @@ namespace Cowrie.Modules.ProductList
             locationGMap.resetMarkers();
             locationGMap.resetMarkerManager();
 
-            GLatLng _point = new GLatLng(X_Map, Y_Map);
+            GLatLng _point = new GLatLng(Convert.ToDouble(Session["HiddenFieldX"].ToString()), Convert.ToDouble(Session["HiddenFieldY"].ToString()));
             locationGMap.setCenter(_point, 5); // UK
         }
         protected GMarker CreateMarker(GLatLng FromPoint)
@@ -481,21 +480,25 @@ namespace Cowrie.Modules.ProductList
 
                     GLatLng _point = new GLatLng(Convert.ToDouble(e.eventArgs[2], new System.Globalization.CultureInfo("en-US", false)),
                         Convert.ToDouble(e.eventArgs[1], new System.Globalization.CultureInfo("en-US", false)));
-                    Session["Location"] = GetInverseGeoCode(_point);
+                    string addr;
+                    var inverseGeoCode = GetInverseGeoCode(_point, out addr);
+                    Session["Location"] = addr;
 
-                    ResetMap();
-                    CreateMarker(_point);
+                    //ResetMap();
+                    //CreateMarker(_point);
 
-                    return Session["Location"].ToString();
+                    //return inverseGeoCode;
+                    return string.Empty;
             }
 
             return string.Empty;
         }
         protected string locationGMap_MarkerClick(object s, GAjaxServerEventArgs e)
         {
-            return GetInverseGeoCode(e.point);
+            string addr;
+            return GetInverseGeoCode(e.point, out addr);
         }
-        protected string GetInverseGeoCode(GLatLng FromPoint)
+        protected string GetInverseGeoCode(GLatLng FromPoint, out string addr)
         {
             string streetNumber;
             string streetName;
@@ -505,10 +508,11 @@ namespace Cowrie.Modules.ProductList
             if (_addr != String.Empty)
             {
                 GInfoWindow window = new GInfoWindow(FromPoint, _addr, true);
-
+                addr = _addr;
                 return window.ToString(locationGMap.GMap_Id);
             }
             else
+                addr = String.Empty;
                 return string.Empty;
         }
         protected string locationGMap_Click(object s, GAjaxServerEventArgs e)
