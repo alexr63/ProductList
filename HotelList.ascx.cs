@@ -145,10 +145,12 @@ namespace Cowrie.Modules.ProductList
 
                     Session["HiddenFieldX"] = X_Map.ToString();
                     Session["HiddenFieldY"] = Y_Map.ToString();
+
+                    GLatLng _point = new GLatLng(Convert.ToDouble(Session["HiddenFieldX"]), Convert.ToDouble(Session["HiddenFieldY"]));
+                    double _radius = double.Parse(DropDownListDistance.SelectedValue);
+                    ResetMap(_point, _radius);
+                    CreateMarker(_point);
                 }
-                GLatLng _point = new GLatLng(Convert.ToDouble(Session["HiddenFieldX"]), Convert.ToDouble(Session["HiddenFieldY"]));
-                ResetMap();
-                CreateMarker(_point);
             }
             catch (Exception ex)
             {
@@ -156,7 +158,7 @@ namespace Cowrie.Modules.ProductList
             }
         }
 
-        private void ResetMap()
+        private void ResetMap(GLatLng point, double radius)
         {
             //locationGMap.reset();
             //locationGMap.addControl(new GControl(GControl.preBuilt.GOverviewMapControl));
@@ -176,9 +178,7 @@ namespace Cowrie.Modules.ProductList
             locationGMap.resetMarkers();
             locationGMap.resetMarkerManager();
 
-            GLatLng _point = new GLatLng(Convert.ToDouble(Session["HiddenFieldX"].ToString()), Convert.ToDouble(Session["HiddenFieldY"].ToString()));
-            double radius = double.Parse(DropDownListDistance.SelectedValue);
-            locationGMap.setCenter(_point, GetZoomLevel(radius) - 1); // UK
+            locationGMap.setCenter(point, GetZoomLevel(radius) - 1); // UK
         }
         public int GetZoomLevel(double radius)
         {
@@ -281,8 +281,11 @@ namespace Cowrie.Modules.ProductList
         {
             using (SelectedHotelsEntities db = new SelectedHotelsEntities())
             {
-                distance = double.Parse(DropDownListDistance.SelectedValue);
-                BindData(db, Convert.ToDouble(Session["HiddenFieldX"]), Convert.ToDouble(Session["HiddenFieldY"]), distance);
+                GLatLng _point = new GLatLng(Convert.ToDouble(Session["HiddenFieldX"]), Convert.ToDouble(Session["HiddenFieldY"]));
+                double _radius = double.Parse(DropDownListDistance.SelectedValue);
+                ResetMap(_point, _radius);
+                CreateMarker(_point);
+                BindData(db, Convert.ToDouble(Session["HiddenFieldX"]), Convert.ToDouble(Session["HiddenFieldY"]), _radius);
             }
         }
 

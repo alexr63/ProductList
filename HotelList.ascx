@@ -6,21 +6,21 @@
 <%@ Register Assembly="GMaps" Namespace="Subgurim.Controles" TagPrefix="cc1" %>
 <telerik:radskinmanager id="QsfSkinManager" runat="server" showchooser="false" />
 <telerik:radformdecorator id="QsfFromDecorator" runat="server" decoratedcontrols="All" enableroundedcorners="false" />
-<cc1:GMap ID="locationGMap" runat="server"
-    onserverevent="locationGMap_ServerEvent" enableServerEvents="True"
-    GZoom="10" Width="870px" />
-<br />
+<asp:Panel ID="PanelLocations" runat="server" CssClass="locations">
+    <cc1:GMap ID="locationGMap" runat="server"
+        onserverevent="locationGMap_ServerEvent" enableServerEvents="True"
+        GZoom="10" Width="100%" />
+    <br />
 <asp:HiddenField ID="HiddenFieldX" runat="server" />
 <asp:HiddenField ID="HiddenFieldY" runat="server" />
-Enter a distance&nbsp;
-        <asp:DropDownList ID="DropDownListDistance" runat="server" TabIndex="1" Width="50px">
-            <asp:ListItem Value="10" Text="10" Selected="True" />
-            <asp:ListItem Value="25" Text="25" />
-            <asp:ListItem Value="50" Text="50" />
-        </asp:DropDownList>
-&nbsp;miles&nbsp;
-<asp:Button ID="ButtonLocate" runat="server" Text="Search" OnClick="ButtonLocate_Click" />
-<asp:Panel ID="PanelLocations" runat="server">
+    Enter a distance&nbsp;
+            <asp:DropDownList ID="DropDownListDistance" runat="server" TabIndex="1" Width="50px">
+                <asp:ListItem Value="10" Text="10" Selected="True" />
+                <asp:ListItem Value="25" Text="25" />
+                <asp:ListItem Value="50" Text="50" />
+            </asp:DropDownList>
+    &nbsp;miles&nbsp;
+    <asp:Button ID="ButtonLocate" runat="server" Text="Search" OnClick="ButtonLocate_Click" />
 </asp:Panel>
 <asp:Panel ID="PanelCategories" runat="server" CssClass="categories" Visible="True">
     <telerik:radtreeview id="RadTreeViewLocations" runat="server" height="1800px" width="100%"
