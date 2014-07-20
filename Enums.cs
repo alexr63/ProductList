@@ -29,7 +29,9 @@ namespace ProductList
             PriceAsc,
             PriceDesc,
             RatingAsc,
-            RatingDesc
+            RatingDesc,
+            DistanceAsc,
+            DistanceDesc
         }
 
     }

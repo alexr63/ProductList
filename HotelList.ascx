@@ -44,6 +44,8 @@
                             <asp:ListItem Value="3">Price (high to low)</asp:ListItem>
                             <asp:ListItem Value="4">Rating (low to high)</asp:ListItem>
                             <asp:ListItem Value="5">Rating (high to low)</asp:ListItem>
+                            <asp:ListItem Value="6">Distance (low to high)</asp:ListItem>
+                            <asp:ListItem Value="7">Distance (high to low)</asp:ListItem>
                         </asp:DropDownList>
             </td>
             <td width="150px">View
@@ -103,6 +105,9 @@
                             <td style="vertical-align: middle">
                                 <h1>
                                     <asp:HyperLink ID="HyperLinkName" runat="server" Text='<%# Eval("Name") %>' NavigateUrl='<%# DotNetNuke.Common.Globals.NavigateURL(DetailsTabId, "", "Id=" + Eval("Id")) %>' /></h1>
+                            </td>
+                            <td style="vertical-align: middle">
+                                <h2>(<%# Eval("Distance", "{0:0.0}") %>)&nbsp;miles</h2>
                             </td>
                             <td style="vertical-align: middle">
                                 <telerik:RadRating ID="RadRatingStar" runat="server" Value='<%# Convert.ToDecimal(Eval("Star")) %>' ReadOnly="True" />
