@@ -41,7 +41,7 @@
     <table style="width: 100%">
         <tr width="280px">
             <td>Sort by
-                        <asp:DropDownList ID="DropDownListSortCriterias" runat="server" AutoPostBack="True" OnSelectedIndexChanged="DropDownListSortCriterias_SelectedIndexChanged">
+                        <asp:DropDownList ID="DropDownListSortCriterias" runat="server" AutoPostBack="True" OnSelectedIndexChanged="DropDownListSortCriterias_SelectedIndexChanged" Width="200px">
                             <asp:ListItem Value="1" Selected="True">Name</asp:ListItem>
                             <asp:ListItem Value="2">Price (low to high)</asp:ListItem>
                             <asp:ListItem Value="3">Price (high to low)</asp:ListItem>

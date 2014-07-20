@@ -31,6 +31,15 @@ namespace Cowrie.Modules.ProductList {
         protected global::Telerik.Web.UI.RadFormDecorator QsfFromDecorator;
         
         /// <summary>
+        /// PanelLocations control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel PanelLocations;
+        
+        /// <summary>
         /// locationGMap control.
         /// </summary>
         /// <remarks>
@@ -74,15 +83,6 @@ namespace Cowrie.Modules.ProductList {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button ButtonLocate;
-        
-        /// <summary>
-        /// PanelLocations control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel PanelLocations;
         
         /// <summary>
         /// PanelCategories control.
