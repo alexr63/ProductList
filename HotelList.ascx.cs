@@ -246,7 +246,10 @@ namespace Cowrie.Modules.ProductList
                     Rooms = hotel.Rooms,
                     CustomerRating = hotel.CustomerRating,
                     Address = hotel.Address,
-                    Location = hotel.Location
+                    Location = hotel.Location,
+                    Image = hotel.Image,
+                    UnitCost = hotel.UnitCost,
+                    CurrencyCode = hotel.CurrencyCode
                 };
 
             if (TextBoxSearch.Text != String.Empty)

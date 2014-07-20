@@ -81,7 +81,7 @@
 
         <ItemSeparatorTemplate>
             <tr>
-                <td colspan="2">
+                <td colspan="3">
                     <hr />
                 </td>
             </tr>
@@ -89,7 +89,7 @@
 
         <ItemTemplate>
             <tr>
-                <td rowspan="2" style="vertical-align: middle">
+                <td rowspan="3" style="vertical-align: middle">
                     <h1><%# Container.DataItemIndex + 1 %></h1>
                 </td>
                 <td style="vertical-align: middle" colspan="2">
@@ -102,17 +102,17 @@
                                         runat="Server" resourcekey="Edit" />
                                 </asp:HyperLink>
                             </td>
-                            <td style="vertical-align: middle">
+                            <td style="vertical-align: middle; width: 500px;">
                                 <h1>
                                     <asp:HyperLink ID="HyperLinkName" runat="server" Text='<%# Eval("Name") %>' NavigateUrl='<%# DotNetNuke.Common.Globals.NavigateURL(DetailsTabId, "", "Id=" + Eval("Id")) %>' /></h1>
                             </td>
-                            <td style="vertical-align: middle">
-                                <h2>(<%# Eval("Distance", "{0:0.0}") %>)&nbsp;miles</h2>
+                            <td style="vertical-align: middle; width: 100px;">
+                                <h2><%# Eval("Distance", "{0:0.0}") %>&nbsp;miles</h2>
                             </td>
-                            <td style="vertical-align: middle">
+                            <td style="vertical-align: middle; width: 100px;">
                                 <telerik:RadRating ID="RadRatingStar" runat="server" Value='<%# Convert.ToDecimal(Eval("Star")) %>' ReadOnly="True" />
                             </td>
-                            <td style="vertical-align: middle">
+                            <td style="vertical-align: middle; width: 100px;">
                                 <%# Eval("UnitCost") != null ? String.Format("(from {0}{1:#0.00} per night)", Utils.GetCurrencySymbol(Eval("CurrencyCode").ToString()), Eval("UnitCost")) : String.Empty %>
                             </td>
                         </tr>
