@@ -24,10 +24,6 @@ namespace Cowrie.Modules.ProductList
 {
     public partial class HotelList : PortalModuleBase, IActionable
     {
-        protected double X_Map = 54.0;   // Latitude
-        protected double Y_Map = -5.0;   // Longitude
-        protected double distance = 10.0;
-
         public int DetailsTabId { get; set; }
         public int EditTabId { get; set; }
 
@@ -75,7 +71,8 @@ namespace Cowrie.Modules.ProductList
                         {
                             try
                             {
-                                if (Settings["preselectedlocation"] != null && Settings["preselectedlocation"].ToString() != String.Empty)
+                                if (Settings["preselectedlocation"] != null &&
+                                    Settings["preselectedlocation"].ToString() != String.Empty)
                                 {
                                     selectedLocationId = Convert.ToInt32(Settings["preselectedlocation"]);
                                 }
@@ -125,7 +122,8 @@ namespace Cowrie.Modules.ProductList
                             }
                             //Utils.PopulateLocationTree(RadTreeViewLocations, db, locationId, selectedLocationId, false, hotelTypeId);
                             const int englandGeoNameId = 6269131;
-                            Utils.PopulateGeoLocationTree(RadTreeViewLocations, db, englandGeoNameId, englandGeoNameId, false, hotelTypeId);
+                            Utils.PopulateGeoLocationTree(RadTreeViewLocations, db, englandGeoNameId, englandGeoNameId,
+                                false, hotelTypeId);
                         }
                         else
                         {
@@ -135,21 +133,25 @@ namespace Cowrie.Modules.ProductList
                         PanelCategories.Visible = false;
                         PanelProducts.Width = Unit.Pixel(870);
 
-                        var london = db.GeoNames.SingleOrDefault(gn => gn.Name == "London" && gn.CountryCode == "GB");
-                        X_Map = london.Latitude.Value;
-                        Y_Map = london.Longitude.Value;
-                        BindData(db, X_Map, Y_Map, distance);
+                        if (Session["HiddenFieldX"] == null)
+                        {
+                            var london = db.GeoNames.SingleOrDefault(gn => gn.Name == "London" && gn.CountryCode == "GB");
+                            Session["HiddenFieldX"] = london.Latitude.Value;
+                            Session["HiddenFieldY"] = london.Longitude.Value;
+                        }
+
+                        GLatLng point = new GLatLng(Convert.ToDouble(Session["HiddenFieldX"]), Convert.ToDouble(Session["HiddenFieldY"]));
+                        double distance = double.Parse(DropDownListDistance.SelectedValue);
+                        ResetMap(point, distance);
+                        CreateMarker(point);
+                        string addr;
+                        var inverseGeoCode = GetInverseGeoCode(point, out addr);
+                        Session["Location"] = addr;
+
+                        BindData(db, point, distance);
 
                         SavePersistentSetting();
                     }
-
-                    Session["HiddenFieldX"] = X_Map.ToString();
-                    Session["HiddenFieldY"] = Y_Map.ToString();
-
-                    GLatLng _point = new GLatLng(Convert.ToDouble(Session["HiddenFieldX"]), Convert.ToDouble(Session["HiddenFieldY"]));
-                    double _radius = double.Parse(DropDownListDistance.SelectedValue);
-                    ResetMap(_point, _radius);
-                    CreateMarker(_point);
                 }
             }
             catch (Exception ex)
@@ -161,6 +163,10 @@ namespace Cowrie.Modules.ProductList
         private void ResetMap(GLatLng point, double radius)
         {
             //locationGMap.reset();
+            //locationGMap.resetCustomOverlays();
+            //locationGMap.markerManager = null;
+            //locationGMap.resetGroundOverlays();
+            //locationGMap.resetScreenOverlays();
             //locationGMap.addControl(new GControl(GControl.preBuilt.GOverviewMapControl));
             locationGMap.Add(new GControl(GControl.preBuilt.LargeMapControl));
             locationGMap.Add(new GControl(GControl.preBuilt.MapTypeControl));
@@ -281,17 +287,18 @@ namespace Cowrie.Modules.ProductList
         {
             using (SelectedHotelsEntities db = new SelectedHotelsEntities())
             {
-                GLatLng _point = new GLatLng(Convert.ToDouble(Session["HiddenFieldX"]), Convert.ToDouble(Session["HiddenFieldY"]));
-                double _radius = double.Parse(DropDownListDistance.SelectedValue);
-                ResetMap(_point, _radius);
-                CreateMarker(_point);
-                BindData(db, Convert.ToDouble(Session["HiddenFieldX"]), Convert.ToDouble(Session["HiddenFieldY"]), _radius);
+                //GLatLng _point = new GLatLng(Convert.ToDouble(Session["HiddenFieldX"]), Convert.ToDouble(Session["HiddenFieldY"]));
+                //double _radius = double.Parse(DropDownListDistance.SelectedValue);
+                //ResetMap(_point, _radius);
+                //CreateMarker(_point);
+                //BindData(db, Convert.ToDouble(Session["HiddenFieldX"]), Convert.ToDouble(Session["HiddenFieldY"]), _radius);
+                Response.Redirect(DotNetNuke.Common.Globals.NavigateURL(TabId));
             }
         }
 
-        private void BindData(SelectedHotelsEntities db, double lat, double lon, double distance)
+        private void BindData(SelectedHotelsEntities db, GLatLng point, double distance)
         {
-            var location = DbGeography.FromText(String.Format("POINT({0} {1})", lon, lat));
+            var location = DbGeography.FromText(String.Format("POINT({0} {1})", point.lng, point.lat));
             var hotels = from hotel in db.Products.Where(p => !p.IsDeleted).OfType<Hotel>()
                 where !hotel.IsDeleted && hotel.Location != null &&
                 hotel.Location.Distance(location) * .00062 <= distance
@@ -413,7 +420,7 @@ namespace Cowrie.Modules.ProductList
 
             using (SelectedHotelsEntities db = new SelectedHotelsEntities())
             {
-                BindData(db, 54.0, -5.0, 10.0);
+                //BindData(db, 54.0, -5.0, 10.0);
             }
         }
 
@@ -423,7 +430,7 @@ namespace Cowrie.Modules.ProductList
 
             using (SelectedHotelsEntities db = new SelectedHotelsEntities())
             {
-                BindData(db, 54.0, -5.0, 10.0);
+                //BindData(db, 54.0, -5.0, 10.0);
             }
         }
 
@@ -446,7 +453,7 @@ namespace Cowrie.Modules.ProductList
 
             using (SelectedHotelsEntities db = new SelectedHotelsEntities())
             {
-                BindData(db, 54.0, -5.0, 10.0);
+                //BindData(db, 54.0, -5.0, 10.0);
             }
         }
 
@@ -476,7 +483,7 @@ namespace Cowrie.Modules.ProductList
 
             using (SelectedHotelsEntities db = new SelectedHotelsEntities())
             {
-                BindData(db, 54.0, -5.0, 10.0);
+                //BindData(db, 54.0, -5.0, 10.0);
             }
         }
 
@@ -490,7 +497,7 @@ namespace Cowrie.Modules.ProductList
 
             using (SelectedHotelsEntities db = new SelectedHotelsEntities())
             {
-                BindData(db, 54.0, -5.0, 10.0);
+                //BindData(db, 54.0, -5.0, 10.0);
             }
         }
 
