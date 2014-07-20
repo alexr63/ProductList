@@ -17,8 +17,6 @@ using ProductList;
 using SelectedHotelsModel;
 using Subgurim.Controles;
 using Subgurim.Controles.GoogleChartIconMaker;
-using Telerik.Web.UI;
-using Utils = ProductList.Utils;
 
 namespace Cowrie.Modules.ProductList
 {
@@ -48,38 +46,30 @@ namespace Cowrie.Modules.ProductList
             {
                 if (!IsPostBack)
                 {
+                    StringBuilder sb = new StringBuilder();
+
+                    sb.Append("var markersArray=[];");
+                    sb.Append("function clearOverlays() {");
+                    sb.Append("   for (var i = 0; i < markersArray.length; i++ ) {");
+                    sb.Append("     markersArray[i].setMap(null);");
+                    sb.Append("   }");
+                    sb.Append("   markersArray = [];");
+                    sb.Append("}");
+
+                    locationGMap.Add(sb.ToString());
+
                     using (SelectedHotelsEntities db = new SelectedHotelsEntities())
                     {
-#if DEBUG
+#if DEBUGDB
                         db.Database.Log = logInfo => MyLogger.Log(logInfo, PortalSettings);
 #endif
-                        int locationId = 1069;
-                        try
-                        {
-                            locationId = Convert.ToInt32(Settings["location"]);
-                        }
-                        catch (Exception)
-                        {
-                        }
-                        int selectedLocationId = locationId;
                         if (Session["ReturnFromDetails"] != null)
                         {
                             Session["ReturnFromDetails"] = null;
-                            LoadPersistentSettings(ref selectedLocationId);
+                            LoadPersistentSettings();
                         }
                         else
                         {
-                            try
-                            {
-                                if (Settings["preselectedlocation"] != null &&
-                                    Settings["preselectedlocation"].ToString() != String.Empty)
-                                {
-                                    selectedLocationId = Convert.ToInt32(Settings["preselectedlocation"]);
-                                }
-                            }
-                            catch (Exception)
-                            {
-                            }
                             if (Settings["search"] != null &&
                                 Settings["search"].ToString() != String.Empty)
                             {
@@ -87,49 +77,6 @@ namespace Cowrie.Modules.ProductList
                             }
                         }
 
-#if MULTIPLELOCATIONS
-                        List<Location> selectedLocations = new List<Location>();
-                        object setting = Settings["locations"];
-                        if (setting != null)
-                        {
-                            try
-                            {
-                                string[] selectedLocationIds = setting.ToString().Split(';');
-                                foreach (string s in selectedLocationIds)
-                                {
-                                    int locationId = int.Parse(s);
-                                    var location = db.Locations.SingleOrDefault(l => l.Id == locationId);
-                                    if (location != null)
-                                    {
-                                        selectedLocations.Add(location);
-                                    }
-                                }
-                                LabelCurrentLocation.Text = String.Join(", ", selectedLocations);
-                            }
-                            catch (Exception)
-                            {
-                            }
-                        }
-#endif
-                        var selectedLocation = db.Locations.SingleOrDefault(l => l.Id == selectedLocationId);
-                        LabelSelectedLocation.Text = selectedLocation.Name;
-                        if (Settings["hidetree"] == null || !Convert.ToBoolean(Settings["hidetree"]))
-                        {
-                            int? hotelTypeId = null;
-                            if (Settings["hoteltype"] != null)
-                            {
-                                hotelTypeId = Convert.ToInt32(Settings["hoteltype"]);
-                            }
-                            //Utils.PopulateLocationTree(RadTreeViewLocations, db, locationId, selectedLocationId, false, hotelTypeId);
-                            const int englandGeoNameId = 6269131;
-                            Utils.PopulateGeoLocationTree(RadTreeViewLocations, db, englandGeoNameId, englandGeoNameId,
-                                false, hotelTypeId);
-                        }
-                        else
-                        {
-                            PanelCategories.Visible = false;
-                            PanelProducts.Width = Unit.Pixel(870);
-                        }
                         PanelCategories.Visible = false;
                         PanelProducts.Width = Unit.Pixel(870);
 
@@ -171,20 +118,20 @@ namespace Cowrie.Modules.ProductList
             locationGMap.Add(new GControl(GControl.preBuilt.LargeMapControl));
             locationGMap.Add(new GControl(GControl.preBuilt.MapTypeControl));
 
-            //locationGMap.addGMapUI(new GMapUI());
+            locationGMap.addGMapUI(new GMapUI());
 
-            //KeyDragZoom keyDragZoom = new KeyDragZoom();
-            //keyDragZoom.key = KeyDragZoom.HotKeyEnum.ctrl;
-            //keyDragZoom.boxStyle = "{border: '4px solid #FFFF00'}";
-            //keyDragZoom.paneStyle = "{backgroundColor: 'black', opacity: 0.2, cursor: 'crosshair'}";
+            KeyDragZoom keyDragZoom = new KeyDragZoom();
+            keyDragZoom.key = KeyDragZoom.HotKeyEnum.ctrl;
+            keyDragZoom.boxStyle = "{border: '4px solid #FFFF00'}";
+            keyDragZoom.paneStyle = "{backgroundColor: 'black', opacity: 0.2, cursor: 'crosshair'}";
 
-            //locationGMap.addKeyDragZoom(keyDragZoom);
+            locationGMap.addKeyDragZoom(keyDragZoom);
 
-            ////locationGMap.resetMarkerClusterer();
+            //locationGMap.resetMarkerClusterer();
             locationGMap.resetMarkers();
             locationGMap.resetMarkerManager();
 
-            locationGMap.setCenter(point, GetZoomLevel(radius) - 1); // UK
+            locationGMap.setCenter(point, GetZoomLevel(radius) - 1);
         }
         public int GetZoomLevel(double radius)
         {
@@ -227,12 +174,8 @@ namespace Cowrie.Modules.ProductList
             return _Marker;
         }
 
-        private void LoadPersistentSettings(ref int selectedLocationId)
+        private void LoadPersistentSettings()
         {
-            if (Session["locationId"] != null)
-            {
-                selectedLocationId = Convert.ToInt32(Session["locationId"]);
-            }
             if (Session["search"] != null)
             {
                 TextBoxSearch.Text = Session["search"].ToString();
@@ -259,17 +202,6 @@ namespace Cowrie.Modules.ProductList
 
         private void SavePersistentSetting()
         {
-            if (PanelCategories.Visible)
-            {
-                if (!String.IsNullOrEmpty(RadTreeViewLocations.SelectedValue))
-                {
-                    Session["locationId"] = Convert.ToInt32(RadTreeViewLocations.SelectedValue);
-                }
-                else
-                {
-                    Session.Remove("locationId");
-                }
-            }
             if (TextBoxSearch.Text != String.Empty)
             {
                 Session["search"] = TextBoxSearch.Text;
@@ -287,38 +219,24 @@ namespace Cowrie.Modules.ProductList
         {
             using (SelectedHotelsEntities db = new SelectedHotelsEntities())
             {
-                //GLatLng _point = new GLatLng(Convert.ToDouble(Session["HiddenFieldX"]), Convert.ToDouble(Session["HiddenFieldY"]));
-                //double _radius = double.Parse(DropDownListDistance.SelectedValue);
-                //ResetMap(_point, _radius);
-                //CreateMarker(_point);
-                //BindData(db, Convert.ToDouble(Session["HiddenFieldX"]), Convert.ToDouble(Session["HiddenFieldY"]), _radius);
                 Response.Redirect(DotNetNuke.Common.Globals.NavigateURL(TabId));
             }
         }
 
         private void BindData(SelectedHotelsEntities db, GLatLng point, double distance)
         {
-            var location = DbGeography.FromText(String.Format("POINT({0} {1})", point.lng, point.lat));
-            var hotels = from hotel in db.Products.Where(p => !p.IsDeleted).OfType<Hotel>()
-                where !hotel.IsDeleted && hotel.Location != null &&
-                hotel.Location.Distance(location) * .00062 <= distance
-                select hotel;
-
-            int locationId = Convert.ToInt32(Settings["location"]);
-            if (PanelCategories.Visible && Session["locationId"] != null)
-            {
-                locationId = Convert.ToInt32(Session["locationId"]);
-            }
-#if DEBUG
-            //locationId = 6269131;
-#endif
             int? hotelTypeId = null;
             if (Settings["hoteltype"] != null)
             {
                 hotelTypeId = Convert.ToInt32(Settings["hoteltype"]);
             }
-            //var hotels = db.HotelsInLocation(locationId, hotelTypeId);
-            //var hotels = db.HotelsInGeoLocation(locationId, hotelTypeId);
+            var location = DbGeography.FromText(String.Format("POINT({0} {1})", point.lng, point.lat));
+            var hotels = from hotel in db.Products.Where(p => !p.IsDeleted).OfType<Hotel>()
+                where !hotel.IsDeleted && hotel.Location != null && hotel.Location.Latitude !=null && hotel.Location.Longitude != null &&
+                      hotel.Location.Distance(location)*.00062 <= distance &&
+                      (hotelTypeId == null || hotel.HotelTypeId == hotelTypeId)
+                select hotel;
+
             if (TextBoxSearch.Text != String.Empty)
             {
                 hotels =
@@ -358,7 +276,6 @@ namespace Cowrie.Modules.ProductList
             ListViewContent.DataSource = hotelList;
             ListViewContent.DataBind();
 
-            //var selectedLocation = db.Locations.SingleOrDefault(l => l.Id == locationId);
             if (Session["Location"] != null)
             {
                 LabelSelectedLocation.Text = Session["Location"].ToString();
@@ -369,7 +286,7 @@ namespace Cowrie.Modules.ProductList
             int i = 1;
             foreach (var hotel in hotelList)
             {
-                GLatLng gLatLng = new GLatLng(hotel.Lat.Value, hotel.Lon.Value);
+                GLatLng gLatLng = new GLatLng(hotel.Location.Latitude.Value, hotel.Location.Longitude.Value);
                 PinLetter pinLetter = new PinLetter(i.ToString(), Color.FromArgb(0xB4, 0x97, 0x59), Color.Black);
                 var markerOptions = new GMarkerOptions(new GIcon(pinLetter.ToString(), pinLetter.Shadow()), hotel.Name.Replace("'", "´"));
                 GMarker marker = new GMarker(gLatLng, markerOptions);
@@ -410,20 +327,6 @@ namespace Cowrie.Modules.ProductList
             }
         }
 
-        protected void RadTreeViewLocations_NodeClick(object sender, RadTreeNodeEventArgs e)
-        {
-            int locationId = Convert.ToInt32(RadTreeViewLocations.SelectedValue);
-            Session["locationId"] = locationId;
-
-            DataPagerContent.SetPageProperties(0, int.Parse(DropDownListPageSizes.SelectedValue), false);
-            DataPagerContent2.SetPageProperties(0, int.Parse(DropDownListPageSizes.SelectedValue), false); 
-
-            using (SelectedHotelsEntities db = new SelectedHotelsEntities())
-            {
-                //BindData(db, 54.0, -5.0, 10.0);
-            }
-        }
-
         protected void DropDownListSortCriterias_SelectedIndexChanged(object sender, EventArgs e)
         {
             Session["sortCriteria"] = DropDownListSortCriterias.SelectedValue;
@@ -455,23 +358,6 @@ namespace Cowrie.Modules.ProductList
             {
                 //BindData(db, 54.0, -5.0, 10.0);
             }
-        }
-
-        protected void RadTreeViewLocations_NodeExpand(object sender, RadTreeNodeEventArgs e)
-        {
-            using (SelectedHotelsEntities db = new SelectedHotelsEntities())
-            {
-                int? locationId = Convert.ToInt32(e.Node.Value);
-                var location = db.Locations.SingleOrDefault(l => l.Id == locationId);
-                int selectedLocationId = Convert.ToInt32(RadTreeViewLocations.SelectedValue);
-                int? hotelTypeId = null;
-                if (Settings["hoteltype"] != null)
-                {
-                    hotelTypeId = Convert.ToInt32(Settings["hoteltype"]);
-                }
-                Utils.CreateSubLocationNodes(db, location, e.Node, selectedLocationId, hotelTypeId);
-            }
-            e.Node.Expanded = true;
         }
 
         protected void ButtonSubmit_Click(object sender, EventArgs e)
@@ -532,7 +418,11 @@ namespace Cowrie.Modules.ProductList
                     //CreateMarker(_point);
 
                     //return inverseGeoCode;
-                    return string.Empty;
+                    //return string.Empty;
+                    return "clearOverlays();";
+                    //window.ToString(e.map) +
+                    //"markersArray.push(" + GMap1.getGMapElementById(marker.ID) + ");";
+
             }
 
             return string.Empty;
@@ -563,33 +453,5 @@ namespace Cowrie.Modules.ProductList
         {
             return string.Format("{0}.panTo({1})", e.who, e.point.ToString("new"));
         }
-
-        //protected void DNNTextSuggestLocation_PopulateOnDemand(object source, DotNetNuke.UI.WebControls.DNNTextSuggestEventArgs e)
-        //{
-        //    using (SelectedHotelsEntities db = new SelectedHotelsEntities())
-        //    {
-        //        var query = from gn in db.GeoNames
-        //                    where gn.Name.StartsWith(e.Text)
-        //                    orderby gn.Name
-        //                    select gn;
-        //        foreach (var geoName in query.Take(DNNTextSuggestLocation.MaxSuggestRows))
-        //        {
-        //            e.Nodes.Add(new DNNNode(geoName.Name));
-        //        }
-        //    }
-        //}
-        //protected void DNNTextSuggestLocation_NodeClick(object source, DNNTextSuggestEventArgs e)
-        //{
-        //    DNNTextSuggestLocation.Text = e.Text;
-        //}
-        //protected void DNNTxtBannerGroup_PopulateOnDemand(object source, DNNTextSuggestEventArgs e)
-        //{
-        //    DNNNode objNode = new DNNNode("q1");
-        //    objNode.ID = e.Nodes.Count.ToString();
-        //    e.Nodes.Add(objNode);
-        //    objNode = new DNNNode("q2");
-        //    objNode.ID = e.Nodes.Count.ToString();
-        //    e.Nodes.Add(objNode);
-        //}
     }
 }

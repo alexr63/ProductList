@@ -94,15 +94,6 @@ namespace Cowrie.Modules.ProductList {
         protected global::System.Web.UI.WebControls.Panel PanelCategories;
         
         /// <summary>
-        /// RadTreeViewLocations control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::Telerik.Web.UI.RadTreeView RadTreeViewLocations;
-        
-        /// <summary>
         /// PanelProducts control.
         /// </summary>
         /// <remarks>
@@ -112,13 +103,13 @@ namespace Cowrie.Modules.ProductList {
         protected global::System.Web.UI.WebControls.Panel PanelProducts;
         
         /// <summary>
-        /// LabelCurrentLocation control.
+        /// LabelSelectedLocation control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label LabelCurrentLocation;
+        protected global::System.Web.UI.WebControls.Label LabelSelectedLocation;
         
         /// <summary>
         /// TextBoxSearch control.
@@ -146,15 +137,6 @@ namespace Cowrie.Modules.ProductList {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button ButtonClear;
-        
-        /// <summary>
-        /// LabelSelectedLocation control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label LabelSelectedLocation;
         
         /// <summary>
         /// LabelFilteredBy control.

@@ -23,20 +23,17 @@
     <asp:Button ID="ButtonLocate" runat="server" Text="Search" OnClick="ButtonLocate_Click" />
 </asp:Panel>
 <asp:Panel ID="PanelCategories" runat="server" CssClass="categories" Visible="True">
-    <telerik:radtreeview id="RadTreeViewLocations" runat="server" height="1800px" width="100%"
-        onnodeexpand="RadTreeViewLocations_NodeExpand" onnodeclick="RadTreeViewLocations_NodeClick" Visible="False">
-    </telerik:radtreeview>
 </asp:Panel>
 <asp:Panel ID="PanelProducts" runat="server" CssClass="products" Width="600px">
     <h1>
-        <asp:Label ID="LabelCurrentLocation" runat="server" />
+        Near&nbsp;<asp:Label ID="LabelSelectedLocation" runat="server" />
     </h1>
     <div class="search">
         Search:
             <asp:TextBox ID="TextBoxSearch" runat="server" Width="100px"></asp:TextBox>
         &nbsp;<asp:Button ID="ButtonSubmit" runat="server" Text="Go" OnClick="ButtonSubmit_Click" ValidationGroup="HotelListSearch" />&nbsp;<asp:Button ID="ButtonClear" runat="server" Text="Clear" OnClick="ButtonClear_Click" CausesValidation="False" Visible="False" />
     </div>
-    <h2>Near&nbsp;<asp:Label ID="LabelSelectedLocation" runat="server" />&nbsp;<asp:Label ID="LabelFilteredBy" runat="server" Visible="False" />
+    <h2><asp:Label ID="LabelFilteredBy" runat="server" Visible="False" />
     </h2>
     <table style="width: 100%">
         <tr width="280px">
