@@ -121,40 +121,6 @@ namespace Cowrie.Modules.ProductList
             LabelCount.Text = query.Count().ToString();
         }
 
-        private void BindDataByLocation(SelectedHotelsEntities db, int locationId)
-        {
-            var location = db.Locations.SingleOrDefault(l => l.Id == locationId);
-            if (location != null)
-            {
-                LabelSelectedLocation.Text = location.Name;
-            }
-            var query = db.HotelsInLocation(locationId, 1);
-            if (TextBoxSearch2.Text != String.Empty)
-            {
-                query =
-                    query.Where(
-                        p =>
-                        p.Name.ToLower().Contains(TextBoxSearch2.Text.ToLower()) ||
-                        p.Description.ToLower().Contains(TextBoxSearch2.Text.ToLower()));
-            }
-            if (DropDownListSortCriterias2.SelectedValue == "Name")
-            {
-                ListViewContent2.DataSource = query.OrderBy(h => h.Name).ToList();
-            }
-            else if (DropDownListSortCriterias2.SelectedValue == "Price")
-            {
-                ListViewContent2.DataSource = query.OrderBy(h => h.UnitCost).ToList();
-            }
-            else
-            {
-                ListViewContent2.DataSource = query.OrderBy(h => h.Star).ToList();
-            }
-            ListViewContent2.DataBind();
-
-            LabelCount2.Text = query.Count().ToString();
-        }
-
-
         #region IActionable Members
 
         #endregion
@@ -196,7 +162,6 @@ namespace Cowrie.Modules.ProductList
                 int locationId = Convert.ToInt32(Session["locationId"]);
                 using (SelectedHotelsEntities db = new SelectedHotelsEntities())
                 {
-                    BindDataByLocation(db, locationId);
                 }
             }
         }
@@ -238,17 +203,8 @@ namespace Cowrie.Modules.ProductList
                 int locationId = Convert.ToInt32(Session["locationId"]);
                 using (SelectedHotelsEntities db = new SelectedHotelsEntities())
                 {
-                    BindDataByLocation(db, locationId);
                 }
             }
-        }
-
-        public void RadTreeViewLocations_NodeExpand(object sender, RadTreeNodeEventArgs e)
-        {
-        }
-
-        protected void RadTreeViewLocations_NodeClick(object sender, RadTreeNodeEventArgs e)
-        {
         }
 
         protected void ButtonSubmit_Click(object sender, EventArgs e)
@@ -270,7 +226,6 @@ namespace Cowrie.Modules.ProductList
                 int locationId = Convert.ToInt32(Session["locationId"]);
                 using (SelectedHotelsEntities db = new SelectedHotelsEntities())
                 {
-                    BindDataByLocation(db, locationId);
                 }
             }
         }

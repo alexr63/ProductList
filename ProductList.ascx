@@ -89,9 +89,6 @@
             <asp:TextBox ID="TextBoxSearch2" runat="server" Width="100px"></asp:TextBox>&nbsp;<asp:Button ID="ButtonSubmit2" runat="server" Text="Go" OnClick="ButtonSubmit2_Click" />
             <br />
             <br />
-            <telerik:radtreeview id="RadTreeViewLocations" runat="server" height="800px" width="100%"
-                onnodeexpand="RadTreeViewLocations_NodeExpand" onnodeclick="RadTreeViewLocations_NodeClick">
-            </telerik:radtreeview>
         </div>
         <div class="products">
             <h1>

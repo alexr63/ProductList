@@ -97,19 +97,9 @@
         </td>
     </tr>
     <tr>
-        <td class="SubHead" width="150" valign="top">Current Location
-        </td>
-        <td valign="bottom">
-            <asp:Label ID="LabelCurrentLocation" runat="server"></asp:Label>
-        </td>
-    </tr>
-    <tr>
         <td class="SubHead" width="150" valign="top">Location *
         </td>
         <td valign="bottom">
-            <telerik:RadTreeView ID="RadTreeViewLocations" runat="server" Skin="Default" Height="200px" Width="325px"
-                OnNodeExpand="RadTreeViewLocations_NodeExpand">
-            </telerik:RadTreeView>
         </td>
     </tr>
     <tr>

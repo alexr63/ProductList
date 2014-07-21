@@ -46,10 +46,6 @@ namespace Cowrie.Modules.ProductList
                             TextBoxURL.Text = hotel.URL;
                             TextBoxImage.Text = hotel.Image;
 
-                            var hotelLocation = GetHotelLocation(hotel);
-                            LabelCurrentLocation.Text = hotelLocation.Name;
-                            Utils.PopulateLocationTree(RadTreeViewLocations, db, null, hotelLocation.Id);
-
                             TextBoxRooms.Text = hotel.Rooms.ToString();
                             if (hotel.Star.HasValue)
                                 TextBoxStar.Text = hotel.Star.Value.ToString("0.0");
@@ -69,52 +65,12 @@ namespace Cowrie.Modules.ProductList
                     }
                     else
                     {
-                        Utils.PopulateLocationTree(RadTreeViewLocations, db);
                         RadGridAdditionalImages.Visible = false;
                     }
                 }
             }
         }
 
-        private static Location GetHotelLocation(Hotel hotel)
-        {
-            var hotelLocation =
-                hotel.HotelLocations.OrderByDescending(hl => hl.Location.LocationTypeId)
-                    .FirstOrDefault().Location;
-            return hotelLocation;
-        }
-
-        private static void SetHotelLocation(Hotel hotel, Location location)
-        {
-            hotel.HotelLocations.Clear();
-            var hotelLocation = new HotelLocation
-            {
-                Hotel = hotel,
-                Location = location,
-                HotelTypeId = hotel.HotelTypeId
-            };
-            hotel.HotelLocations.Add(hotelLocation);
-            if (location.ParentLocation != null)
-            {
-                var parentHotelLocation = new HotelLocation
-                {
-                    Hotel = hotel,
-                    Location = location.ParentLocation,
-                    HotelTypeId = hotel.HotelTypeId
-                };
-                hotel.HotelLocations.Add(parentHotelLocation);
-                if (location.ParentLocation.ParentLocation != null)
-                {
-                    var parentParentHotelLocation = new HotelLocation
-                    {
-                        Hotel = hotel,
-                        Location = location.ParentLocation.ParentLocation,
-                        HotelTypeId = hotel.HotelTypeId
-                    };
-                    hotel.HotelLocations.Add(parentParentHotelLocation);
-                }
-            }
-        }
         protected void cmdSave_Command(object sender, System.Web.UI.WebControls.CommandEventArgs e)
         {
             if (!Page.IsValid)
@@ -145,17 +101,6 @@ namespace Cowrie.Modules.ProductList
                         hotel.ExtraDescription = txtExtraDescription.Text;
                         hotel.URL = TextBoxURL.Text;
                         hotel.Image = TextBoxImage.Text;
-                        if (RadTreeViewLocations.SelectedValue != String.Empty)
-                        {
-                            var hotelLocation = GetHotelLocation(hotel);
-                            var locationId = hotelLocation.Id;
-                            var newLocationId = int.Parse(RadTreeViewLocations.SelectedValue);
-                            if (locationId != newLocationId)
-                            {
-                                var newLocation = db.Locations.Find(newLocationId);
-                                SetHotelLocation(hotel, newLocation);
-                            }
-                        }
                         if (TextBoxRooms.Text != String.Empty)
                         {
                             hotel.Rooms = int.Parse(TextBoxRooms.Text);
@@ -235,14 +180,6 @@ namespace Cowrie.Modules.ProductList
                         hotel.Lon = double.Parse(TextBoxLon.Text);
                     db.Products.Add(hotel);
                     db.SaveChanges();
-
-                    db.Entry(hotel).Reference(h => h.HotelType).Load();
-                    int locationId = RadTreeViewLocations.SelectedValue == String.Empty
-                        ? 1069
-                        : int.Parse(RadTreeViewLocations.SelectedValue);
-                    var location = db.Locations.Find(locationId);
-                    SetHotelLocation(hotel, location);
-                    db.SaveChanges();
                 }
             }
 
@@ -267,17 +204,6 @@ namespace Cowrie.Modules.ProductList
                 }
             }
             Response.Redirect(DotNetNuke.Common.Globals.NavigateURL(TabId));
-        }
-
-        protected void RadTreeViewLocations_NodeExpand(object sender, RadTreeNodeEventArgs e)
-        {
-            using (SelectedHotelsEntities db = new SelectedHotelsEntities())
-            {
-                int? locationId = Convert.ToInt32(e.Node.Value);
-                var location = db.Locations.SingleOrDefault(l => l.Id == locationId);
-                Utils.CreateSubLocationNodes(db, location, e.Node, locationId);
-            }
-            e.Node.Expanded = true;
         }
 
         protected void CustomValidatorCurrencyCode_ServerValidate(object source,

@@ -1,56 +1,34 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="HotelSettings.ascx.cs" Inherits="Cowrie.Modules.ProductList.HotelSettings" %>
 <%@ Register TagPrefix="dnn" TagName="Label" Src="~/controls/LabelControl.ascx" %>
-<%@ Register assembly="DotNetNuke.WebControls" namespace="DotNetNuke.UI.WebControls" tagPrefix="dnn" %>
+<%@ Register Assembly="DotNetNuke.WebControls" Namespace="DotNetNuke.UI.WebControls" TagPrefix="dnn" %>
 <%@ Register TagPrefix="telerik" Namespace="Telerik.Web.UI" Assembly="Telerik.Web.UI" %>
 <table cellspacing="0" cellpadding="2" border="0" summary="ModuleName1 Settings Design Table">
     <tr>
         <td class="SubHead" width="150" valign="top">
-            <dnn:Label ID="DnnLabelCurrentLocation" runat="server" Suffix=":"
-                Text="Current Location">
+            <dnn:Label ID="LabelLocation" runat="server" Suffix=":" Text="Location">
             </dnn:Label>
         </td>
         <td valign="bottom" width="250">
-            <asp:Label ID="LabelCurrentLocation" runat="server"></asp:Label>
+            <asp:TextBox ID="TextBoxLocation" runat="server"></asp:TextBox>
         </td>
     </tr>
     <tr>
         <td class="SubHead" width="150" valign="top">
-            <dnn:Label ID="LabelLocation" runat="server" ControlName="RadTreeViewLocations" Suffix=":"
-                Text="Location">
+            <dnn:Label ID="LabelDistance" runat="server" Suffix=":" Text="Distance">
             </dnn:Label>
         </td>
         <td valign="bottom" width="250">
-            <telerik:RadTreeView ID="RadTreeViewLocations" runat="server" Height="300px" Width="250px"
-                OnNodeExpand="RadTreeViewLocations_NodeExpand" MultipleSelect="True">
-            </telerik:RadTreeView>
+            <asp:DropDownList ID="DropDownListDistance" runat="server" Width="50px">
+                <asp:ListItem Value="10" Text="10" Selected="True" />
+                <asp:ListItem Value="25" Text="25" />
+                <asp:ListItem Value="50" Text="50" />
+            </asp:DropDownList>
+            miles
         </td>
     </tr>
     <tr>
         <td class="SubHead" width="150" valign="top">
-            <dnn:Label ID="DnnLabelCurrentPreSelectedLocation" runat="server" Suffix=":"
-                Text="Current Pre-Selected Location">
-            </dnn:Label>
-        </td>
-        <td valign="bottom" width="250">
-            <asp:Label ID="LabelCurrentPreSelectedLocation" runat="server"></asp:Label>
-        </td>
-    </tr>
-    <tr>
-        <td class="SubHead" width="150" valign="top">
-            <dnn:Label ID="LabelPreSelectedLocation" runat="server" ControlName="RadTreeViewPreSelectedLocations" Suffix=":"
-                Text="Pre-Selected Location">
-            </dnn:Label>
-        </td>
-        <td valign="bottom" width="250">
-            <telerik:RadTreeView ID="RadTreeViewPreSelectedLocations" runat="server" Height="300px" Width="250px"
-                OnNodeExpand="RadTreeViewLocations_NodeExpand">
-            </telerik:RadTreeView>
-        </td>
-    </tr>
-    <tr>
-        <td class="SubHead" width="150" valign="top">
-            <dnn:Label ID="LabelSearch" runat="server" Suffix=":"
-                Text="Search">
+            <dnn:Label ID="LabelSearch" runat="server" Suffix=":" Text="Search">
             </dnn:Label>
         </td>
         <td valign="bottom" width="250">
@@ -59,22 +37,11 @@
     </tr>
     <tr>
         <td class="SubHead" width="150" valign="top">
-            <dnn:Label ID="LabelType" runat="server" Suffix=":"
-                Text="Type">
+            <dnn:Label ID="LabelType" runat="server" Suffix=":" Text="Type">
             </dnn:Label>
         </td>
         <td valign="bottom" width="250">
             <asp:DropDownList ID="DropDownListTypes" runat="server" DataTextField="Name" DataValueField="Id"></asp:DropDownList>
-        </td>
-    </tr>
-    <tr>
-        <td class="SubHead" width="150" valign="top">
-            <dnn:Label ID="LabelHideTree" runat="server" Suffix=":"
-                Text="Hide the navigation tree">
-            </dnn:Label>
-        </td>
-        <td valign="bottom" width="250">
-            <asp:CheckBox ID="CheckBoxHideTree" runat="server"></asp:CheckBox>
         </td>
     </tr>
 </table>

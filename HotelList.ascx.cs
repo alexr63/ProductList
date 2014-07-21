@@ -65,9 +65,18 @@ namespace Cowrie.Modules.ProductList
 
                         if (Session["HiddenFieldX"] == null)
                         {
-                            var london = db.GeoNames.SingleOrDefault(gn => gn.Name == "London" && gn.CountryCode == "GB");
-                            Session["HiddenFieldX"] = london.Latitude.Value;
-                            Session["HiddenFieldY"] = london.Longitude.Value;
+                            GeoName geoName = null;
+                            if (Settings["location"] != null)
+                            {
+                                var location = Settings["location"].ToString();
+                                geoName = db.GeoNames.SingleOrDefault(gn => gn.Name == location && gn.CountryCode == "GB");
+                            }
+                            if (geoName == null)
+                            {
+                                geoName = db.GeoNames.SingleOrDefault(gn => gn.Name == "London" && gn.CountryCode == "GB");
+                            }
+                            Session["HiddenFieldX"] = geoName.Latitude.Value;
+                            Session["HiddenFieldY"] = geoName.Longitude.Value;
                         }
 
                         GLatLng point = new GLatLng(Convert.ToDouble(Session["HiddenFieldX"]), Convert.ToDouble(Session["HiddenFieldY"]));
@@ -159,6 +168,10 @@ namespace Cowrie.Modules.ProductList
 
         private void LoadPersistentSettings()
         {
+            if (Settings["distance"] != null && Settings["distance"].ToString() != String.Empty)
+            {
+                DropDownListDistance.SelectedValue = Settings["distance"].ToString();
+            }
             if (Session["distance"] != null)
             {
                 DropDownListDistance.SelectedValue = Session["distance"].ToString();

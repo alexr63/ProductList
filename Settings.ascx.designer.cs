@@ -67,24 +67,6 @@ namespace Cowrie.Modules.ProductList {
         protected global::Telerik.Web.UI.RadTreeView RadTreeViewCategories;
         
         /// <summary>
-        /// DnnLabelCurrentLocation control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DotNetNuke.UI.UserControls.LabelControl DnnLabelCurrentLocation;
-        
-        /// <summary>
-        /// LabelCurrentLocation control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label LabelCurrentLocation;
-        
-        /// <summary>
         /// LabelLocation control.
         /// </summary>
         /// <remarks>
@@ -92,50 +74,5 @@ namespace Cowrie.Modules.ProductList {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DotNetNuke.UI.UserControls.LabelControl LabelLocation;
-        
-        /// <summary>
-        /// RadTreeViewLocations control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::Telerik.Web.UI.RadTreeView RadTreeViewLocations;
-        
-        /// <summary>
-        /// DnnLabelCurrentPreSelectedLocation control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DotNetNuke.UI.UserControls.LabelControl DnnLabelCurrentPreSelectedLocation;
-        
-        /// <summary>
-        /// LabelCurrentPreSelectedLocation control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label LabelCurrentPreSelectedLocation;
-        
-        /// <summary>
-        /// LabelPreSelectedLocation control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DotNetNuke.UI.UserControls.LabelControl LabelPreSelectedLocation;
-        
-        /// <summary>
-        /// RadTreeViewPreSelectedLocations control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::Telerik.Web.UI.RadTreeView RadTreeViewPreSelectedLocations;
     }
 }

@@ -61,42 +61,9 @@ namespace Cowrie.Modules.ProductList
                         Utils.PopulateCategoryTree(RadTreeViewCategories, db, null, categoryId);
 
                         setting = Settings["location"];
-                        int? locationId = null;
                         if (setting != null)
                         {
-                            try
-                            {
-                                locationId = Convert.ToInt32(setting);
-                                var location = db.Locations.SingleOrDefault(l => l.Id == locationId);
-                                if (location != null)
-                                {
-                                    LabelCurrentLocation.Text = location.Name;
-                                }
-                            }
-                            catch (Exception)
-                            {
-                            }
                         }
-                        Utils.PopulateLocationTree(RadTreeViewLocations, db, null, locationId);
-
-                        setting = Settings["preselectedlocation"];
-                        int? preSelectedLocationId = null;
-                        if (setting != null)
-                        {
-                            try
-                            {
-                                preSelectedLocationId = Convert.ToInt32(setting);
-                                var preSelectedLocation = db.Locations.SingleOrDefault(l => l.Id == preSelectedLocationId);
-                                if (preSelectedLocation != null)
-                                {
-                                    LabelCurrentPreSelectedLocation.Text = preSelectedLocation.Name;
-                                }
-                            }
-                            catch (Exception)
-                            {
-                            }
-                        }
-                        Utils.PopulateLocationTree(RadTreeViewPreSelectedLocations, db, null, preSelectedLocationId);
                     }
                 }
             }
@@ -116,8 +83,6 @@ namespace Cowrie.Modules.ProductList
                 ModuleController controller = new ModuleController();
                 controller.UpdateModuleSetting(ModuleId, "mode", RadioButtonListMode.SelectedValue);
                 controller.UpdateModuleSetting(ModuleId, "category", RadTreeViewCategories.SelectedValue);
-                controller.UpdateModuleSetting(ModuleId, "location", RadTreeViewLocations.SelectedValue);
-                controller.UpdateModuleSetting(ModuleId, "preselectedlocation", RadTreeViewPreSelectedLocations.SelectedValue);
             }
             catch (Exception ex)
             {
@@ -135,17 +100,5 @@ namespace Cowrie.Modules.ProductList
             }
             e.Node.Expanded = true;
         }
-
-        protected void RadTreeViewLocations_NodeExpand(object sender, RadTreeNodeEventArgs e)
-        {
-            using (SelectedHotelsEntities db = new SelectedHotelsEntities())
-            {
-                int? locationId = Convert.ToInt32(e.Node.Value);
-                var location = db.Locations.SingleOrDefault(l => l.Id == locationId);
-                Utils.CreateSubLocationNodes(db, location, e.Node, locationId, locationId);
-            }
-            e.Node.Expanded = true;
-        }
-
     }
 }
