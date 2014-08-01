@@ -13,6 +13,7 @@ using DotNetNuke.Entities.Modules.Actions;
 using DotNetNuke.Entities.Tabs;
 using DotNetNuke.Security;
 using DotNetNuke.Services.Exceptions;
+using DotNetNuke.UI.WebControls;
 using ProductList;
 using SelectedHotelsModel;
 using Subgurim.Controles;
@@ -83,6 +84,7 @@ namespace Cowrie.Modules.ProductList
                             }
                             Session["HiddenFieldX"] = geoName.Latitude.Value;
                             Session["HiddenFieldY"] = geoName.Longitude.Value;
+                            TextBoxLocation.Text = geoName.Name;
                         }
 
                         GLatLng point = new GLatLng(Convert.ToDouble(Session["HiddenFieldX"]), Convert.ToDouble(Session["HiddenFieldY"]));
@@ -103,6 +105,14 @@ namespace Cowrie.Modules.ProductList
             {
                 Exceptions.ProcessModuleLoadException(this, ex);
             }
+        }
+
+        protected void PopulateBannersOnDemand(object source, DNNTextSuggestEventArgs e)
+        {
+            var objNode = new DNNNode("London") { ID = e.Nodes.Count.ToString() };
+            e.Nodes.Add(objNode);
+            objNode = new DNNNode("Barking") { ID = e.Nodes.Count.ToString() };
+            e.Nodes.Add(objNode);
         }
 
         private void ResetMap(GLatLng point, double radius)

@@ -1,6 +1,6 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="HotelList.ascx.cs"
     Inherits="Cowrie.Modules.ProductList.HotelList" %>
-<%@ Register Assembly="DotNetNuke.WebControls" Namespace="DotNetNuke.UI.WebControls" TagPrefix="DNN" %>
+<%@ Register Assembly="DotNetNuke.WebControls" Namespace="DotNetNuke.UI.WebControls" TagPrefix="dnn" %>
 <%@ Import Namespace="Common" %>
 <%@ Register TagPrefix="telerik" Namespace="Telerik.Web.UI" Assembly="Telerik.Web.UI" %>
 <%@ Register Assembly="GMaps" Namespace="Subgurim.Controles" TagPrefix="cc1" %>
@@ -11,29 +11,30 @@
         onserverevent="locationGMap_ServerEvent" enableServerEvents="True"
         GZoom="10" Width="100%" />
     <br />
-<asp:HiddenField ID="HiddenFieldX" runat="server" />
-<asp:HiddenField ID="HiddenFieldY" runat="server" />
-    Enter a distance&nbsp;
-            <asp:DropDownList ID="DropDownListDistance" runat="server" TabIndex="1" Width="50px">
-                <asp:ListItem Value="10" Text="10" Selected="True" />
-                <asp:ListItem Value="25" Text="25" />
-                <asp:ListItem Value="50" Text="50" />
-            </asp:DropDownList>
+    <asp:HiddenField ID="HiddenFieldX" runat="server" />
+    <asp:HiddenField ID="HiddenFieldY" runat="server" />
+    Location&nbsp;<dnn:DNNTextSuggest id="DNNTxtBannerGroup" runat="server" Columns="30" LookupDelay="500" MaxLength="100" Width="300px" TextSuggestCssClass="SuggestTextMenu GroupSuggestMenu" DefaultNodeCssClassOver="SuggestNodeOver" OnPopulateOnDemand="PopulateBannersOnDemand" />
+    <asp:TextBox ID="TextBoxLocation" runat="server"></asp:TextBox>
+    Distance&nbsp;<asp:DropDownList ID="DropDownListDistance" runat="server" TabIndex="1" Width="50px">
+        <asp:ListItem Value="10" Text="10" Selected="True" />
+        <asp:ListItem Value="25" Text="25" />
+        <asp:ListItem Value="50" Text="50" />
+    </asp:DropDownList>
     &nbsp;miles&nbsp;
     <asp:Button ID="ButtonLocate" runat="server" Text="Search" OnClick="ButtonLocate_Click" />
 </asp:Panel>
 <asp:Panel ID="PanelCategories" runat="server" CssClass="categories" Visible="True">
 </asp:Panel>
 <asp:Panel ID="PanelProducts" runat="server" CssClass="products" Width="600px">
-    <h1>
-        Near&nbsp;<asp:Label ID="LabelSelectedLocation" runat="server" />
+    <h1>Near&nbsp;<asp:Label ID="LabelSelectedLocation" runat="server" />
     </h1>
     <div class="search">
         Search:
             <asp:TextBox ID="TextBoxSearch" runat="server" Width="100px"></asp:TextBox>
         &nbsp;<asp:Button ID="ButtonSubmit" runat="server" Text="Go" OnClick="ButtonSubmit_Click" ValidationGroup="HotelListSearch" />&nbsp;<asp:Button ID="ButtonClear" runat="server" Text="Clear" OnClick="ButtonClear_Click" CausesValidation="False" Visible="False" />
     </div>
-    <h2><asp:Label ID="LabelFilteredBy" runat="server" Visible="False" />
+    <h2>
+        <asp:Label ID="LabelFilteredBy" runat="server" Visible="False" />
     </h2>
     <table style="width: 100%">
         <tr width="280px">
