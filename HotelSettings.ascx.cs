@@ -67,7 +67,10 @@ namespace Cowrie.Modules.ProductList
             {
                 ModuleController controller = new ModuleController();
                 controller.UpdateModuleSetting(ModuleId, "location", TextBoxLocation.Text);
+                Session.Remove("HiddenFieldX");
+                Session.Remove("HiddenFieldY");
                 controller.UpdateModuleSetting(ModuleId, "distance", DropDownListDistance.SelectedValue);
+                Session.Remove("distance");
                 controller.UpdateModuleSetting(ModuleId, "search", TextBoxSearch.Text);
                 controller.UpdateModuleSetting(ModuleId, "hoteltype", DropDownListTypes.SelectedValue);
             }

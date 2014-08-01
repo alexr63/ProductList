@@ -69,7 +69,13 @@ namespace Cowrie.Modules.ProductList
                             if (Settings["location"] != null)
                             {
                                 var location = Settings["location"].ToString();
-                                geoName = db.GeoNames.SingleOrDefault(gn => gn.Name == location && gn.CountryCode == "GB");
+                                var geoNames = db.GeoNames.Where(gn => gn.Name.ToLower() == location.ToLower())
+                                    .OrderByDescending(gn => gn.Population)
+                                    .ThenByDescending(gn => gn.ModificationDate);
+                                if (geoNames.Any())
+                                {
+                                    geoName = geoNames.FirstOrDefault();
+                                }
                             }
                             if (geoName == null)
                             {
