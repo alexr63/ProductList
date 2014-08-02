@@ -109,10 +109,15 @@ namespace Cowrie.Modules.ProductList
 
         protected void PopulateBannersOnDemand(object source, DNNTextSuggestEventArgs e)
         {
-            var objNode = new DNNNode("London") { ID = e.Nodes.Count.ToString() };
-            e.Nodes.Add(objNode);
-            objNode = new DNNNode("Barking") { ID = e.Nodes.Count.ToString() };
-            e.Nodes.Add(objNode);
+            using (SelectedHotelsEntities db = new SelectedHotelsEntities())
+            {
+                var query = db.GeoNames.Where(gn => gn.Name.StartsWith(e.Text) && gn.Population > 0).OrderBy(gn => gn.Name).Take(10);
+                foreach (GeoName geoName in query)
+                {
+                    var objNode = new DNNNode(geoName.Name) {ID = e.Nodes.Count.ToString()};
+                    e.Nodes.Add(objNode);
+                }
+            }
         }
 
         private void ResetMap(GLatLng point, double radius)
