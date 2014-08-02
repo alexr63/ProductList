@@ -13,8 +13,7 @@
     <br />
     <asp:HiddenField ID="HiddenFieldX" runat="server" />
     <asp:HiddenField ID="HiddenFieldY" runat="server" />
-    Location&nbsp;<dnn:DNNTextSuggest id="DNNTxtBannerGroup" runat="server" Columns="30" LookupDelay="500" MaxLength="100" Width="300px" TextSuggestCssClass="SuggestTextMenu GroupSuggestMenu" DefaultNodeCssClassOver="SuggestNodeOver" OnPopulateOnDemand="PopulateBannersOnDemand" />
-    <asp:TextBox ID="TextBoxLocation" runat="server"></asp:TextBox>
+    Location&nbsp;<dnn:DNNTextSuggest id="DNNTxtLocation" runat="server" Columns="30" LookupDelay="500" MaxLength="100" Width="300px" TextSuggestCssClass="SuggestTextMenu GroupSuggestMenu" DefaultNodeCssClassOver="SuggestNodeOver" OnPopulateOnDemand="PopulateLocationsOnDemand" />
     Distance&nbsp;<asp:DropDownList ID="DropDownListDistance" runat="server" TabIndex="1" Width="50px">
         <asp:ListItem Value="10" Text="10" Selected="True" />
         <asp:ListItem Value="25" Text="25" />

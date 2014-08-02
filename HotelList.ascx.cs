@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data.Entity.Spatial;
 using System.Drawing;
 using System.Linq;
@@ -64,9 +65,10 @@ namespace Cowrie.Modules.ProductList
                         PanelCategories.Visible = false;
                         PanelProducts.Width = Unit.Pixel(870);
 
-                        if (Session["HiddenFieldX"] == null)
+                        GeoName geoName = db.GeoNames.SingleOrDefault(gn => gn.Name == "London" && gn.CountryCode == "GB");
+                        GLatLng point = new GLatLng(geoName.Latitude.Value, geoName.Longitude.Value);
+                        if (Session["HiddenFieldX"] == null && Session["Location"] == null)
                         {
-                            GeoName geoName = null;
                             if (Settings["location"] != null)
                             {
                                 var location = Settings["location"].ToString();
@@ -76,24 +78,43 @@ namespace Cowrie.Modules.ProductList
                                 if (geoNames.Any())
                                 {
                                     geoName = geoNames.FirstOrDefault();
+                                    Session["HiddenFieldX"] = geoName.Latitude.Value;
+                                    Session["HiddenFieldY"] = geoName.Longitude.Value;
                                 }
                             }
-                            if (geoName == null)
+                        }
+                        else if (Session["Location"] != null)
+                        {
+                            var location = Session["Location"].ToString();
+                            var geoNames = db.GeoNames.Where(gn => gn.Name.ToLower() == location.ToLower())
+                                .OrderByDescending(gn => gn.Population)
+                                .ThenByDescending(gn => gn.ModificationDate);
+                            if (geoNames.Any())
                             {
-                                geoName = db.GeoNames.SingleOrDefault(gn => gn.Name == "London" && gn.CountryCode == "GB");
+                                geoName = geoNames.FirstOrDefault();
+                                if (geoName.Latitude != null && geoName.Longitude != null)
+                                {
+                                    Session["HiddenFieldX"] = geoName.Latitude.Value;
+                                    Session["HiddenFieldY"] = geoName.Longitude.Value;
+                                }
                             }
-                            Session["HiddenFieldX"] = geoName.Latitude.Value;
-                            Session["HiddenFieldY"] = geoName.Longitude.Value;
-                            TextBoxLocation.Text = geoName.Name;
+                        }
+                        else if (Session["HiddenFieldX"] != null)
+                        {
+                            point = new GLatLng(Convert.ToDouble(Session["HiddenFieldX"]), Convert.ToDouble(Session["HiddenFieldY"]));
+                            var location = DbGeography.FromText(String.Format("POINT({0} {1})", point.lng, point.lat));
+                            geoName = db.GeoNames.Where(gn => gn.Population > 0).OrderBy(gn => gn.Location.Distance(location)).First();
                         }
 
-                        GLatLng point = new GLatLng(Convert.ToDouble(Session["HiddenFieldX"]), Convert.ToDouble(Session["HiddenFieldY"]));
+                        point = new GLatLng(Convert.ToDouble(Session["HiddenFieldX"]), Convert.ToDouble(Session["HiddenFieldY"]));
+                        LabelSelectedLocation.Text = geoName.Name;
+
                         double distance = double.Parse(DropDownListDistance.SelectedValue);
                         ResetMap(point, distance);
                         CreateMarker(point);
-                        string addr;
-                        var inverseGeoCode = GetInverseGeoCode(point, out addr);
-                        Session["Location"] = addr;
+                        //string addr;
+                        //var inverseGeoCode = GetInverseGeoCode(point, out addr);
+                        //Session["Location"] = addr;
 
                         BindData(db, point, distance);
 
@@ -107,7 +128,7 @@ namespace Cowrie.Modules.ProductList
             }
         }
 
-        protected void PopulateBannersOnDemand(object source, DNNTextSuggestEventArgs e)
+        protected void PopulateLocationsOnDemand(object source, DNNTextSuggestEventArgs e)
         {
             using (SelectedHotelsEntities db = new SelectedHotelsEntities())
             {
@@ -243,6 +264,11 @@ namespace Cowrie.Modules.ProductList
 
         protected void ButtonLocate_Click(object sender, EventArgs e)
         {
+            if (DNNTxtLocation.Text != String.Empty)
+            {
+                Session["Location"] = DNNTxtLocation.Text;
+            }
+
             SavePersistentSetting();
 
             using (SelectedHotelsEntities db = new SelectedHotelsEntities())
@@ -330,11 +356,6 @@ namespace Cowrie.Modules.ProductList
             }
             ListViewContent.DataSource = hotelList;
             ListViewContent.DataBind();
-
-            if (Session["Location"] != null)
-            {
-                LabelSelectedLocation.Text = Session["Location"].ToString();
-            }
 
             LabelCount.Text = hotels.Count().ToString();
 
@@ -470,12 +491,37 @@ namespace Cowrie.Modules.ProductList
 
                     Session["HiddenFieldX"] = e.eventArgs[2];    // Coordinates swapped on client request
                     Session["HiddenFieldY"] = e.eventArgs[1];    //
+                    Session.Remove("Location");
 
-                    GLatLng _point = new GLatLng(Convert.ToDouble(e.eventArgs[2], new System.Globalization.CultureInfo("en-US", false)),
+                    GLatLng point = new GLatLng(Convert.ToDouble(e.eventArgs[2], new System.Globalization.CultureInfo("en-US", false)),
                         Convert.ToDouble(e.eventArgs[1], new System.Globalization.CultureInfo("en-US", false)));
-                    string addr;
-                    var inverseGeoCode = GetInverseGeoCode(_point, out addr);
-                    Session["Location"] = addr;
+
+                    // TODO: remove GeoNamesClient
+                    //using (var geoNamesClient = new GeoNamesClient())
+                    //{
+                    //    var finder = new NearbyPlaceNameFinder
+                    //    {
+                    //        Latitude = point.lat,
+                    //        Longitude = point.lng,
+                    //        UserName = ConfigurationManager.AppSettings["GeoNamesUserName"]
+                    //    };
+                    //    try
+                    //    {
+                    //        var results = geoNamesClient.FindNearbyPlaceName(finder);
+                    //        if (results != null && results.Count > 0)
+                    //        {
+                    //            var toponym = results.First();
+                    //            DNNTxtLocation.Text = toponym.Name;
+                    //        }
+                    //    }
+                    //    catch (Exception)
+                    //    {
+                    //    }
+                    //}
+
+                    //string addr;
+                    //var inverseGeoCode = GetInverseGeoCode(_point, out addr);
+                    //Session["Location"] = addr;
 
                     //return inverseGeoCode;
                     return "clearOverlays();";
