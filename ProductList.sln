@@ -20,6 +20,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExportClothes", "..\..\..\.
 		{58ED5699-0CE6-4868-9876-F99D40899857} = {58ED5699-0CE6-4868-9876-F99D40899857}
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImportGeoNames", "..\..\..\..\..\Projects\Cowrie\ImportGeoNames\ImportGeoNames.csproj", "{E524FF91-9B2F-4F90-923D-56C8E9B969C7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -123,6 +125,19 @@ Global
 		{612F0D96-94AF-4ED6-B3ED-E06388FE8D46}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{612F0D96-94AF-4ED6-B3ED-E06388FE8D46}.Release|x64.ActiveCfg = Release|Any CPU
 		{612F0D96-94AF-4ED6-B3ED-E06388FE8D46}.Release|x86.ActiveCfg = Release|Any CPU
+		{E524FF91-9B2F-4F90-923D-56C8E9B969C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E524FF91-9B2F-4F90-923D-56C8E9B969C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E524FF91-9B2F-4F90-923D-56C8E9B969C7}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{E524FF91-9B2F-4F90-923D-56C8E9B969C7}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{E524FF91-9B2F-4F90-923D-56C8E9B969C7}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{E524FF91-9B2F-4F90-923D-56C8E9B969C7}.Debug|x64.Build.0 = Debug|Any CPU
+		{E524FF91-9B2F-4F90-923D-56C8E9B969C7}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E524FF91-9B2F-4F90-923D-56C8E9B969C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E524FF91-9B2F-4F90-923D-56C8E9B969C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E524FF91-9B2F-4F90-923D-56C8E9B969C7}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{E524FF91-9B2F-4F90-923D-56C8E9B969C7}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{E524FF91-9B2F-4F90-923D-56C8E9B969C7}.Release|x64.ActiveCfg = Release|Any CPU
+		{E524FF91-9B2F-4F90-923D-56C8E9B969C7}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

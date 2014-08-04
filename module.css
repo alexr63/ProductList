@@ -80,3 +80,18 @@ div.search {
     WIDTH: 207px;
     max-height: 212px
 }
+
+/* style for the DNNTextSuggest control select menu */
+ .SuggestTextMenu
+ {
+     border: solid 1px #000;
+     white-space: nowrap;
+     background: #FFF;
+     padding: 3px;
+ }
+ /* style for the DNNTextSuggest control selected menu node */
+ .SuggestNodeOver
+ {
+     background-color: navy;
+     color: #FFF;
+ }
