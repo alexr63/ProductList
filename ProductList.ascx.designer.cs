@@ -49,7 +49,7 @@ namespace Cowrie.Modules.ProductList {
         protected global::System.Web.UI.WebControls.View ViewProducts;
         
         /// <summary>
-        /// TextBoxSearch control.
+        /// TextBoxFilter control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
@@ -58,7 +58,7 @@ namespace Cowrie.Modules.ProductList {
         protected global::System.Web.UI.WebControls.TextBox TextBoxSearch;
         
         /// <summary>
-        /// ButtonSubmit control.
+        /// ButtonFilter control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.

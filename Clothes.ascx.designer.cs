@@ -130,7 +130,7 @@ namespace Cowrie.Modules.ProductList {
         protected global::System.Web.UI.WebControls.Label LabelTitle;
         
         /// <summary>
-        /// TextBoxSearch control.
+        /// TextBoxFilter control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
@@ -139,7 +139,7 @@ namespace Cowrie.Modules.ProductList {
         protected global::System.Web.UI.WebControls.TextBox TextBoxSearch;
         
         /// <summary>
-        /// ButtonSubmit control.
+        /// ButtonFilter control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
@@ -148,7 +148,7 @@ namespace Cowrie.Modules.ProductList {
         protected global::System.Web.UI.WebControls.Button ButtonSubmit;
         
         /// <summary>
-        /// ButtonClear control.
+        /// ButtonClearFilter control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.

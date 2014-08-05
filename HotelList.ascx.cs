@@ -12,8 +12,11 @@ using Common;
 using DotNetNuke.Entities.Modules;
 using DotNetNuke.Entities.Modules.Actions;
 using DotNetNuke.Entities.Tabs;
+using DotNetNuke.Modules.Dashboard.Components.Skins;
 using DotNetNuke.Security;
 using DotNetNuke.Services.Exceptions;
+using DotNetNuke.UI.Skins;
+using DotNetNuke.UI.Skins.Controls;
 using DotNetNuke.UI.WebControls;
 using ProductList;
 using SelectedHotelsModel;
@@ -213,18 +216,20 @@ namespace Cowrie.Modules.ProductList
             if (Settings["distance"] != null && Settings["distance"].ToString() != String.Empty)
             {
                 DropDownListDistance.SelectedValue = Settings["distance"].ToString();
+                Session["distance"] = Settings["distance"];
             }
             if (Session["distance"] != null)
             {
                 DropDownListDistance.SelectedValue = Session["distance"].ToString();
             }
-            if (Session["search"] != null)
+            if (Settings["filter"] != null && Settings["filter"].ToString() != String.Empty)
             {
-                TextBoxSearch.Text = Session["search"].ToString();
+                TextBoxFilter.Text = Settings["filter"].ToString();
+                Session["filter"] = Settings["filter"];
             }
-            if (Settings["search"] != null && Settings["search"].ToString() != String.Empty)
+            if (Session["filter"] != null)
             {
-                TextBoxSearch.Text = Settings["search"].ToString();
+                TextBoxFilter.Text = Session["filter"].ToString();
             }
             if (Session["sortCriteria"] != null)
             {
@@ -249,13 +254,13 @@ namespace Cowrie.Modules.ProductList
         private void SavePersistentSetting()
         {
             Session["distance"] = DropDownListDistance.SelectedValue;
-            if (TextBoxSearch.Text != String.Empty)
+            if (TextBoxFilter.Text != String.Empty)
             {
-                Session["search"] = TextBoxSearch.Text;
+                Session["filter"] = TextBoxFilter.Text;
             }
             else
             {
-                Session.Remove("search");
+                Session.Remove("filter");
             }
             Session["sortCriteria"] = DropDownListSortCriterias.SelectedValue;
             Session["startRowIndex"] = DataPagerContent.StartRowIndex;
@@ -266,15 +271,20 @@ namespace Cowrie.Modules.ProductList
         {
             if (DNNTxtLocation.Text != String.Empty)
             {
+                using (SelectedHotelsEntities db = new SelectedHotelsEntities())
+                {
+                    var query = db.GeoNames.FirstOrDefault(gn => gn.Name.ToLower() == DNNTxtLocation.Text.ToLower());
+                    if (query == null)
+                    {
+                        Skin.AddModuleMessage(this, "", "No location found - please type a valid location", ModuleMessage.ModuleMessageType.RedError);
+                        return;
+                    }
+                }
                 Session["Location"] = DNNTxtLocation.Text;
             }
 
             SavePersistentSetting();
-
-            using (SelectedHotelsEntities db = new SelectedHotelsEntities())
-            {
-                Response.Redirect(DotNetNuke.Common.Globals.NavigateURL(TabId));
-            }
+            Response.Redirect(DotNetNuke.Common.Globals.NavigateURL(TabId));
         }
 
         public class HotelView : Hotel
@@ -312,21 +322,21 @@ namespace Cowrie.Modules.ProductList
                     CurrencyCode = hotel.CurrencyCode
                 };
 
-            if (TextBoxSearch.Text != String.Empty)
+            if (Session["filter"] != null)
             {
                 hotels =
                     hotels.Where(
                         p =>
-                        p.Name.ToLower().Contains(TextBoxSearch.Text.ToLower()) ||
-                        p.Description.ToLower().Contains(TextBoxSearch.Text.ToLower()));
-                LabelFilteredBy.Text = String.Format("and filtered by \"{0}\"", TextBoxSearch.Text);
+                        p.Name.ToLower().Contains(TextBoxFilter.Text.ToLower()) ||
+                        p.Description.ToLower().Contains(TextBoxFilter.Text.ToLower()));
+                LabelFilteredBy.Text = String.Format("and filtered by \"{0}\"", TextBoxFilter.Text);
                 LabelFilteredBy.Visible = true;
-                ButtonClear.Visible = true;
+                ButtonClearFilter.Visible = true;
             }
             else
             {
                 LabelFilteredBy.Visible = false;
-                ButtonClear.Visible = false;
+                ButtonClearFilter.Visible = false;
             }
             List<HotelView> hotelList = null;
             Enums.SortCriteriaEnum sortCriteria = (Enums.SortCriteriaEnum)Enum.Parse(typeof(Enums.SortCriteriaEnum), DropDownListSortCriterias.SelectedValue);
@@ -440,35 +450,16 @@ namespace Cowrie.Modules.ProductList
             }
         }
 
-        protected void ButtonSubmit_Click(object sender, EventArgs e)
+        protected void ButtonFilter_Click(object sender, EventArgs e)
         {
-            Session["search"] = TextBoxSearch.Text;
-
-            DataPagerContent.SetPageProperties(0, int.Parse(DropDownListPageSizes.SelectedValue), false);
-            DataPagerContent2.SetPageProperties(0, int.Parse(DropDownListPageSizes.SelectedValue), false); 
-
-            using (SelectedHotelsEntities db = new SelectedHotelsEntities())
-            {
-                GLatLng point = new GLatLng(Convert.ToDouble(Session["HiddenFieldX"]), Convert.ToDouble(Session["HiddenFieldY"]));
-                double distance = double.Parse(DropDownListDistance.SelectedValue);
-                BindData(db, point, distance);
-            }
+            SavePersistentSetting();
+            Response.Redirect(DotNetNuke.Common.Globals.NavigateURL(TabId));
         }
 
-        protected void ButtonClear_Click(object sender, EventArgs e)
+        protected void ButtonClearFilter_Click(object sender, EventArgs e)
         {
-            TextBoxSearch.Text = String.Empty;
-            Session.Remove("search");
-
-            DataPagerContent.SetPageProperties(0, int.Parse(DropDownListPageSizes.SelectedValue), false);
-            DataPagerContent2.SetPageProperties(0, int.Parse(DropDownListPageSizes.SelectedValue), false);
-
-            using (SelectedHotelsEntities db = new SelectedHotelsEntities())
-            {
-                GLatLng point = new GLatLng(Convert.ToDouble(Session["HiddenFieldX"]), Convert.ToDouble(Session["HiddenFieldY"]));
-                double distance = double.Parse(DropDownListDistance.SelectedValue);
-                BindData(db, point, distance);
-            }
+            SavePersistentSetting();
+            Response.Redirect(DotNetNuke.Common.Globals.NavigateURL(TabId));
         }
 
         protected void ListViewContent_ItemCommand(object sender, ListViewCommandEventArgs e)

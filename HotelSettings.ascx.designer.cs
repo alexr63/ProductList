@@ -49,22 +49,22 @@ namespace Cowrie.Modules.ProductList {
         protected global::System.Web.UI.WebControls.DropDownList DropDownListDistance;
         
         /// <summary>
-        /// LabelSearch control.
+        /// LabelFilter control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DotNetNuke.UI.UserControls.LabelControl LabelSearch;
+        protected global::DotNetNuke.UI.UserControls.LabelControl LabelFilter;
         
         /// <summary>
-        /// TextBoxSearch control.
+        /// TextBoxFilter control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TextBoxSearch;
+        protected global::System.Web.UI.WebControls.TextBox TextBoxFilter;
         
         /// <summary>
         /// LabelType control.

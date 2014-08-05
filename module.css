@@ -4,12 +4,12 @@
     padding: 0;
     margin: 10px 10px 10px 10px;
     display: inline;
-    -moz-min-width: 800px;
-    -ms-min-width: 800px;
-    -o-min-width: 800px;
-    -webkit-min-width: 800px;
-    min-width: 800px;
-    width: 870px;
+    -moz-min-width: 240px;
+    -ms-min-width: 240px;
+    -o-min-width: 240px;
+    -webkit-min-width: 240px;
+    min-width: 240px;
+    width: 95%;
     align-content: center;
 }
 
@@ -72,7 +72,11 @@ div.footer {
 }
 
 div.search {
-    text-align: right;
+    clear: left;
+    float: left;
+    padding: 0;
+    margin: 10px 10px 10px 10px;
+    text-align: left;
 }
 
 .filter {

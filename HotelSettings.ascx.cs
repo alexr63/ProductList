@@ -38,10 +38,10 @@ namespace Cowrie.Modules.ProductList
                             DropDownListDistance.SelectedValue = setting.ToString();
                         }
 
-                        setting = Settings["search"];
+                        setting = Settings["filter"];
                         if (setting != null)
                         {
-                            TextBoxSearch.Text = setting.ToString();
+                            TextBoxFilter.Text = setting.ToString();
                         }
 
                         setting = Settings["hoteltype"];
@@ -71,7 +71,7 @@ namespace Cowrie.Modules.ProductList
                 Session.Remove("HiddenFieldY");
                 controller.UpdateModuleSetting(ModuleId, "distance", DropDownListDistance.SelectedValue);
                 Session.Remove("distance");
-                controller.UpdateModuleSetting(ModuleId, "search", TextBoxSearch.Text);
+                controller.UpdateModuleSetting(ModuleId, "filter", TextBoxFilter.Text);
                 controller.UpdateModuleSetting(ModuleId, "hoteltype", DropDownListTypes.SelectedValue);
             }
             catch (Exception ex)

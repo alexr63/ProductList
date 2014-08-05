@@ -15,6 +15,8 @@
     <asp:HiddenField ID="HiddenFieldY" runat="server" />
     Location&nbsp;<dnn:DNNTextSuggest id="DNNTxtLocation" runat="server" Columns="30" LookupDelay="500" MaxLength="100" Width="300px" TextSuggestCssClass="SuggestTextMenu GroupSuggestMenu" DefaultNodeCssClassOver="SuggestNodeOver" OnPopulateOnDemand="PopulateLocationsOnDemand" />
     Distance&nbsp;<asp:DropDownList ID="DropDownListDistance" runat="server" TabIndex="1" Width="50px">
+        <asp:ListItem Value="2" Text="2" />
+        <asp:ListItem Value="5" Text="5" />
         <asp:ListItem Value="10" Text="10" Selected="True" />
         <asp:ListItem Value="25" Text="25" />
         <asp:ListItem Value="50" Text="50" />
@@ -22,16 +24,15 @@
     &nbsp;miles&nbsp;
     <asp:Button ID="ButtonLocate" runat="server" Text="Search" OnClick="ButtonLocate_Click" />
 </asp:Panel>
+<asp:Panel ID="PanelFilter" runat="server" CssClass="search">
+    Optional - filter the results for this location&nbsp;<asp:TextBox ID="TextBoxFilter" runat="server" Width="100px"></asp:TextBox>
+    &nbsp;<asp:Button ID="ButtonFilter" runat="server" Text="Filter" OnClick="ButtonFilter_Click" />&nbsp;<asp:Button ID="ButtonClearFilter" runat="server" Text="Clear" OnClick="ButtonClearFilter_Click" CausesValidation="False" Visible="False" />
+</asp:Panel>
 <asp:Panel ID="PanelCategories" runat="server" CssClass="categories" Visible="True">
 </asp:Panel>
 <asp:Panel ID="PanelProducts" runat="server" CssClass="products" Width="600px">
     <h1>Near&nbsp;<asp:Label ID="LabelSelectedLocation" runat="server" />
     </h1>
-    <div class="search">
-        Search:
-            <asp:TextBox ID="TextBoxSearch" runat="server" Width="100px"></asp:TextBox>
-        &nbsp;<asp:Button ID="ButtonSubmit" runat="server" Text="Go" OnClick="ButtonSubmit_Click" ValidationGroup="HotelListSearch" />&nbsp;<asp:Button ID="ButtonClear" runat="server" Text="Clear" OnClick="ButtonClear_Click" CausesValidation="False" Visible="False" />
-    </div>
     <h2>
         <asp:Label ID="LabelFilteredBy" runat="server" Visible="False" />
     </h2>
