@@ -2,7 +2,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Data.Entity.Spatial;
 using System.Drawing;
 using System.Linq;
@@ -12,7 +11,6 @@ using Common;
 using DotNetNuke.Entities.Modules;
 using DotNetNuke.Entities.Modules.Actions;
 using DotNetNuke.Entities.Tabs;
-using DotNetNuke.Modules.Dashboard.Components.Skins;
 using DotNetNuke.Security;
 using DotNetNuke.Services.Exceptions;
 using DotNetNuke.UI.Skins;
@@ -115,9 +113,6 @@ namespace Cowrie.Modules.ProductList
                         double distance = double.Parse(DropDownListDistance.SelectedValue);
                         ResetMap(point, distance);
                         CreateMarker(point);
-                        //string addr;
-                        //var inverseGeoCode = GetInverseGeoCode(point, out addr);
-                        //Session["Location"] = addr;
 
                         BindData(db, point, distance);
 
@@ -367,10 +362,13 @@ namespace Cowrie.Modules.ProductList
             ListViewContent.DataSource = hotelList;
             ListViewContent.DataBind();
 
-            LabelCount.Text = hotels.Count().ToString();
+            var count = hotels.Count();
+            DataPagerContent.Visible = count > DataPagerContent.PageSize;
+            DataPagerContent2.Visible = count > DataPagerContent2.PageSize;
+            LabelCount.Text = count.ToString();
 
-            int i = 1;
-            foreach (var hotel in hotelList)
+            int i = DataPagerContent.StartRowIndex + 1;
+            foreach (var hotel in hotelList.Skip(DataPagerContent.StartRowIndex).Take(DataPagerContent.PageSize))
             {
                 GLatLng gLatLng = new GLatLng(hotel.Location.Latitude.Value, hotel.Location.Longitude.Value);
                 PinLetter pinLetter = new PinLetter(i.ToString(), Color.FromArgb(0xB4, 0x97, 0x59), Color.Black);
@@ -416,38 +414,20 @@ namespace Cowrie.Modules.ProductList
         protected void DropDownListSortCriterias_SelectedIndexChanged(object sender, EventArgs e)
         {
             Session["sortCriteria"] = DropDownListSortCriterias.SelectedValue;
-
-            using (SelectedHotelsEntities db = new SelectedHotelsEntities())
-            {
-                GLatLng point = new GLatLng(Convert.ToDouble(Session["HiddenFieldX"]), Convert.ToDouble(Session["HiddenFieldY"]));
-                double distance = double.Parse(DropDownListDistance.SelectedValue);
-                BindData(db, point, distance);
-            }
+            Response.Redirect(DotNetNuke.Common.Globals.NavigateURL(TabId));
         }
 
         protected void DropDownListPageSizes_SelectedIndexChanged(object sender, EventArgs e)
         {
             int pageSize = Convert.ToInt32(DropDownListPageSizes.SelectedValue);
             Session["pageSize"] = pageSize;
-
-            DataPagerContent.PageSize = pageSize;
-            DataPagerContent2.PageSize = pageSize;
+            Response.Redirect(DotNetNuke.Common.Globals.NavigateURL(TabId));
         }
 
         protected void ListViewContent_PagePropertiesChanging(object sender, PagePropertiesChangingEventArgs e)
         {
             Session["startRowIndex"] = e.StartRowIndex;
-
-            //set current page startindex, max rows and rebind to false
-            DataPagerContent.SetPageProperties(e.StartRowIndex, e.MaximumRows, false);
-            DataPagerContent2.SetPageProperties(e.StartRowIndex, e.MaximumRows, false);
-
-            using (SelectedHotelsEntities db = new SelectedHotelsEntities())
-            {
-                GLatLng point = new GLatLng(Convert.ToDouble(Session["HiddenFieldX"]), Convert.ToDouble(Session["HiddenFieldY"]));
-                double distance = double.Parse(DropDownListDistance.SelectedValue);
-                BindData(db, point, distance);
-            }
+            Response.Redirect(DotNetNuke.Common.Globals.NavigateURL(TabId));
         }
 
         protected void ButtonFilter_Click(object sender, EventArgs e)
@@ -487,38 +467,7 @@ namespace Cowrie.Modules.ProductList
                     GLatLng point = new GLatLng(Convert.ToDouble(e.eventArgs[2], new System.Globalization.CultureInfo("en-US", false)),
                         Convert.ToDouble(e.eventArgs[1], new System.Globalization.CultureInfo("en-US", false)));
 
-                    // TODO: remove GeoNamesClient
-                    //using (var geoNamesClient = new GeoNamesClient())
-                    //{
-                    //    var finder = new NearbyPlaceNameFinder
-                    //    {
-                    //        Latitude = point.lat,
-                    //        Longitude = point.lng,
-                    //        UserName = ConfigurationManager.AppSettings["GeoNamesUserName"]
-                    //    };
-                    //    try
-                    //    {
-                    //        var results = geoNamesClient.FindNearbyPlaceName(finder);
-                    //        if (results != null && results.Count > 0)
-                    //        {
-                    //            var toponym = results.First();
-                    //            DNNTxtLocation.Text = toponym.Name;
-                    //        }
-                    //    }
-                    //    catch (Exception)
-                    //    {
-                    //    }
-                    //}
-
-                    //string addr;
-                    //var inverseGeoCode = GetInverseGeoCode(_point, out addr);
-                    //Session["Location"] = addr;
-
-                    //return inverseGeoCode;
                     return "clearOverlays();";
-                    //window.ToString(e.map) +
-                    //"markersArray.push(" + GMap1.getGMapElementById(marker.ID) + ");";
-
             }
 
             return string.Empty;
