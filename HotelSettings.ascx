@@ -9,7 +9,7 @@
             </dnn:Label>
         </td>
         <td valign="bottom" width="250">
-            <asp:TextBox ID="TextBoxLocation" runat="server"></asp:TextBox>
+            <dnn:DNNTextSuggest id="DNNTxtLocation" runat="server" Columns="30" LookupDelay="500" MaxLength="100" Width="300px" TextSuggestCssClass="SuggestTextMenu GroupSuggestMenu" DefaultNodeCssClassOver="SuggestNodeOver" OnPopulateOnDemand="PopulateLocationsOnDemand" />
         </td>
     </tr>
     <tr>

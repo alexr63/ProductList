@@ -2,6 +2,7 @@
 using System.Linq;
 using DotNetNuke.Entities.Modules;
 using DotNetNuke.Services.Exceptions;
+using DotNetNuke.UI.WebControls;
 using SelectedHotelsModel;
 
 namespace Cowrie.Modules.ProductList
@@ -29,7 +30,7 @@ namespace Cowrie.Modules.ProductList
                         setting = Settings["location"];
                         if (setting != null)
                         {
-                            TextBoxLocation.Text = setting.ToString();
+                            DNNTxtLocation.Text = setting.ToString();
                         }
 
                         setting = Settings["distance"];
@@ -66,7 +67,7 @@ namespace Cowrie.Modules.ProductList
             try
             {
                 ModuleController controller = new ModuleController();
-                controller.UpdateModuleSetting(ModuleId, "location", TextBoxLocation.Text);
+                controller.UpdateModuleSetting(ModuleId, "location", DNNTxtLocation.Text);
                 Session.Remove("HiddenFieldX");
                 Session.Remove("HiddenFieldY");
                 controller.UpdateModuleSetting(ModuleId, "distance", DropDownListDistance.SelectedValue);
@@ -77,6 +78,19 @@ namespace Cowrie.Modules.ProductList
             catch (Exception ex)
             {
                 Exceptions.ProcessModuleLoadException(this, ex);
+            }
+        }
+
+        protected void PopulateLocationsOnDemand(object source, DNNTextSuggestEventArgs e)
+        {
+            using (SelectedHotelsEntities db = new SelectedHotelsEntities())
+            {
+                var query = db.GeoNames.Where(gn => gn.Name.StartsWith(e.Text) && gn.Population > 0).OrderBy(gn => gn.Name).Take(10);
+                foreach (GeoName geoName in query)
+                {
+                    var objNode = new DNNNode(geoName.Name) { ID = e.Nodes.Count.ToString() };
+                    e.Nodes.Add(objNode);
+                }
             }
         }
     }

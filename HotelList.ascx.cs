@@ -213,23 +213,23 @@ namespace Cowrie.Modules.ProductList
 
         private void LoadPersistentSettings()
         {
-            if (Settings["distance"] != null && Settings["distance"].ToString() != String.Empty)
-            {
-                DropDownListDistance.SelectedValue = Settings["distance"].ToString();
-                Session["distance"] = Settings["distance"];
-            }
             if (Session["distance"] != null)
             {
                 DropDownListDistance.SelectedValue = Session["distance"].ToString();
             }
-            if (Settings["filter"] != null && Settings["filter"].ToString() != String.Empty)
+            else if (Settings["distance"] != null && Settings["distance"].ToString() != String.Empty)
             {
-                TextBoxFilter.Text = Settings["filter"].ToString();
-                Session["filter"] = Settings["filter"];
+                DropDownListDistance.SelectedValue = Settings["distance"].ToString();
+                Session["distance"] = Settings["distance"];
             }
             if (Session["filter"] != null)
             {
                 TextBoxFilter.Text = Session["filter"].ToString();
+            }
+            else if (Settings["filter"] != null && Settings["filter"].ToString() != String.Empty)
+            {
+                TextBoxFilter.Text = Settings["filter"].ToString();
+                Session["filter"] = Settings["filter"];
             }
             if (Session["sortCriteria"] != null)
             {
