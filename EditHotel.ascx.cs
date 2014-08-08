@@ -54,10 +54,11 @@ namespace Cowrie.Modules.ProductList
                                 TextBoxCustomerRating.Text = hotel.CustomerRating.Value.ToString("0.0");
                             TextBoxAddress.Text = hotel.Address;
                             TextBoxCurrencyCode.Text = hotel.CurrencyCode;
-                            if (hotel.Location.Latitude.HasValue)
+                            if (hotel.Location != null && hotel.Location.Latitude.HasValue && hotel.Location.Longitude.HasValue)
+                            {
                                 TextBoxLat.Text = hotel.Location.Latitude.Value.ToString();
-                            if (hotel.Location.Longitude.HasValue)
                                 TextBoxLon.Text = hotel.Location.Longitude.Value.ToString();
+                            }
                             TextBoxPostCode.Text = hotel.PostCode;
                             DropDownListTypes.SelectedValue = hotel.HotelTypeId.ToString();
 
