@@ -438,6 +438,9 @@ namespace Cowrie.Modules.ProductList
 
         protected void ButtonClearFilter_Click(object sender, EventArgs e)
         {
+            TextBoxFilter.Text = String.Empty;
+            Session.Remove("filter");
+
             SavePersistentSetting();
             Response.Redirect(DotNetNuke.Common.Globals.NavigateURL(TabId));
         }
