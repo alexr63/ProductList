@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data.Entity.Spatial;
 using System.Linq;
 using System.Web.UI.WebControls;
 using DotNetNuke.Common.Utilities;
@@ -53,10 +54,10 @@ namespace Cowrie.Modules.ProductList
                                 TextBoxCustomerRating.Text = hotel.CustomerRating.Value.ToString("0.0");
                             TextBoxAddress.Text = hotel.Address;
                             TextBoxCurrencyCode.Text = hotel.CurrencyCode;
-                            if (hotel.Lat.HasValue)
-                                TextBoxLat.Text = hotel.Lat.Value.ToString();
-                            if (hotel.Lon.HasValue)
-                                TextBoxLon.Text = hotel.Lon.Value.ToString();
+                            if (hotel.Location.Latitude.HasValue)
+                                TextBoxLat.Text = hotel.Location.Latitude.Value.ToString();
+                            if (hotel.Location.Longitude.HasValue)
+                                TextBoxLon.Text = hotel.Location.Longitude.Value.ToString();
                             TextBoxPostCode.Text = hotel.PostCode;
                             DropDownListTypes.SelectedValue = hotel.HotelTypeId.ToString();
 
@@ -127,21 +128,13 @@ namespace Cowrie.Modules.ProductList
                         }
                         hotel.Address = TextBoxAddress.Text;
                         hotel.CurrencyCode = TextBoxCurrencyCode.Text;
-                        if (TextBoxLat.Text != String.Empty)
+                        if (TextBoxLat.Text != String.Empty && TextBoxLon.Text != String.Empty)
                         {
-                            hotel.Lat = double.Parse(TextBoxLat.Text);
+                            hotel.Location = DbGeography.FromText(String.Format("POINT({0} {1})", TextBoxLon.Text, TextBoxLat.Text));
                         }
                         else
                         {
-                            hotel.Lat = null;
-                        }
-                        if (TextBoxLon.Text != String.Empty)
-                        {
-                            hotel.Lon = double.Parse(TextBoxLon.Text);
-                        }
-                        else
-                        {
-                            hotel.Lon = null;
+                            hotel.Location = null;
                         }
                         hotel.PostCode = TextBoxPostCode.Text;
                         hotel.HotelTypeId = int.Parse(DropDownListTypes.SelectedValue);
@@ -174,10 +167,8 @@ namespace Cowrie.Modules.ProductList
                         hotel.Star = decimal.Parse(TextBoxStar.Text);
                     if (TextBoxCustomerRating.Text != String.Empty)
                         hotel.CustomerRating = decimal.Parse(TextBoxCustomerRating.Text);
-                    if (TextBoxLat.Text != String.Empty)
-                        hotel.Lat = double.Parse(TextBoxLat.Text);
-                    if (TextBoxLon.Text != String.Empty)
-                        hotel.Lon = double.Parse(TextBoxLon.Text);
+                    if (TextBoxLat.Text != String.Empty && TextBoxLon.Text != String.Empty)
+                        hotel.Location = DbGeography.FromText(String.Format("POINT({0} {1})", TextBoxLon.Text, TextBoxLat.Text));
                     db.Products.Add(hotel);
                     db.SaveChanges();
                 }

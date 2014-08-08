@@ -67,7 +67,7 @@ namespace Cowrie.Modules.ProductList
                         PanelProducts.Width = Unit.Pixel(870);
 
                         GeoName geoName = db.GeoNames.SingleOrDefault(gn => gn.Name == "London" && gn.CountryCode == "GB");
-                        GLatLng point = new GLatLng(geoName.Latitude.Value, geoName.Longitude.Value);
+                        GLatLng point = new GLatLng(geoName.Location.Latitude.Value, geoName.Location.Longitude.Value);
                         if (Session["HiddenFieldX"] == null && Session["Location"] == null)
                         {
                             if (Settings["location"] != null)
@@ -79,8 +79,8 @@ namespace Cowrie.Modules.ProductList
                                 if (geoNames.Any())
                                 {
                                     geoName = geoNames.FirstOrDefault();
-                                    Session["HiddenFieldX"] = geoName.Latitude.Value;
-                                    Session["HiddenFieldY"] = geoName.Longitude.Value;
+                                    Session["HiddenFieldX"] = geoName.Location.Latitude.Value;
+                                    Session["HiddenFieldY"] = geoName.Location.Longitude.Value;
                                 }
                             }
                         }
@@ -93,10 +93,10 @@ namespace Cowrie.Modules.ProductList
                             if (geoNames.Any())
                             {
                                 geoName = geoNames.FirstOrDefault();
-                                if (geoName.Latitude != null && geoName.Longitude != null)
+                                if (geoName.Location.Latitude != null && geoName.Location.Longitude != null)
                                 {
-                                    Session["HiddenFieldX"] = geoName.Latitude.Value;
-                                    Session["HiddenFieldY"] = geoName.Longitude.Value;
+                                    Session["HiddenFieldX"] = geoName.Location.Latitude.Value;
+                                    Session["HiddenFieldY"] = geoName.Location.Longitude.Value;
                                 }
                             }
                         }
