@@ -104,7 +104,7 @@ namespace Cowrie.Modules.ProductList
                         {
                             point = new GLatLng(Convert.ToDouble(Session["HiddenFieldX"]), Convert.ToDouble(Session["HiddenFieldY"]));
                             var location = DbGeography.FromText(String.Format("POINT({0} {1})", point.lng, point.lat));
-                            geoName = db.GeoNames.Where(gn => gn.Population > 0).OrderBy(gn => gn.Location.Distance(location)).First();
+                            geoName = db.GeoNames.Where(gn => gn.FeatureClass == "P").OrderBy(gn => gn.Location.Distance(location)).First();
                         }
 
                         point = new GLatLng(Convert.ToDouble(Session["HiddenFieldX"]), Convert.ToDouble(Session["HiddenFieldY"]));
@@ -130,10 +130,10 @@ namespace Cowrie.Modules.ProductList
         {
             using (SelectedHotelsEntities db = new SelectedHotelsEntities())
             {
-                var query = db.GeoNames.Where(gn => gn.Name.StartsWith(e.Text) && gn.Population > 0).OrderBy(gn => gn.Name).Take(10);
-                foreach (GeoName geoName in query)
+                var query = db.GeoNames.Where(gn => gn.Name.StartsWith(e.Text) && gn.FeatureClass == "P").Select(gn => gn.Name).Distinct().OrderBy(gn => gn).Take(10);
+                foreach (string geoName in query)
                 {
-                    var objNode = new DNNNode(geoName.Name) {ID = e.Nodes.Count.ToString()};
+                    var objNode = new DNNNode(geoName) {ID = e.Nodes.Count.ToString()};
                     e.Nodes.Add(objNode);
                 }
             }

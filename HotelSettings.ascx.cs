@@ -85,10 +85,10 @@ namespace Cowrie.Modules.ProductList
         {
             using (SelectedHotelsEntities db = new SelectedHotelsEntities())
             {
-                var query = db.GeoNames.Where(gn => gn.Name.StartsWith(e.Text) && gn.Population > 0).OrderBy(gn => gn.Name).Take(10);
-                foreach (GeoName geoName in query)
+                var query = db.GeoNames.Where(gn => gn.Name.StartsWith(e.Text) && gn.FeatureClass == "P").Select(gn => gn.Name).Distinct().OrderBy(gn => gn).Take(10);
+                foreach (string geoName in query)
                 {
-                    var objNode = new DNNNode(geoName.Name) { ID = e.Nodes.Count.ToString() };
+                    var objNode = new DNNNode(geoName) { ID = e.Nodes.Count.ToString() };
                     e.Nodes.Add(objNode);
                 }
             }
