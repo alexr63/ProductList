@@ -305,16 +305,21 @@ namespace Cowrie.Modules.ProductList
                 {
                     Id = hotel.Id,
                     Name = hotel.Name,
+                    Number = hotel.Number,
+                    UnitCost = hotel.UnitCost,
                     Description = hotel.Description,
-                    Distance = dist,
-                    Star = hotel.Star,
+                    URL = hotel.URL,
+                    Image = hotel.Image,
+                    ExtraDescription = hotel.ExtraDescription,
+                    CurrencyCode = hotel.CurrencyCode,
                     Rooms = hotel.Rooms,
+                    Star = hotel.Star,
                     CustomerRating = hotel.CustomerRating,
                     Address = hotel.Address,
+                    PostCode = hotel.PostCode,
                     Location = hotel.Location,
-                    Image = hotel.Image,
-                    UnitCost = hotel.UnitCost,
-                    CurrencyCode = hotel.CurrencyCode
+                    Distance = dist,
+                    GeoName = hotel.GeoName
                 };
 
             if (Session["filter"] != null)
