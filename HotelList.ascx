@@ -111,7 +111,8 @@
                                 <h2><%# Eval("Distance", "{0:0.0}") %>&nbsp;miles</h2>
                             </td>
                             <td style="vertical-align: middle; width: 100px;">
-                                <telerik:RadRating ID="RadRatingStar" runat="server" Value='<%# Convert.ToDecimal(Eval("Star")) %>' ReadOnly="True" />
+                                <telerik:RadRating ID="RadRatingStar" runat="server" Value='<%# Convert.ToDecimal(Eval("Star")) %>' ReadOnly="True" /><br />
+                                <%# Eval("CustomerRating") != null ? String.Format("({0}/5 )", Convert.ToDecimal(Eval("CustomerRating"))) : String.Empty %>
                             </td>
                             <td style="vertical-align: middle; width: 100px;">
                                 <%# Eval("UnitCost") != null ? String.Format("(from {0}{1:#0.00} per night)", Utils.GetCurrencySymbol(Eval("CurrencyCode").ToString()), Eval("UnitCost")) : String.Empty %>
