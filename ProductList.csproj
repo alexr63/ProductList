@@ -113,21 +113,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="HomeAndGardensDetails.ascx.cs">
-      <DependentUpon>HomeAndGardensDetails.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="HomeAndGardensDetails.ascx.designer.cs">
-      <DependentUpon>HomeAndGardensDetails.ascx</DependentUpon>
-    </Compile>
     <Compile Include="Enums.cs" />
-    <Compile Include="HomeAndGardens.ascx.cs">
-      <DependentUpon>HomeAndGardens.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="HomeAndGardens.ascx.designer.cs">
-      <DependentUpon>HomeAndGardens.ascx</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ProductList.ascx.cs">
       <DependentUpon>ProductList.ascx</DependentUpon>
@@ -147,8 +133,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Build\build.bat" />
-    <Content Include="HomeAndGardensDetails.ascx" />
-    <Content Include="HomeAndGardens.ascx" />
     <Content Include="module.css" />
     <Content Include="packages.config" />
     <None Include="ProductList.dnn">

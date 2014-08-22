@@ -28,25 +28,6 @@
 						</control>
 					</controls>
 				</module>
-				<module>
-					<friendlyname>HomeAndGardens</friendlyname>
-					<cachetime>0</cachetime>
-					<controls>
-						<control>
-							<src>DesktopModules/ProductList/HomeAndGardens.ascx</src>
-							<type>View</type>
-							<helpurl></helpurl>
-						</control>
-						<control>
-							<key>HomeAndGardensDetails</key>
-							<title>Home and Gardens Details</title>
-							<src>DesktopModules/ProductList/HomeAndGardensDetails.ascx</src>
-							<type>View</type>
-							<helpurl></helpurl>
-							<supportspartialrendering>true</supportspartialrendering>
-						</control>
-					</controls>
-				</module>
 			</modules>
 			<files>
         <file>
@@ -54,12 +35,6 @@
         </file>
         <file>
 					<name>ProductList.dll</name>
-				</file>
-				<file>
-					<name>HomeAndGardens.ascx</name>
-				</file>
-				<file>
-					<name>HomeAndGardensDetails.ascx</name>
 				</file>
 				<file>
 					<name>ProductList.ascx</name>
