@@ -113,13 +113,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BoatList.ascx.cs">
-      <DependentUpon>BoatList.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="BoatList.ascx.designer.cs">
-      <DependentUpon>BoatList.ascx</DependentUpon>
-    </Compile>
     <Compile Include="HomeAndGardensDetails.ascx.cs">
       <DependentUpon>HomeAndGardensDetails.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -154,7 +147,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Build\build.bat" />
-    <Content Include="BoatList.ascx" />
     <Content Include="HomeAndGardensDetails.ascx" />
     <Content Include="HomeAndGardens.ascx" />
     <Content Include="module.css" />

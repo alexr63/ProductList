@@ -28,17 +28,6 @@
 						</control>
 					</controls>
 				</module>
-        <module>
-					<friendlyname>BoatList</friendlyname>
-					<cachetime>0</cachetime>
-					<controls>
-						<control>
-							<src>DesktopModules/ProductList/BoatList.ascx</src>
-							<type>View</type>
-							<helpurl></helpurl>
-						</control>
-					</controls>
-				</module>
 				<module>
 					<friendlyname>HomeAndGardens</friendlyname>
 					<cachetime>0</cachetime>
@@ -65,9 +54,6 @@
         </file>
         <file>
 					<name>ProductList.dll</name>
-				</file>
-				<file>
-					<name>BoatList.ascx</name>
 				</file>
 				<file>
 					<name>HomeAndGardens.ascx</name>
